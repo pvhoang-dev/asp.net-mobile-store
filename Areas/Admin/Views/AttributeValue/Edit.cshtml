@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Edit Attribute Value";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Title {
+    Edit Attribute Value
+}
+
+<div class="card">
+    <form method="post" action="">
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="attribute_id">Attribute:</label>
+                    <select name="attribute_id" class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="value">Value:</label>
+                    <input type="text" id="value" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="card-footer float-right border-0 bg-transparent">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+
+
