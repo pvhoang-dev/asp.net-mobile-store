@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace BTL_QuanLyBanDienThoai.Areas.Admin.Models;
+namespace BTL_QuanLyBanDienThoai.Models;
 
 public partial class BaiTapLonLapTrinhWebContext : DbContext
 {
