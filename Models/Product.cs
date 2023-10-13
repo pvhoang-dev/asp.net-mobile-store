@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BTL_QuanLyBanDienThoai.Areas.Admin.Models;
+namespace BTL_QuanLyBanDienThoai.Models;
 
 public partial class Product
 {
