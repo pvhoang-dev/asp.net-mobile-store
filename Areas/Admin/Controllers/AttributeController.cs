@@ -6,7 +6,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
     [Route("admin/attributes")]
     public class AttributeController : Controller
     {
-        [Route("")]
         public IActionResult Index()
         {
             return View();

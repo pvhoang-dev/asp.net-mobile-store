@@ -6,7 +6,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
     [Route("admin")]
     public class HomeAdminController : Controller
     {
-        [Route("")]
         public IActionResult Index()
         {
             return View();
