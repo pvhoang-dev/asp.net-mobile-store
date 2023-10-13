@@ -1,0 +1,1 @@
+Scaffold-DbContext "Data Source=DESKTOP-LEGION\SQLEXPRESS;Initial Catalog=BAI_TAP_LON_LAP_TRINH_WEB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Areas/Admin/Models
