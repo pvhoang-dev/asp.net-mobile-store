@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Create Product Variant";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Title {
+                Create Product Variant
+
+    <a class="btn btn-outline-primary float-right align-items-center"
+       href="/admin/Product-Variants">
+        <i class="uil uil-corner-up-left-alt"></i>&nbsp;Back
+    </a>
+}
+
+<div class="card">
+    <form>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="product_id">Product Parent:</label>
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="text" value="" class="form-control" disabled>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="price">Price:</label>
+                    <input type="number" name="price" class="form-control" required>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" class="form-control" required>
+                </div>
+
+
+                @*               {{-- Create Product Variant --}}
+                @if(empty($variantAttribute))
+                @if(isset($attributes))
+                <div class="form-group col-sm-6" id="option-1">
+                <label>Attribute 1: <span class="index-1"></span></label>
+                <select class="form-control" id="attribute_1" name="attribute_id_1">
+                <option value="0">No Select</option>
+                @foreach($attributes as $value)
+                <option value="{{$value->id}}">{{$value->name}}</option>
+                @endforeach
+                </select>
+                </div>
+                <div class="col-sm-6" id="option-2">
+                <label>Attribute 1 Value: <span class="index-1"></span></label>
+                <select class="form-control" id="attribute_1_value" name="attribute_value_id_1">
+                </select>
+                </div>
+                <div class="form-group col-sm-6" id="option-1">
+                <label>Attribute 2: <span class="index-1"></span></label>
+                <select class="form-control" id="attribute_2" name="attribute_id_2">
+                <option value="0">No Select</option>
+                @foreach($attributes as $value)
+                <option value="{{$value->id}}">{{$value->name}}</option>
+                @endforeach
+                </select>
+                </div>
+                <div class="col-sm-6" id="option-2">
+                <label>Attribute 2 Value: <span class="index-1"></span></label>
+                <select class="form-control" id="attribute_2_value" name="attribute_value_id_2">
+                </select>
+                </div>
+                @endif
+                @else
+                @if(isset($variantAttribute[0]))
+                <div class="col-sm-6 form-group">
+                <input type="hidden" name="attribute_id_1" value="{{$variantAttribute[0]}}">
+                @foreach($attributes as $attribute)
+                @if($attribute->id == $variantAttribute[0])
+                <label>Attribute 1: <span class="index-1"></span></label>
+                <input disabled class="form-control" value="{{$attribute->name}}"/>
+                @endif
+                @endforeach
+                </div>
+                <div class="col-sm-6">
+                <label>Attribute 1 Value: <span class="index-1"></span></label>
+                <select name="attribute_value_id_1" class="form-control">
+                @foreach($variantAttributeValue as $value)
+                @if($value->attribute_id == $variantAttribute[0])
+                <option value="{{$value->id}}">{{$value->value}}</option>
+                @endif
+                @endforeach
+                </select>
+                </div>
+                @endif
+                @if(isset($variantAttribute[1]))
+                <div class="col-sm-6 form-group">
+                <input type="hidden" name="attribute_id_2" value="{{$variantAttribute[1]}}">
+                @foreach($attributes as $attribute)
+                @if($attribute->id == $variantAttribute[1])
+                <label>Attribute 2: <span class="index-1"></span></label>
+                <input disabled class="form-control" value="{{$attribute->name}}"/>
+                @endif
+                @endforeach
+                </div>
+                <div class="col-sm-6">
+                <label>Attribute 2 Value: <span class="index-1"></span></label>
+                <select name="attribute_value_id_2" class="form-control">
+                @foreach($variantAttributeValue as $value)
+                @if($value->attribute_id == $variantAttribute[1])
+                <option value="{{$value->id}}">{{$value->value}}</option>
+                @endif
+                @endforeach
+                </select>
+                </div>
+                @endif
+                @endif *@
+            </div>
+        </div>
+        <div class="card-footer float-right border-0 bg-transparent">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#attribute_1").on("change", function (e) {
+                $.ajax({
+                    url: '{{route("admin.ajaxGetAttributeValue")}}?attribute_id=' + $(this).val(),
+                }).done(function (data) {
+                    console.log(data)
+                    $("#attribute_1_value").html(data)
+                });
+            })
+
+            $("#attribute_2").on("change", function (e) {
+                $.ajax({
+                    url: '{{route("admin.ajaxGetAttributeValue")}}?attribute_id=' + $(this).val(),
+                }).done(function (data) {
+                    $("#attribute_2_value").html(data)
+                });
+            })
+        });
+    </script>
+}
