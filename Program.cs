@@ -1,4 +1,14 @@
+using BTL_QuanLyBanDienThoai.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.Services.AddDbContext<QLBanDienThoaiContext>(options => options.
+//UseSqlServer(builder.Configuration.GetConnectionString("QLBanDienThoaiContext")));
+
+builder.Services.AddDbContext<QLBanDienThoaiContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

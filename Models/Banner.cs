@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BTL_QuanLyBanDienThoai.Models;
 
-public partial class Category
+public partial class Banner
 {
     public int Id { get; set; }
 
@@ -11,5 +11,5 @@ public partial class Category
 
     public string? Image { get; set; }
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public string? Title { get; set; }
 }

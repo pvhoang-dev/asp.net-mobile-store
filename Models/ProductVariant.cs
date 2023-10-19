@@ -15,6 +15,8 @@ public partial class ProductVariant
 
     public double? Price { get; set; }
 
+    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
     public virtual Product? Product { get; set; }
 
     public virtual ICollection<ProductAttributeValue> ProductAttributeValues { get; set; } = new List<ProductAttributeValue>();
