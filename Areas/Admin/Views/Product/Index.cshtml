@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Title {
+            Products
+
+    <a class="btn btn-primary float-right align-items-center"
+       href="/admin/Products/Create">
+        Add New
+    </a>
+}
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive users-table">
+            <table class="table table-centered mb-0 " id="products-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="d-none d-sm-table-cell">Qty</th>
+                        <th class="d-none d-sm-table-cell">Price</th>
+                        <th class="d-none d-lg-table-cell">Slug</th>
+                        <th class="d-none d-lg-table-cell">Category</th>
+                        <th>Status</th>
+                        <th colspan="2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td class="d-none d-sm-table-cell">
+                            <h4><span class="badge badge-primary">Qty</span></h4>
+                        </td>
+                        <td class="d-none d-sm-table-cell">Price</td>
+                        <td class="d-none d-lg-table-cell">Slug</td>
+                        <td class="d-none d-lg-table-cell">Category</td>
+                        <td>
+                            <div>
+                                <input class="updateStatus" type="checkbox" id="product-{{ $product->id }}"
+                                       object="products" object_id="{{ $product->id }}" status="{{ $product->status }}"
+                                       data-switch="success" />
+                                <label for="product-{{ $product->id }}" data-on-label="Yes" data-off-label="No"
+                                       class="mb-0 d-block"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class='btn-group'>
+                                <a href="/Admin/Products/Edit" class="action-icon">
+                                    <i class="mdi mdi-pencil"></i>
+                                </a>
+                                <a href="" class="action-icon">
+                                    <i class="mdi mdi-delete"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer clearfix">
+            <div class="float-right">
+                @* @include('adminlte-templates::common.paginate', ['records' => $products]) *@
+            </div>
+        </div>
+    </div>
+</div>

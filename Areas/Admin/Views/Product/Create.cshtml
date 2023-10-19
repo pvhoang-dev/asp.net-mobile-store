@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Create Product";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Title {
+    Create Product
+
+    <a class="btn btn-outline-primary float-right align-items-center"
+       href="/admin/Products">
+        <i class="uil uil-corner-up-left-alt"></i>&nbsp;Back
+    </a>
+}
+
+<div class="card">
+    <form>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" class="form-control">
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="category_id">Category:</label>
+                    <select name="category_id" class="custom-select">
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="price">Price:</label>
+                    <input type="number" name="price" class="form-control">
+                </div>
+
+                <div class="form-group col-12">
+                    <label for="description">Description:</label>
+                    <input type="text" name="description" class="form-control">
+                </div>
+
+                <!-- File Upload -->
+                <div class="form-group col-12 tab-content">
+                    <label>Images:</label>
+                    <div class="tab-pane show active" id="file-upload-preview">
+                        <div action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
+                             data-upload-preview-template="#uploadPreviewTemplate">
+                            <div class="fallback">
+                                <input name="image[]" type="file" multiple />
+                            </div>
+
+                            <div class="dz-message needsclick">
+                                <i class="h1 text-muted dripicons-cloud-upload"></i>
+                                <h4>Drop files here or click to upload.</h4>
+                            </div>
+                        </div>
+                        <!-- Preview -->
+                        <div class="dropzone-previews mt-3" id="file-previews"></div>
+                    </div> <!-- end preview-->
+                </div> <!-- end tab-content-->
+                <!-- Preview -->
+                <div class="dropzone-previews mt-3" id="file-previews"></div>
+            </div>
+        </div>
+        <div class="card-footer float-right border-0 bg-transparent">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</div>
+<!-- Preview -->
+<div class="d-none" id="uploadPreviewTemplate">
+    <div class="card mt-1 mb-0 shadow-none border">
+        <div class="p-2">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
+                </div>
+                <div class="col pl-0">
+                    <a href="javascript:void(0);" class="text-muted font-weight-bold" data-dz-name></a>
+                    <p class="mb-0" data-dz-size></p>
+                </div>
+                <div class="col-auto">
+                    <!-- Button -->
+                    <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
+                        <i class="dripicons-cross"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    
+    <script src="~/admin/assets/js/vendor/dropzone.min.js"></script>
+    <!-- init js -->
+    <script src="~/admin/assets/js/ui/component.fileupload.js"></script>
+}
