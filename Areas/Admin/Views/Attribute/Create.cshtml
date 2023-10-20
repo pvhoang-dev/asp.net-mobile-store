@@ -1,19 +1,24 @@
-﻿@{
+﻿@using BTL_QuanLyBanDienThoai.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
     ViewData["Title"] = "Create Attribute";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+
+@model Attr
 
 @section Title {
     Create Attribute
 }
 
 <div class="card">
-    <form method="post" action="">
+    <form method="post">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" class="form-control">
+                    <label asp-for="Name">Name</label>
+                    <input asp-for="Name" type="text" id="name" class="form-control">
                 </div>
             </div>
         </div>
