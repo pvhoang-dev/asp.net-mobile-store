@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
-{
+{   
+    [Area("Admin")]
+    [Route("Admin/Banners")]
     public class BannerController : Controller
     {
-        [Area("Admin")]
-        [Route("Admin/Banners")]
         public IActionResult Index()
         {
             return View();
