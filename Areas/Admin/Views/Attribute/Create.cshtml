@@ -6,11 +6,11 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-@model Attr
-
 @section Title {
     Create Attribute
 }
+
+@model Attr
 
 <div class="card">
     <form method="post">
@@ -20,6 +20,7 @@
                     <label asp-for="Name">Name</label>
                     <input asp-for="Name" type="text" id="name" class="form-control">
                 </div>
+               
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">

@@ -1,4 +1,5 @@
 ﻿using BTL_QuanLyBanDienThoai.Data;
+using BTL_QuanLyBanDienThoai.Utils;
 using BTL_QuanLyBanDienThoai.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
     [Route("admin/attributes")]
     public class AttributeController : Controller
     {
+        Slug slug = new Slug();
         private readonly QLBanDienThoaiContext db;
 
         public AttributeController(QLBanDienThoaiContext _db)
@@ -35,9 +37,14 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         public IActionResult Create(Attr attr)
         {
             if (ModelState.IsValid)
-            {
-                this.db.Attrs.Add(attr);
-                this.db.SaveChanges();
+            { 
+                string code = slug.Create(attr.Name);
+                db.Attrs.Add(new Attr
+                {
+                    Name = attr.Name,
+                    Code = code,
+                });
+                db.SaveChanges();
                 return RedirectToAction("Index", "Attribute");
             }
             return View();
@@ -64,6 +71,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                attr.Code = slug.Create(attr.Name);
                 db.Attrs.Update(attr);
                 db.SaveChanges();
                 return RedirectToAction("Index", "Attribute");
