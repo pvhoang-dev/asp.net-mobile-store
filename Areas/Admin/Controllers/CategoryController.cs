@@ -1,4 +1,4 @@
-﻿using BTL_QuanLyBanDienThoai.Data;
+using BTL_QuanLyBanDienThoai.Data;
 using BTL_QuanLyBanDienThoai.Models;
 using Microsoft.AspNetCore.Mvc;
 

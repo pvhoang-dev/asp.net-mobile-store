@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Create Category";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Title {
+    Create Category
+
+    <a class="btn btn-outline-primary float-right align-items-center"
+       href="/Admin/Categories">
+        <i class="uil uil-corner-up-left-alt"></i>&nbsp;Back
+    </a>
+}
+
+<div class="card">
+    <form method="post" action="">
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-12">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="card-footer float-right border-0 bg-transparent">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</div>
+
+
+

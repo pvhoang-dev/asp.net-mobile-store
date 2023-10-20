@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Title {
+        Categories
+
+    <a class="btn btn-primary float-right align-items-center"
+       href="/Admin/Categories/Create">
+        Add New
+    </a>
+}
+
+<div class="card-body p-0">
+    <div class="table-responsive users-table">
+        <table class="table table-centered mb-0 " id="attributes-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Size</td>
+                    <td>
+                        <div class='btn-group'>
+                            <a href="/Admin/Categories/Edit" class="action-icon">
+                                <i class="mdi mdi-pencil"></i>
+                            </a>
+                            <a href="" class="action-icon">
+                                <i class="mdi mdi-delete"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card-footer clearfix">
+        <div class="float-right">
+            @* @include('adminlte-templates::common.paginate', ['records' => $attributes]) *@
+        </div>
+    </div>
+</div>

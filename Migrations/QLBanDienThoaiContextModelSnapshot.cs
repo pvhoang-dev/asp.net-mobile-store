@@ -101,6 +101,9 @@ namespace BTL_QuanLyBanDienThoai.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Category", (string)null);
@@ -199,11 +202,11 @@ namespace BTL_QuanLyBanDienThoai.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("Price1")
+                    b.Property<double?>("Price")
                         .HasColumnType("float");
 
-                    b.Property<double?>("Price2")
-                        .HasColumnType("float");
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
@@ -283,6 +286,9 @@ namespace BTL_QuanLyBanDienThoai.Migrations
                         .HasColumnType("float");
 
                     b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Slug")

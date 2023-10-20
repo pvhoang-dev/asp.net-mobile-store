@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Title {
+            Product Variants
+
+    <a class="btn btn-primary float-right align-items-center"
+       href="/admin/Product-Variants/Create">
+        Add New
+    </a>
+}
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive users-table">
+            <table class="table table-centered mb-0 " id="product-variants-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="d-none d-sm-table-cell">Qty</th>
+                        <th class="d-none d-sm-table-cell">Price</th>
+                        <th class="d-none d-lg-table-cell">Slug</th>
+                        <th colspan="2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td class="d-none d-sm-table-cell">
+                            <h4><span class="badge badge-primary">Qty</span></h4>
+                        </td>
+                        <td class="d-none d-sm-table-cell">Price</td>
+                        <td class="d-none d-lg-table-cell">Slug</td>
+                        <td>
+                            <div class='btn-group'>
+                                <a href="/Admin/Product-Variants/Edit" class="action-icon">
+                                    <i class="mdi mdi-pencil"></i>
+                                </a>
+                                <a href="" class="action-icon">
+                                    <i class="mdi mdi-delete"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer clearfix">
+            <div class="float-right">
+                @* @include('adminlte-templates::common.paginate', ['records' => $products]) *@
+            </div>
+        </div>
+    </div>
+
+</div>
