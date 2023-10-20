@@ -10,6 +10,8 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
     {
         private readonly QLBanDienThoaiContext db;
 
+
+
         public AttributeValueController(QLBanDienThoaiContext _db)
         {
             db = _db;
