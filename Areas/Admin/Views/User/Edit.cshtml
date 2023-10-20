@@ -1,5 +1,94 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Edit User";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+
+@section Title {
+                        Edit User
+
+    <a class="btn btn-outline-primary float-right align-items-center"
+       href="/Admin/Users">
+        <i class="uil uil-corner-up-left-alt"></i>&nbsp;Back
+    </a>
+}
+
+
+<div class="card">
+    <form>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="email">Email:</label>
+                    <input type="text" name="email" class="form-control" required>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label>Password:</label>
+                    <button class="btn btn-outline-primary form-control col-6 d-block" type="button"
+                            data-toggle="collapse" data-target="#collapseExample"
+                            aria-expanded="false" aria-controls="collapseExample">
+                        Change password
+                    </button>
+                    <br />
+                    <div class="collapse show form-group w-100" id="collapseExample">
+                        <div class="card card-body row">
+                            <div class="form-group col-12">
+                                <label for="old_password">Old Password:</label>
+                                <div class="input-group input-group-merge">
+                                    <input type="password" id="old_password" name="old_password" class="form-control">
+                                    <div class="input-group-append" data-password="false">
+                                        <div class="input-group-text">
+                                            <span class="password-eye"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="new_password">Password:</label>
+                                <div class="input-group input-group-merge">
+                                    <input type="password" id="new_password" name="new_password" class="form-control">
+                                    <div class="input-group-append" data-password="false">
+                                        <div class="input-group-text">
+                                            <span class="password-eye"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-12">
+                                <label for="confirm_password">Confirm Password:</label>
+                                <div class="input-group input-group-merge">
+                                    <input type="password" id="confirm_password" name="confirm_password" class="form-control">
+                                    <div class="input-group-append" data-password="false">
+                                        <div class="input-group-text">
+                                            <span class="password-eye"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group border-0 bg-transparent">
+                                <button type="button" class="btn btn-outline-info">Change</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group col-sm-6">
+                    <label for="role">Role:</label>
+                    <select class="form-control" id="role" name="role">
+                        <option>Select a role</option>
+                        <option value="1">Admin</option>
+                        <option value="2">User</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer float-right border-0 bg-transparent">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</div>

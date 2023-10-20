@@ -3,10 +3,10 @@
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("Admin")]
+    [Route("Admin/Users")]
     public class UserController : Controller
     {
-        [Route("List")]
+        [Route("")]
         public IActionResult Index()
         {
             return View();
@@ -29,5 +29,12 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             return View();
         }
+
+        [Route("Create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
     }
 }

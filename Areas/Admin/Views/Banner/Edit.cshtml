@@ -4,7 +4,7 @@
 }
 
 @section Title {
-    Edit Banner
+        Edit Banner
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/Admin/Banners">
@@ -26,9 +26,16 @@
                     <input type="text" id="title" class="form-control">
                 </div>
 
+                <div class="form-group col-md-6">
+                    <label for="old_image">Old Image:</label>
+                    <img src="~/admin/assets/images/products/product-1.jpg"
+                         class="d-block img-thumbnail"
+                         style="border-radius: 5px" />
+                </div>
+
                 <!-- File Upload -->
-                <div class="form-group col-12 tab-content">
-                    <label>Images:</label>
+                <div class="form-group col-md-6 tab-content">
+                    <label>New Images:</label>
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
