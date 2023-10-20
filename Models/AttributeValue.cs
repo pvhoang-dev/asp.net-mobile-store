@@ -11,7 +11,6 @@ public partial class AttributeValue
 
     public string? Name { get; set; }
 
-
     public virtual Attr? Attr { get; set; }
 
     public virtual ICollection<ProductAttributeValue> ProductAttributeValues { get; set; } = new List<ProductAttributeValue>();
