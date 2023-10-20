@@ -1,6 +1,5 @@
-﻿@using BTL_QuanLyBanDienThoai.Models;
+﻿@using BTL_QuanLyBanDienThoai.Models.ViewModel;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
 @{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -14,8 +13,10 @@
     </a>
 }
 
-@model List<AttributeValue>
+@model List<AttributeValueViewModel>;
 
+
+<div class="card">
 <div class="card-body p-0">
     <div class="table-responsive users-table">
         <table class="table table-centered mb-0 " id="attribute-values-table">
@@ -30,14 +31,14 @@
                 @foreach(var attributeValue in Model)
                 {
                     <tr>
-                        <td>Size</td>
-                        <td>S</td>
+                        <td>@attributeValue.Name</td>
+                        <td>@attributeValue.Value</td>
                         <td>
                             <div class='btn-group'>
-                                <a href="/admin/attribute-values/edit" class="action-icon">
+                                <a asp-area="admin" asp-controller="AttributeValue" asp-action="Edit" asp-route-id="@attributeValue.Id" class="action-icon">
                                     <i class="mdi mdi-pencil"></i>
                                 </a>
-                                <a href="" class="action-icon">
+                                <a asp-area="admin" asp-controller="AttributeValue" asp-action="Delete" asp-route-id="@attributeValue.Id" class="action-icon">
                                     <i class="mdi mdi-delete"></i>
                                 </a>
                             </div>
@@ -53,4 +54,5 @@
             @* @include('adminlte-templates::common.paginate', ['records' => $attributeValues]) *@
         </div>
     </div>
+</div>
 </div>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BTL_QuanLyBanDienThoai.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     ViewData["Title"] = "Create Category";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -12,13 +14,15 @@
     </a>
 }
 
-<div class="card col-lg-6">
-    <form method="post" action="">
+@model Category
+
+<div class="card">
+    <form method="post">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" class="form-control">
+                    <label asp-for="Name"  for="name">Name</label>
+                    <input asp-for="Name" type="text" id="name" class="form-control">
                 </div>
 
                 <!-- File Upload -->

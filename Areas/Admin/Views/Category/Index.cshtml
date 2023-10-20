@@ -1,15 +1,19 @@
-﻿@{
+﻿@using BTL_QuanLyBanDienThoai.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 @section Title {
-                Categories
-
+    Categories
     <a class="btn btn-primary float-right align-items-center"
        href="/Admin/Categories/Create">
         Add New
     </a>
 }
+
+@model List<Category>
+
 <div class="card">
     <div class="card-body p-0">
         <div class="table-responsive users-table">
@@ -22,29 +26,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>name</td>
-                        <td>
-                            <img src="~/admin/assets/images/products/product-1.jpg"
-                                 width="50"
-                                 height="50"
-                                 style="border-radius: 5px" />
-                        </td>
-                        <td>
-                            <div class='btn-group'>
-                                <a href="/Admin/Categories/Edit" class="action-icon">
-                                    <i class="mdi mdi-pencil"></i>
-                                </a>
-                                <a href="" class="action-icon">
-                                    <i class="mdi mdi-delete"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach(var category in Model)
+                    {
+                        <tr>
+                            <td>@category.Name</td>
+                            <td>
+                                <img src="~/admin/assets/images/products/product-1.jpg"
+                                     width="50"
+                                     height="50"
+                                     style="border-radius: 5px" />
+                            </td>
+                            <td>
+                                <div class='btn-group'>
+                                    <a asp-area="Admin" asp-controller="Categories" asp-action="Edit" asp-route-id="@category.Id" class="action-icon">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </a>
+                                    <a href="" class="action-icon">
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
-
         <div class="card-footer clearfix">
             <div class="float-right">
                 @* @include('adminlte-templates::common.paginate', ['records' => $attributes]) *@
