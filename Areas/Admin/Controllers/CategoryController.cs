@@ -33,14 +33,14 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
         [Route("Create")]
         [HttpPost]
-        public async Task<IActionResult> Create(Category category, IFormFile avatarFile)
+        public async Task<IActionResult> Create(Category category, IFormFile cateImg)
         {
             if(ModelState.IsValid)
             {
-                if (avatarFile != null)
+                if (cateImg != null)
                     try
                     {
-                        if (await _bufferedFileUploadService.UploadFile(avatarFile))
+                        if (await _bufferedFileUploadService.UploadFile(cateImg, "categories"))
                         {
                             Debug.WriteLine("File Upload Successful");
                             ViewBag.Message = "File Upload Successful";
@@ -54,13 +54,11 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     catch
                     {
                         Debug.WriteLine("File Upload Failed");
-                        //Log ex
                         ViewBag.Message = "File Upload Failed";
                     }
 
                 if (category.Image != null)              
-                    category.Image = Path.Combine("UploadedFiles", category.Image);
-                
+                    category.Image = Path.Combine("UploadedFiles\\categories", category.Image);
                     
                 db.Categories.Add(category);
                 db.SaveChanges();

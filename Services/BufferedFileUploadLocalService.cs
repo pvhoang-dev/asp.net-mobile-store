@@ -4,14 +4,14 @@ namespace BTL_QuanLyBanDienThoai.Services
 {
     public class BufferedFileUploadLocalService : IBufferedFileUploadService
     {
-        public async Task<bool> UploadFile(IFormFile file)
+        public async Task<bool> UploadFile(IFormFile file, string link)
         {
             string path = "";
             try
             {
                 if (file.Length > 0)
                 {
-                    path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot", "UploadedFiles"));
+                    path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot", "UploadedFiles" + "/" + link));
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
