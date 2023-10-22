@@ -1,4 +1,6 @@
 using BTL_QuanLyBanDienThoai.Data;
+using BTL_QuanLyBanDienThoai.Services.Interfaces;
+using BTL_QuanLyBanDienThoai.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,7 @@ builder.Services.AddDbContext<QLBanDienThoaiContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IBufferedFileUploadService, BufferedFileUploadLocalService>();
 
 var app = builder.Build();
 
