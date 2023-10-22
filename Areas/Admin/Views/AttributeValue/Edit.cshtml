@@ -12,27 +12,57 @@
 }
 
 
+@model AttributeValueViewModel;
+
 <div class="card">
-    <form method="post" action="">
+    <form method="post">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label for="attribute_id">Attribute:</label>
-                    <select name="attribute_id" class="form-control">                        
-                        <option>2</option>
+                    <label asp-for="attrId" for="attribute_id">Attribute:</label>
+                    <select name="attribute_id" id="attribute_id" class="form-control">
+                        <option value="">Selected attribute</option>
+                        @foreach (var attr in Model.attrs)
+                        {
+                            if (Model.attrId != null && Model.attrId == @attr.Id)
+                            {
+                                <option selected asp-for="attrId" value="@attr.Id">@attr.Name</option>
+                            }
+                            else
+                            {
+                                <option asp-for="attrId" value="@attr.Id">@attr.Name</option>
+                            }
+                        }
                     </select>
                 </div>
                 <div class="form-group col-sm-6">
-                    <label for="value">Value:</label>
-                    <input type="text" id="value" class="form-control" required>
+                    <label asp-for="Name">Value:</label>
+                    <input asp-for="Name" type="text" id="value" class="form-control" required>
                 </div>
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary">Create</button>
         </div>
     </form>
 </div>
-
-
-
+@section Scripts {
+    <script>
+        // Lắng nghe sự kiện thay đổi của phần tử select
+        document.getElementById('attribute_id').addEventListener('change', function () {
+            var selectedValue = this.value;
+            document.getElementById('attribute_id').setAttribute('asp-for', 'Id');
+            document.getElementById('Id').value = selectedValue;
+        });
+    </script>
+    @if (ViewBag.Message != null)
+    {
+        <script>
+            Swal.fire(
+                'Warning',
+                "@ViewBag.Message",
+                'warning'
+            )
+        </script>
+    }
+}

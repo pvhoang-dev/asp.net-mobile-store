@@ -2,13 +2,15 @@
 using BTL_QuanLyBanDienThoai.Utils;
 using BTL_QuanLyBanDienThoai.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
-
-
     [Area("admin")]
-    [Route("admin/attributes")]
+    [Route("Admin/Attributes")]
     public class AttributeController : Controller
     {
         Slug slug = new Slug();
@@ -23,7 +25,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             List<Attr> attrs = db.Attrs.ToList();
             return View(attrs);
-            // return View();
         }
 
         [Route("Create")]
@@ -32,22 +33,31 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
+
         [Route("Create")]
         [HttpPost]
         public IActionResult Create(Attr attr)
         {
-            if (ModelState.IsValid)
-            { 
-                string code = slug.Create(attr.Name);
+            string code = slug.Create(attr.Name);
+            var existingAttr = db.Attrs.FirstOrDefault(a => a.Code == code);
+
+            if (existingAttr == null)
+            {
                 db.Attrs.Add(new Attr
                 {
                     Name = attr.Name,
                     Code = code,
                 });
                 db.SaveChanges();
+
                 return RedirectToAction("Index", "Attribute");
             }
-            return View();
+            else
+            {
+                ViewBag.Message = "Attribute '" + attr.Name + "' existed";
+
+                return View(attr);
+            }
         }
 
         [Route("Edit/{id}")]
@@ -80,36 +90,39 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
-        [Route("Delete/{id}")]
-        public IActionResult Delete(int? id)
+        [Route("Delete")]
+        [HttpPost]
+        public IActionResult Delete(int id)
         {
-            if (id == null || id == 0)
+            var dbAttr = db.Attrs.FirstOrDefault(x => x.Id == id);
+
+            if (dbAttr != null)
             {
-                return NotFound();
+                db.Attrs.Remove(dbAttr);
+                try
+                {
+                    db.SaveChanges();
+
+                    return Json(new { success = true, message = "done" });
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    return BadRequest(JsonConvert.SerializeObject(
+                        new
+                        {
+                            error = "Can not delete this attribute."
+                        }
+                    ));
+                }
             }
-            Attr attr = this.db.Attrs.Find(id);
-            if (attr == null)
-            {
-                return NotFound();
-            }
-            return View(attr);
+
+            return BadRequest(JsonConvert.SerializeObject(
+                new
+                {
+                    error = "Can not delete this attribute."
+                }
+            ));
         }
-
-        [Route("Delete/{id}")]
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int? id)
-        {
-            Attr? attr = db.Attrs.Find(id);
-            if (attr == null)
-            {
-                return NotFound();
-            }
-
-            db.Attrs.Remove(attr);
-            db.SaveChanges();
-            return RedirectToAction("Index", "Attribute");
-        }
-
-        
     }
 }

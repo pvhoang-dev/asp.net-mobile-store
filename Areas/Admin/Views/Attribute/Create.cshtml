@@ -29,5 +29,15 @@
     </form>
 </div>
 
-
-
+@section Scripts {
+    @if (ViewBag.Message != null)
+    {
+        <script>
+            Swal.fire(
+                'Warning',
+                "@ViewBag.Message",
+                'warning'
+            )
+        </script>
+    }
+}
