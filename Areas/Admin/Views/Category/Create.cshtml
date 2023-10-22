@@ -17,7 +17,7 @@
 @model Category
 
 <div class="card">
-    <form method="post">
+    <form action="/Admin/Categories/Create" method="post" enctype="multipart/form-data">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
@@ -27,12 +27,13 @@
 
                 <!-- File Upload -->
                 <div class="form-group col-12 tab-content">
-                    <label>Images:</label>
+                    <label asp-for="Image">Images:</label>
                     <div class="tab-pane show active" id="file-upload-preview">
-                        <div action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
+                        <div class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input name="image[]" type="file"/>
+                                <input id="avatarfile" name="avatarfile" type="file" class="form-control" onchange="ChangeFile()" />
+                                <input type="text" asp-for="Image" class="form-control d-none" />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -75,3 +76,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    function ChangeFile(e) {
+        var currentFile = document.querySelector('#avatarfile').files[0];
+        var fileName = currentFile.name;
+        document.querySelector('input[name="AvatarUrl"]').value = fileName;
+        console.log(document.querySelector('input[name="AvatarUrl"]').value);
+    }
+</script>

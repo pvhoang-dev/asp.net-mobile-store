@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BTL_QuanLyBanDienThoai.Models.ViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -10,6 +12,8 @@
         Add New
     </a>
 }
+
+@model List<ProductViewModel>
 
 <div class="card">
     <div class="card-body p-0">
@@ -27,34 +31,37 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td class="d-none d-sm-table-cell">
-                            <h4><span class="badge badge-primary">Qty</span></h4>
-                        </td>
-                        <td class="d-none d-sm-table-cell">Price</td>
-                        <td class="d-none d-lg-table-cell">Slug</td>
-                        <td class="d-none d-lg-table-cell">Category</td>
-                        <td>
-                            <div>
-                                <input class="updateStatus" type="checkbox" id="product-{{ $product->id }}"
-                                       object="products" object_id="{{ $product->id }}" status="{{ $product->status }}"
-                                       data-switch="success" />
-                                <label for="product-{{ $product->id }}" data-on-label="Yes" data-off-label="No"
-                                       class="mb-0 d-block"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class='btn-group'>
-                                <a href="/Admin/Products/Edit" class="action-icon">
-                                    <i class="mdi mdi-pencil"></i>
-                                </a>
-                                <a href="" class="action-icon">
-                                    <i class="mdi mdi-delete"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach(var productViewModel in Model)
+                    {
+                        <tr>
+                            <td>@productViewModel.Name</td>
+                            <td class="d-none d-sm-table-cell">
+                                <h4><span class="badge badge-primary">@productViewModel.Quantity</span></h4>
+                            </td>
+                            <td class="d-none d-sm-table-cell">@productViewModel.Price</td>
+                            <td class="d-none d-lg-table-cell">@productViewModel.Slug</td>
+                            <td class="d-none d-lg-table-cell">@productViewModel.CategoryName</td>
+                            <td>
+                                <div>
+                                    <input class="updateStatus" type="checkbox" id="product-{{ $product->id }}"
+                                           object="products" object_id="{{ $product->id }}" status="{{ $product->status }}"
+                                           data-switch="success" />
+                                    <label for="product-{{ $product->id }}" data-on-label="Yes" data-off-label="No"
+                                           class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class='btn-group'>
+                                    <a asp-area="admin" asp-controller="Product" asp-action="Edit" asp-route-id="@productViewModel.Id"  class="action-icon">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </a>
+                                    <a href="" class="action-icon">
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
