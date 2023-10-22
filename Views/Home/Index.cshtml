@@ -107,68 +107,35 @@
         </div>
     </div>
 </section>
-
-<!-- Categ -->
+@model BTL_QuanLyBanDienThoai.Models.ViewModel.HomeViewModel
+<!-- Category -->
 <div class="sec-banner bg0 p-t-80 p-b-50">
     <div class="container">
         <div class="row">
-            <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-                <!-- Block1 -->
-                <div class="block1 wrap-pic-w">
-                    <img src="~/web/assets/images/15-prm/15prm.jpeg" alt="IMG-BANNER" />
+            @foreach (var category in Model.Categories)
+            {
+                <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
+                    <!-- Block1 -->
+                    <div class="block1 wrap-pic-w">
+                        <img src="/@category.Image" alt="IMG-CATEGORIES" />
 
-                    <a href="product.html"
-                       class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                        <div class="block1-txt-child1 flex-col-l">
-                            <span class="block1-name ltext-102 trans-04 p-b-8">
-                                iPhone 15 series
-                            </span>
-                        </div>
+                        <a href="product.html"
+                           class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+                            <div class="block1-txt-child1 flex-col-l">
+                                <span class="block1-name ltext-102 trans-04 p-b-8">
+                                    @category.Name
+                                </span>
+                            </div>
 
-                        <div class="block1-txt-child2 p-b-4 trans-05">
-                            <div class="block1-link stext-101 cl0 trans-09">Shop Now</div>
-                        </div>
-                    </a>
+                            <div class="block1-txt-child2 p-b-4 trans-05">
+                                <div class="block1-link stext-101 cl0 trans-09">Shop Now</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-                <!-- Block1 -->
-                <div class="block1 wrap-pic-w">
-                    <img src="~/web/assets/images/14-prm/14-prm.jpeg" alt="IMG-BANNER" />
-
-                    <a href="product.html"
-                       class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                        <div class="block1-txt-child1 flex-col-l">
-                            <span class="block1-name ltext-102 trans-04 p-b-8">
-                                iPhone 14 series
-                            </span>
-                        </div>
-
-                        <div class="block1-txt-child2 p-b-4 trans-05">
-                            <div class="block1-link stext-101 cl0 trans-09">Shop Now</div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-                <!-- Block1 -->
-                <div class="block1 wrap-pic-w">
-                    <img src="~/web/assets/images/13/13.webp" alt="IMG-BANNER" />
-
-                    <a href="product.html"
-                       class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                        <div class="block1-txt-child1 flex-col-l">
-                            <span class="block1-name ltext-102 trans-04 p-b-8">
-                                iPhone 13 series
-                            </span>
-                        </div>
-
-                        <div class="block1-txt-child2 p-b-4 trans-05">
-                            <div class="block1-link stext-101 cl0 trans-09">Shop Now</div>
-                        </div>
-                    </a>
-                </div>
-            </div>
+            }
+           
+            
         </div>
     </div>
 </div>

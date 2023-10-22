@@ -1,6 +1,9 @@
 ﻿using BTL_QuanLyBanDienThoai.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using BTL_QuanLyBanDienThoai.Data;
+using BTL_QuanLyBanDienThoai.Services.Interfaces;
+using BTL_QuanLyBanDienThoai.Models.ViewModel;
 
 namespace BTL_QuanLyBanDienThoai.Controllers
 {
@@ -8,14 +11,32 @@ namespace BTL_QuanLyBanDienThoai.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+		private readonly QLBanDienThoaiContext db;
+		
+
+		public HomeController(QLBanDienThoaiContext _db, ILogger<HomeController> logger)
         {
-            _logger = logger;
+			db = _db;
+			_logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var categories = db.Categories.ToList();
+            var products = db.Products.ToList();
+
+            var HomeViewModel = new HomeViewModel
+            {
+                Categories = categories,
+                Products = products
+            };
+
+            return View(HomeViewModel);
+        }
+        public ActionResult GetProducts()
+        {
+            var products = db.Products.ToList(); // Lấy danh sách sản phẩm từ cơ sở dữ liệu
+            return Json(products, JsonRequestBehavior.AllowGet);
         }
 
         public IActionResult Privacy()
