@@ -15,6 +15,7 @@
         public string? ImageDefault { get; set; }
         public string? CategoryName { get; set; }
         public int? CategoryId { get; set; }
+        public IFormFile? Photo { get; set; }
         public List<Category>? Categories { get; set; }
     }
 }

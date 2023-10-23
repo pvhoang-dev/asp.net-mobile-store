@@ -20,8 +20,8 @@
             <table class="table table-centered mb-0" id="attributes-table">
                 <thead>
                     <tr>
-                        <th>Name</th>
                         <th>Image</th>
+                        <th>Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -29,13 +29,13 @@
                     @foreach(var category in Model)
                     {
                         <tr>
-                            <td>@category.Name</td>
                             <td>
                                 <img src="/@category.Image"
                                      width="50"
                                      height="50"
                                      style="border-radius: 5px" />
                             </td>
+                            <td>@category.Name</td>
                             <td>
                                 <div class='btn-group'>
                                     <a asp-area="Admin" asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="action-icon">
@@ -96,4 +96,4 @@
 
         }
     </script>
-}
+}   

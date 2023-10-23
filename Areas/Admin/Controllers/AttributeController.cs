@@ -4,8 +4,6 @@ using BTL_QuanLyBanDienThoai.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {

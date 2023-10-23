@@ -2,11 +2,8 @@
 using BTL_QuanLyBanDienThoai.Models;
 using BTL_QuanLyBanDienThoai.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting.Internal;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Web;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -46,25 +43,8 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 if (cateImg != null)
-                    try
-                    {
-                        if (await _bufferedFileUploadService.UploadFile(cateImg, "categories"))
-                        {
-                            Debug.WriteLine("File Upload Successful");
-                            ViewBag.Message = "File Upload Successful";
-                        }
-                        else
-                        {
-                            Debug.WriteLine("File Upload Failed");
-                            ViewBag.Message = "File Upload Failed";
-                        }
-                    }
-                    catch
-                    {
-                        Debug.WriteLine("File Upload Failed");
-                        ViewBag.Message = "File Upload Failed";
-                    }
-
+                    await _bufferedFileUploadService.UploadFile(cateImg, "categories");
+                
                 if (category.Image != null)
                     category.Image = Path.Combine("UploadedFiles\\categories", category.Image);
 
