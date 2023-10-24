@@ -95,9 +95,23 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         }
 
         [Route("Edit/{id}")]
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
             var pro = db.Products.Find(id);
+
+            List<ProductVariantViewModel> productVariants = (from productVariant in db.ProductVariants
+                                                             join product in db.Products
+                                                             on productVariant.ProductId equals product.Id
+                                                             where product.Id == id
+                                                             select new ProductVariantViewModel
+                                                             {
+                                                                 Id = productVariant.Id,
+                                                                 Name = productVariant.Name,
+                                                                 Price = productVariant.Price,
+                                                                 Quantity = productVariant.Quantity,
+                                                                 Slug = productVariant.Slug
+                                                             }).ToList();
+
             ProductViewModel productViewModel = new ProductViewModel
             {
                 Categories = db.Categories.ToList(),
@@ -107,6 +121,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 Quantity = pro.Quantity,
                 Description = pro.Description,
                 CategoryId = pro.CategoryId,
+                ProductVariants = productVariants
             };
 
             return View(productViewModel);

@@ -17,5 +17,6 @@
         public int? CategoryId { get; set; }
         public IFormFile? Photo { get; set; }
         public List<Category>? Categories { get; set; }
+        public List<ProductVariantViewModel>? ProductVariants { get; set; }
     }
 }

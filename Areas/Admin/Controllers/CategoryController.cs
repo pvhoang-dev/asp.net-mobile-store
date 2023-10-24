@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
 
-
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -26,6 +25,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _bufferedFileUploadService = bufferedFileUploadService;
             _webHostEnvironment = webHostEnvironment;
         }
+
         [Authentication]
         public IActionResult Index()
         {
