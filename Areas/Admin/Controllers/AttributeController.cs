@@ -4,9 +4,10 @@ using BTL_QuanLyBanDienThoai.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
-{
+{ 
     [Area("admin")]
     [Route("Admin/Attributes")]
     public class AttributeController : Controller
@@ -19,6 +20,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             this.db = _db;
         }
 
+        [Authentication]
         public IActionResult Index()
         {
             List<Attr> attrs = db.Attrs.ToList();

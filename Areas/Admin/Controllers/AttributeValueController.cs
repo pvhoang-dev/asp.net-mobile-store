@@ -5,8 +5,7 @@ using BTL_QuanLyBanDienThoai.Models;
 using BTL_QuanLyBanDienThoai.Models.ViewModel;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System;
-using System.Globalization;
+using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
@@ -22,6 +21,8 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             db = _db;
         }
+
+        [Authentication]
         public IActionResult Index()
         {
             List<AttributeValueViewModel> attributeAndAttributeValues = (from attr in db.Attrs

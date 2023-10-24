@@ -3,7 +3,7 @@ using BTL_QuanLyBanDienThoai.Models;
 using BTL_QuanLyBanDienThoai.Models.ViewModel;
 using BTL_QuanLyBanDienThoai.Services.Interfaces;
 using BTL_QuanLyBanDienThoai.Utils;
-using Microsoft.AspNetCore.Hosting;
+using BTL_QuanLyBanDienThoai.Models.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data;
@@ -29,6 +29,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _bufferedFileUploadService = bufferedFileUploadService;
             _webHostEnvironment = webHostEnvironment;
         }
+        [Authentication]
         public IActionResult Index()
         {
             List<ProductViewModel> productViewModel = (from product in db.Products
