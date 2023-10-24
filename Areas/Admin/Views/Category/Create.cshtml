@@ -6,7 +6,7 @@
 }
 
 @section Title {
-            Create Category
+                    Create Category
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/Admin/Categories">
@@ -17,12 +17,12 @@
 @model Category
 
 <div class="card col-lg-6">
-    <form action="/Admin/Categories/Create" method="post" enctype="multipart/form-data">
+    <form id="form" method="post" enctype="multipart/form-data">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
                     <label asp-for="Name" for="name">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control" required>
+                    <input asp-for="Name" type="text" class="form-control" required>
                 </div>
 
                 <!-- File Upload -->
@@ -33,7 +33,7 @@
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
                                 <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" />
-                                <input type="text" asp-for="Image" class="form-control" hidden/>
+                                <input type="text" asp-for="Image" class="form-control" hidden />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -70,33 +70,55 @@
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="button" class="btn btn-primary" id="create">Create</button>
         </div>
     </form>
 </div>
 
-<script>
-    function chooseFile() {
-        document.querySelector('#cateImg').click();
-        //$('#cateImg').click();
-    }
-    function ChangeFile(input) {
-        var currentFile = $('#cateImg')[0].files[0];
-        var fileName = currentFile.name;
+@section Scripts{
+    <script>
+        var checkAllFields = false;
+        function chooseFile() {
+            document.querySelector('#cateImg').click();
+            //$('#cateImg').click();
+        }
+        function ChangeFile(input) {
+            checkAllFields = true;
+            var currentFile = $('#cateImg')[0].files[0];
+            var fileName = currentFile.name;
 
-        $('#file-previewss').removeClass('d-none');
+            $('#file-previewss').removeClass('d-none');
 
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#preImg').attr('src', e.target.result);
-                $('#preImgName').text(fileName);
-            };
+                reader.onload = function (e) {
+                    $('#preImg').attr('src', e.target.result);
+                    $('#preImgName').text(fileName);
+                };
 
-            reader.readAsDataURL(input.files[0]);
+                reader.readAsDataURL(input.files[0]);
+            }
+
+            $('input[name="Image"]').val(fileName);
         }
 
-        $('input[name="Image"]').val(fileName);
-    }
-</script>
+        $(document).ready(function () {
+            $('#create').on('click', function () {
+                var name = $("#Name").val().trim();
+                if (checkAllFields != false && name != "") {
+                    $("#form").submit();
+                } else {
+                    $.toast({
+                        heading: 'Create failed',
+                        text: 'Please enter all fields',
+                        showHideTransition: 'plain',
+                        position: 'bottom-right',
+                        icon: 'error',
+                        hideAfter: 3000,
+                    });
+                }
+            });
+        });
+    </script>
+}

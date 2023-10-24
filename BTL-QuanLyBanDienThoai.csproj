@@ -112,7 +112,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\UploadedFiles\" />
+    <Folder Include="wwwroot\UploadedFiles\banners\" />
   </ItemGroup>
 
 </Project>

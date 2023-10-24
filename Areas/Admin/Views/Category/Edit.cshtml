@@ -17,14 +17,15 @@
 @model Category;
 
 <div class="card col-lg-6">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="form">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
                     <label asp-for="Name" for="name">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control" required>
+                    <input asp-for="Name" type="text" class="form-control" required>
                     
                 </div>
+
                 <input asp-for="Id" type="text" class="form-control" hidden>
                 <div class="form-group col-md-6">
                     <label>Old Image:</label>
@@ -78,7 +79,7 @@
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-primary" id="create" >Save</button>
         </div>
     </form>
 </div>
@@ -108,6 +109,23 @@
 
             $('input[name="Image"]').val(fileName);
         }
+        $(document).ready(function () {
+            $('#create').on('click', function () {
+                var name = $("#Name").val().trim();
+                if (name != "") {
+                    $("#form").submit();
+                } else {
+                    $.toast({
+                        heading: 'Create failed',
+                        text: 'Please enter all fields',
+                        showHideTransition: 'plain',
+                        position: 'bottom-right',
+                        icon: 'error',
+                        hideAfter: 3000,
+                    });
+                }
+            });
+        });
     </script>
 
     @if (ViewBag.Message != null)
