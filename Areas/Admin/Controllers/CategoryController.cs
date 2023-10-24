@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
 
-
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
     [Authentication]
@@ -27,7 +26,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _bufferedFileUploadService = bufferedFileUploadService;
             _webHostEnvironment = webHostEnvironment;
         }
-        
+
         public IActionResult Index()
         {
             List<Category> categories = db.Categories.ToList();
