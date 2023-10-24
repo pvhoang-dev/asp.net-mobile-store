@@ -3,11 +3,12 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
+    [Authentication]
     [Area("Admin")]
     [Route("Admin/Orders")]
     public class OrderController : Controller
     {
-        [Authentication]
+        
         public IActionResult Index()
         {
             return View();

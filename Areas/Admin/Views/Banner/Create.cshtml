@@ -1,4 +1,7 @@
-﻿@{
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using BTL_QuanLyBanDienThoai.Models;
+
+@{
     ViewData["Title"] = "Create Banner";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -12,28 +15,32 @@
     </a>
 }
 
+@model Banner;
+
 <div class="card">
-    <form method="post" action="">
+    <form action="/Admin/Banners/Create" method="post" enctype="multipart/form-data">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" class="form-control">
+                    <label asp-for="Name">Name</label>
+                    <input asp-for="Name" type="text" id="name" class="form-control">
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" class="form-control">
+                    <label asp-for="Title">Title</label>
+                    <input asp-for="Title" type="text" id="title" class="form-control">
                 </div>
 
                 <!-- File Upload -->
+                <!-- File Upload -->
                 <div class="form-group col-12 tab-content">
-                    <label>Images:</label>
+                    <label asp-for="Image">Images:</label>
                     <div class="tab-pane show active" id="file-upload-preview">
-                        <div action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
+                        <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input name="image[]" type="file" />
+                                <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" />
+                                <input type="text" asp-for="Image" class="form-control" hidden />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -42,7 +49,29 @@
                             </div>
                         </div>
                         <!-- Preview -->
-                        <div class="dropzone-previews mt-3" id="file-previews"></div>
+                        <div class="d-none dropzone-previews mt-3" id="file-previewss">
+                            <div class="" id="uploadPreviewTemplatee">
+                                <div class="card mt-1 mb-0 shadow-none border">
+                                    <div class="p-2">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <img id="preImg" data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
+                                            </div>
+                                            <div class="col pl-0">
+                                                <a href="javascript:void(0);" class="text-muted font-weight-bold" data-dz-name></a>
+                                                <p class="mb-0" data-dz-size id="preImgName"></p>
+                                            </div>
+                                            <div class="col-auto">
+                                                <!-- Button -->
+                                                <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
+                                                    <i class="dripicons-cross"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div> <!-- end preview-->
                 </div> <!-- end tab-content-->
                 <!-- Preview -->
@@ -54,25 +83,30 @@
         </div>
     </form>
 </div>
-<!-- Preview -->
-<div class="d-none" id="uploadPreviewTemplate">
-    <div class="card mt-1 mb-0 shadow-none border">
-        <div class="p-2">
-            <div class="row align-items-center">
-                <div class="col-auto">
-                    <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                </div>
-                <div class="col pl-0">
-                    <a href="javascript:void(0);" class="text-muted font-weight-bold" data-dz-name></a>
-                    <p class="mb-0" data-dz-size></p>
-                </div>
-                <div class="col-auto">
-                    <!-- Button -->
-                    <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                        <i class="dripicons-cross"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+
+<script>
+    function chooseFile() {
+        document.querySelector('#cateImg').click();
+        //$('#cateImg').click();
+    }
+    function ChangeFile(input) {
+        var currentFile = $('#cateImg')[0].files[0];
+        var fileName = currentFile.name;
+
+        $('#file-previewss').removeClass('d-none');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#preImg').attr('src', e.target.result);
+                $('#preImgName').text(fileName);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        $('input[name="Image"]').val(fileName);
+    }
+</script>

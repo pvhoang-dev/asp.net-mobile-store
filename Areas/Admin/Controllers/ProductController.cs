@@ -11,6 +11,7 @@ using System.Diagnostics;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
+    [Authentication]
     [Area("admin")]
     [Route("admin/Products")]
     public class ProductController : Controller
@@ -29,7 +30,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _bufferedFileUploadService = bufferedFileUploadService;
             _webHostEnvironment = webHostEnvironment;
         }
-        [Authentication]
+        
         public IActionResult Index()
         {
             List<ProductViewModel> productViewModel = (from product in db.Products
