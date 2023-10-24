@@ -4,6 +4,7 @@ using BTL_QuanLyBanDienThoai.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTL_QuanLyBanDienThoai.Migrations
 {
     [DbContext(typeof(QLBanDienThoaiContext))]
-    partial class QLBanDienThoaiContextModelSnapshot : ModelSnapshot
+    [Migration("20231024075233_Add_Column_Create_At_In_Order_Table")]
+    partial class Add_Column_Create_At_In_Order_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
