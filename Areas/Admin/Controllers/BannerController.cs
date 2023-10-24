@@ -3,6 +3,9 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 using BTL_QuanLyBanDienThoai.Data;
 using BTL_QuanLyBanDienThoai.Services.Interfaces;
 using BTL_QuanLyBanDienThoai.Models;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -58,10 +61,112 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
-        [Route("Edit")]
-        public IActionResult Edit()
+        [Route("Edit/{id}")]
+        public IActionResult Edit(int? id)
         {
-            return View();
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            Banner banner = db.Banners.Find(id);
+            if (banner == null)
+            {
+                return NotFound();
+            }
+            return View(banner);
+        }
+
+        [Route("Edit/{id}")]
+        [HttpPost]
+        public async Task<IActionResult> Edit(Banner banner, IFormFile cateImg, int? id)
+        {
+            Banner ban = db.Banners.Find(banner.Id);
+
+            if (ModelState.IsValid)
+            {
+                if (cateImg != null)
+                    try
+                    {
+                        string filePath = Path.Combine(_webHostEnvironment.WebRootPath, banner.Image);
+
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+
+                        if (banner.Image != null)
+                            banner.Image = Path.Combine("UploadedFiles\\categories", banner.Image);
+
+                        ban.Image = banner.Image;
+
+                        if (await _bufferedFileUploadService.UploadFile(cateImg, "categories"))
+                        {
+                            ViewBag.Message = "Edit Category Successful";
+                            ViewBag.Text = "success";
+                        }
+                        else
+                        {
+                            ViewBag.Message = "File Upload Failed";
+                            ViewBag.Text = "warning";
+                        }
+                    }
+                    catch
+                    {
+                        ViewBag.Message = "File Upload Failed";
+                        ViewBag.Text = "warning";
+                    }
+            }
+
+            ViewBag.Message = "Edit Category Successful";
+            ViewBag.Text = "success";
+
+            ban.Name = banner.Name;
+            ban.Title = banner.Title;
+            
+
+            db.Banners.Update(ban);
+            db.SaveChanges();
+
+            return View(banner);
+        }
+
+
+        [Route("Delete")]
+        [HttpPost]
+        public IActionResult Delete(int id) 
+        {
+            var dbBanner = db.Banners.FirstOrDefault(x => x.Id == id);
+            if(dbBanner != null)
+            {
+                db.Banners.Remove(dbBanner);
+                try
+                {
+                    db.SaveChanges();
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, dbBanner.Image);
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                    return Json(new { success = true, message = "done" });
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    return BadRequest(JsonConvert.SerializeObject(
+                        new
+                        {
+                            error = "Can not delete this attribute."
+                        }
+                    ));
+                }
+            }
+            return BadRequest(JsonConvert.SerializeObject(
+                new
+                {
+                    error = "Can not delete this attribute."
+                }
+            ));
         }
     }
 }
