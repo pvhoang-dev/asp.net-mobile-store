@@ -35,7 +35,6 @@
                 <a href="#" class="logo">
                     <img src="~/web/assets/images/icons/logo-01.png" alt="IMG-LOGO">
                 </a>
-                @model BTL_QuanLyBanDienThoai.Models.ViewModel.HomeViewModel
                 <!-- Menu desktop -->
                 <div class="menu-desktop">
                     <ul class="main-menu">
@@ -45,16 +44,7 @@
 
                         <li>
                             <a href="/">Shop</a>
-                            <ul class="sub-menu">
-                                @foreach (var category in Model.Categories)
-                                {
-                                    <li>
-                                        <a asp-controller="Home" asp-action="Index">
-                                            @category.Name
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
+                            @await Component.InvokeAsync("CategoryList")
                         </li>
 
                         <li>
