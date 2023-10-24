@@ -4,6 +4,8 @@ using BTL_QuanLyBanDienThoai.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using BTL_QuanLyBanDienThoai.Models.Authentication;
+
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -24,6 +26,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _bufferedFileUploadService = bufferedFileUploadService;
             _webHostEnvironment = webHostEnvironment;
         }
+        [Authentication]
         public IActionResult Index()
         {
             List<Category> categories = db.Categories.ToList();

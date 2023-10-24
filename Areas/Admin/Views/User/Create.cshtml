@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BTL_QuanLyBanDienThoai.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     ViewData["Title"] = "Create User";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -13,24 +15,27 @@
 }
 
 
+@model User;
+
+
 <div class="card">
-    <form>
+    <form method="post">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label for="name">Name:</label>
-                    <input type="text" class="form-control" name="name" required>
+                    <label asp-for="Name">Name:</label>
+                    <input asp-for="Name" type="text" class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" class="form-control" required>
+                    <label asp-for="Email">Email:</label>
+                    <input asp-for="Email" type="text"  class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label for="password">Password:</label>
+                    <label asp-for="Password">Password:</label>
                     <div class="input-group input-group-merge">
-                        <input type="password" id="password" name="password" class="form-control">
+                        <input asp-for="Password" type="password" id="password" class="form-control">
                         <div class="input-group-append" data-password="false">
                             <div class="input-group-text">
                                 <span class="password-eye"></span>
