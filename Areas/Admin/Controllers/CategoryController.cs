@@ -9,6 +9,7 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
+    [Authentication]
     [Area("Admin")]
     [Route("Admin/Categories")]
     public class CategoryController : Controller
@@ -26,7 +27,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _bufferedFileUploadService = bufferedFileUploadService;
             _webHostEnvironment = webHostEnvironment;
         }
-        [Authentication]
+        
         public IActionResult Index()
         {
             List<Category> categories = db.Categories.ToList();

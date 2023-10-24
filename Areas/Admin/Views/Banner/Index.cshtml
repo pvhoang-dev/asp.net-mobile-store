@@ -1,4 +1,7 @@
-﻿@{
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using BTL_QuanLyBanDienThoai.Models;
+
+@{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -10,6 +13,8 @@
         Add New
     </a>
 }
+
+@model List<Banner>
 
 <div class="card">
     <div class="card-body p-0">
@@ -24,26 +29,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>name</td>
-                        <td>title</td>
-                        <td>
-                            <img src="~/admin/assets/images/products/product-1.jpg"
-                                 width="50"
-                                 height="50"
-                                 style="border-radius: 5px" />
-                        </td>
-                        <td>
-                            <div class='btn-group'>
-                                <a href="/Admin/Banners/Edit" class="action-icon">
-                                    <i class="mdi mdi-pencil"></i>
-                                </a>
-                                <a href="" class="action-icon">
-                                    <i class="mdi mdi-delete"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach(var banner in Model)
+                    {
+                        <tr>
+                            <td>@banner.Name</td>
+                            <td>@banner.Title</td>
+                            <td>
+                                <img src="/@banner.Image"
+                                     width="50"
+                                     height="50"
+                                     style="border-radius: 5px" />
+                            </td>
+                            <td>
+                                <div class='btn-group'>
+                                    <a href="/Admin/Banners/Edit" class="action-icon">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </a>
+                                    <a href="" class="action-icon">
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                    
                 </tbody>
             </table>
         </div>
