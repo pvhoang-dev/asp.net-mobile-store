@@ -8,25 +8,25 @@
 }
 
 @section Title {
-    Edit Attribute Value
+        Edit Attribute Value
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Attribute-Values">
         <i class="uil uil-corner-up-left-alt"></i>&nbsp;Back
-    </a> 
+    </a>
 }
 
 
 @model AttributeValueViewModel;
 
 <div class="card">
-    <form method="post">
+    <form method="post" id="form">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="attrId" for="attribute_id">Attribute:</label>
                     <select name="attribute_id" id="attribute_id" class="form-control">
-                        <option value="">Selected attribute</option>
+                        <option value="0">Selected attribute</option>
                         @foreach (var attr in Model.attrs)
                         {
                             if (Model.attrId != null && Model.attrId == @attr.Id)
@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="button" class="btn btn-primary" id="create">Save</button>
         </div>
     </form>
 </div>
@@ -59,6 +59,25 @@
             document.getElementById('attribute_id').setAttribute('asp-for', 'Id');
             document.getElementById('Id').value = selectedValue;
         });
+
+        $(document).ready(function () {
+            $('#create').on('click', function () {
+                var input = $("#value").val().trim();
+                if ($("#attribute_id option:selected").val() != 0 && input != "") {
+                    $("#form").submit();
+                } else {
+                    // alert("Please enter all fields")
+                    $.toast({
+                        heading: 'Edit failed',
+                        text: 'Please enter all fields',
+                        showHideTransition: 'plain',
+                        position: 'bottom-right',
+                        icon: 'error',
+                        hideAfter: 3000,
+                    });
+                }
+            });
+        });
     </script>
     @if (ViewBag.Message != null)
     {
@@ -66,7 +85,7 @@
             Swal.fire(
                 'Warning',
                 "@ViewBag.Message",
-                'warning'
+                "@ViewBag.Text"
             )
         </script>
     }

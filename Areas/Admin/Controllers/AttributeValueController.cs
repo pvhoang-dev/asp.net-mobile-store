@@ -121,10 +121,19 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 attrVal.Name = attributeValue.Name;
                 db.AttributeValues.Update(attrVal);
                 db.SaveChanges();
-                return RedirectToAction("Index", "AttributeValue");
+                ViewBag.Message = "Edit Attribute Value Successful";
+                ViewBag.Text = "success";
+                attributeValue.attrId = attrId;
             }
+            else
+            {
+                ViewBag.Message = "Edit Attribute Value Failing";
+                ViewBag.Text = "warning";
+            }
+            
+            attributeValue.attrs = db.Attrs.ToList();
 
-            return View();
+            return View(attributeValue);
         }
 
         [Route("Delete")]
