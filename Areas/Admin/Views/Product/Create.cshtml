@@ -21,18 +21,18 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label asp-for="Name">Name:</label>
-                    <input asp-for="Name" type="text" class="form-control" required>
+                    <label asp-for="Name" class="required-input">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" >
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Quantity">Quantity:</label>
+                    <label asp-for="Quantity" class="required-input">Quantity</label>
                     <input asp-for="Quantity" type="number" class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label>Category:</label>
-                    <select name="category_id" id="category_id" class="custom-select">
+                    <label class="required-input">Category</label>
+                    <select name="category_id" id="category_id" class="custom-select select2" data-toggle="select2">
                         <option>Select a category</option>
                         @foreach (var category in Model.Categories)
                         {
@@ -42,24 +42,23 @@
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Price">Price:</label>
+                    <label asp-for="Price" class="required-input">Price</label>
                     <input asp-for="Price" type="number" class="form-control" required>
                 </div>
 
                 <div class="form-group col-12">
-                    <label asp-for="Description">Description:</label>
+                    <label asp-for="Description">Description</label>
                     <input asp-for="Description" type="text" class="form-control">
                 </div>
 
                 <!-- File Upload -->
                 <div class="form-group col-lg-6 tab-content">
-                    <label asp-for="ImageDefault">Images Default(Unique):</label>
+                    <label class="required-input">Images Default (Only one)</label>
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
                                 <input hidden asp-for="Photo" class="form-control" id="proImg" type="file" onchange="ChangeFile(this)" />
-                                <input type="text" asp-for="ImageDefault" class="form-control" hidden />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -91,7 +90,7 @@
 
                 <!-- File Upload -->
                 <div class="form-group col-lg-6 tab-content">
-                    <label>Images(Allow multiple):</label>
+                    <label>Images (Allow multiple)</label>
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile2()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#">
@@ -116,13 +115,6 @@
         </div>
     </form>
 </div>
-
-@* <div>
-    <div class="filearray">
-    </div>
-    <input type="file" name="file[]" id="f_p_v_up1" multiple />
-</div> *@
-
 
 @section Scripts{
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -189,8 +181,6 @@
 
                 reader.readAsDataURL(input.files[0]);
             }
-
-            $('input[name="ImageDefault"]').val(fileName);
         }
     </script>
 }

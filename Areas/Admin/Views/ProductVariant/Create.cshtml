@@ -43,7 +43,7 @@
 
                 <div class="form-group col-sm-6" id="option-1">
                     <label>Attribute 1: <span class="index-1"></span></label>
-                    <select class="form-control" id="attribute_1" name="attribute_1">
+                    <select class="form-control select2" data-toggle="select2" id="attribute_1" name="attribute_1">
                         <option>Select a attribute</option>
                         @foreach (var attr in Model.resultDict)
                         {
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-sm-6" id="option-2">
                     <label>Attribute 1 Value: <span class="index-1"></span></label>
-                    <select class="form-control" id="attribute_1_value" name="attribute_1_value" disabled>
+                    <select class="form-control select2" data-toggle="select2" id="attribute_1_value" name="attribute_1_value" disabled>
                         <option>Select a attribute value</option>
                         @foreach (var attr in Model.resultDict)
                         {
@@ -67,7 +67,7 @@
 
                 <div class="form-group col-sm-6">
                     <label>Attribute 2: <span class="index-2"></span></label>
-                    <select class="form-control" id="attribute_2" name="attribute_2" disabled>
+                    <select class="form-control select2" data-toggle="select2" id="attribute_2" name="attribute_2" disabled>
                         <option value="">Select a attribute</option>
                         @foreach (var attr in Model.resultDict)
                         {
@@ -77,7 +77,7 @@
                 </div>
                 <div class="col-sm-6">
                     <label>Attribute 2 Value: <span class="index-2"></span></label>
-                    <select class="form-control" id="attribute_2_value" name="attribute_2_value" disabled>
+                    <select class="form-control select2" data-toggle="select2" id="attribute_2_value" name="attribute_2_value" disabled>
                         <option>Select a attribute value</option>
                         @foreach (var attr in Model.resultDict)
                         {

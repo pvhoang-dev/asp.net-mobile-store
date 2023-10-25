@@ -11,7 +11,5 @@ public partial class ProductImage
 
     public string? Path { get; set; }
 
-    public int? Type { get; set; }
-
     public virtual Product? Product { get; set; }
 }

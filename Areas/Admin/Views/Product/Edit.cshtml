@@ -7,7 +7,7 @@
 }
 
 @section Title {
-                    Edit Product
+                                Edit Product
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products">
@@ -22,18 +22,18 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label asp-for="Name" for="name">Name:</label>
+                    <label asp-for="Name" class="required-input">Name</label>
                     <input asp-for="Name" type="text" name="name" class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Quantity" for="quantity">Quantity:</label>
+                    <label asp-for="Quantity" class="required-input">Quantity</label>
                     <input asp-for="Quantity" type="number" name="quantity" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label for="category_id">Category:</label>
-                    <select name="category_id" class="custom-select">
+                    <label class="required-input">Category</label>
+                    <select class="custom-select select2" data-toggle="select2">
                         @foreach (var category in Model.Categories)
                         {
                             @if (@category.Id == Model.CategoryId)
@@ -50,14 +50,112 @@
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Price" for="price">Price:</label>
-                    <input asp-for="Price" type="number" name="price" class="form-control" required>
+                    <label asp-for="Price" class="required-input">Price</label>
+                    <input asp-for="Price" type="number" class="form-control" required>
                 </div>
 
                 <div class="form-group col-12">
-                    <label asp-for="Description" for="description">Description:</label>
-                    <input asp-for="Description" type="text" name="description" class="form-control">
+                    <label asp-for="Description">Description</label>
+                    <input asp-for="Description" type="text" class="form-control">
                 </div>
+                
+                <!-- Full width modal -->
+                <div class="form-group col-12">
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#full-width-modal">Change Images</button>
+                </div>
+
+                <div class="form-group col-6 col-sm-4 col-md-3">
+                    <label class="required-input">Default Image</label>
+                    <img src="/@Model.ImageDefault"
+                         class="d-block img-thumbnail w-100"
+                         style="border-radius: 5px" />
+                </div> 
+
+                <div class="form-group row col-12">
+                    <label class="col-12">Images</label>
+                    @foreach (var productImage in Model.ProductImages)
+                    {
+                        <div class="col-6 col-sm-4 col-md-3 mb-3">
+                            <img src="/@productImage.Path"
+                                 class="d-block img-thumbnail"
+                                 style="border-radius: 5px" />
+                        </div>
+                    }
+                </div>
+
+                <div id="full-width-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fullWidthModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-full-width">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="fullWidthModalLabel">Modal Heading</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body row">
+                                <!-- File Upload -->
+                                <div class="form-group col-lg-6 tab-content">
+                                    <label>Images Default(Unique):</label>
+                                    <div class="tab-pane show active" id="file-upload-preview">
+                                        <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
+                                             data-upload-preview-template="#uploadPreviewTemplate">
+                                            <div class="fallback">
+                                                <input hidden asp-for="Photo" class="form-control" id="proImg" type="file" onchange="ChangeFile(this)" />
+                                            </div>
+
+                                            <div class="dz-message needsclick">
+                                                <i class="h1 text-muted dripicons-cloud-upload"></i>
+                                                <h4>Click to upload.</h4>
+                                            </div>
+                                        </div>
+                                        <!-- Preview -->
+                                        <div class="row">
+                                            <div class="d-none dropzone-previews col-12 mt-3" id="file-previewss">
+                                                <div class="" id="uploadPreviewTemplatee">
+                                                    <div class="card mt-1 mb-0 shadow-none border">
+                                                        <div class="p-2">
+                                                            <div class="row align-items-center">
+                                                                <div class="col-auto">
+                                                                    <img id="preImg" data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
+                                                                </div>
+                                                                <div class="col pl-0">
+                                                                    <p class="mb-0" data-dz-size id="preImgName"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- File Upload -->
+                                <div class="form-group col-lg-6 tab-content">
+                                    <label>Images(Allow multiple)</label>
+                                    <div class="tab-pane show active" id="file-upload-preview">
+                                        <div onclick="chooseFile2()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
+                                             data-upload-preview-template="#">
+                                            <div class="fallback">
+                                                <input hidden asp-for="ListPhotos" class="form-control" type="file" multiple />
+                                            </div>
+
+                                            <div class="dz-message needsclick">
+                                                <i class="h1 text-muted dripicons-cloud-upload"></i>
+                                                <h4>Click to upload.</h4>
+                                            </div>
+                                        </div>
+                                        <!-- Preview -->
+                                        <div class="row" id="mulImages">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
