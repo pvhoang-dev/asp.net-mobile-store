@@ -30,7 +30,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _bufferedFileUploadService = bufferedFileUploadService;
             _webHostEnvironment = webHostEnvironment;
         }
-        
+
         public IActionResult Index()
         {
             List<ProductViewModel> productViewModel = (from product in db.Products
@@ -73,6 +73,15 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
                 if (productViewModel.ImageDefault != null)
                     productViewModel.ImageDefault = Path.Combine("UploadedFiles\\products", productViewModel.ImageDefault);
+
+                if (productViewModel.ListPhotos != null)
+                {
+                    foreach (var Img in productViewModel.ListPhotos)
+                    {
+                        await _bufferedFileUploadService.UploadFile(Img, "products");
+                    }
+                }
+
 
                 db.Products.Add(new Product
                 {
