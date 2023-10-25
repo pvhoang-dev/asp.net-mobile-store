@@ -71,3 +71,17 @@
         </div>
     </form>
 </div>
+
+
+@section Scripts{
+    @if (ViewBag.Message != null)
+    {
+        <script>
+            Swal.fire(
+                'Status',
+                "@ViewBag.Message",
+                "@ViewBag.Text"
+            )
+        </script>
+    }
+}

@@ -4,6 +4,7 @@ using BTL_QuanLyBanDienThoai.Data;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
+using BTL_QuanLyBanDienThoai.Utils;
 
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
@@ -13,6 +14,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly QLBanDienThoaiContext db;
+        Password password = new Password();
         public UserController(QLBanDienThoaiContext _db)
         {
             db = _db;
@@ -36,12 +38,19 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
+
             if (HttpContext.Session.GetString("Role") == null)
             {
                 var checkUser = db.Users.Where(x => x.Email.Equals(user.Email) && x.Password.Equals(user.Password)).FirstOrDefault();
+                //if (password.VerifyPassword(user.Password, checkUser.Password) == false)
+                //{
+                //    return View();
+                //}
                 if (checkUser != null)
                 {
                     HttpContext.Session.SetString("Role", checkUser.Role.ToString());
+                    HttpContext.Session.SetString("Name", checkUser.Name.ToString());
+                    HttpContext.Session.SetString("Email", checkUser.Email.ToString());
                     return RedirectToAction("Index", "Admin");
                 }
             }
@@ -97,6 +106,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(User user)
         {
+
             if (ModelState.IsValid)
             {
                 db.Users.Update(user);
@@ -120,6 +130,11 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                var existUser = db.Users.FirstOrDefault(u => u.Email == user.Email);
+                if (existUser != null)
+                {
+                    ViewBag.Message = "User already exist!";
+                }
                 db.Users.Add(new User
                 {
                     Name = user.Name,
