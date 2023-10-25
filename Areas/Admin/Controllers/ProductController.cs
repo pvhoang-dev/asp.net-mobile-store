@@ -68,34 +68,49 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (productViewModel.Photo != null)
-                    await _bufferedFileUploadService.UploadFile(productViewModel.Photo, "products");
+                Product pro = new Product
+                {
+                    Name = productViewModel.Name,
+                    Price = productViewModel.Price,
+                    Slug = slug.Create(productViewModel.Name),
+                    CategoryId = int.Parse(Request.Form["category_id"]),
+                    Status = 1,
+                    Description = productViewModel.Description,
+                };
 
-                if (productViewModel.ImageDefault != null)
-                    productViewModel.ImageDefault = Path.Combine("UploadedFiles\\products", productViewModel.ImageDefault);
+                db.Products.Add(pro);
+
+                db.SaveChanges();
+
+                if (productViewModel.Photo != null)
+                {
+                    string path = Path.Combine("UploadedFiles\\products\\" + pro.Id + "\\default_image", productViewModel.Photo.FileName);
+                    await _bufferedFileUploadService.UploadFile(productViewModel.Photo, "products\\" + pro.Id + "\\default_image");
+                    pro.ImageDefault = path;
+                }
+
+                db.Products.Update(pro);
+                db.SaveChanges();
 
                 if (productViewModel.ListPhotos != null)
                 {
                     foreach (var Img in productViewModel.ListPhotos)
                     {
-                        await _bufferedFileUploadService.UploadFile(Img, "products");
+                        await _bufferedFileUploadService.UploadFile(Img, "products\\" + pro.Id + "\\images");
+
+                        string path = Path.Combine("UploadedFiles\\products\\" + pro.Id + "\\images", Img.FileName);
+
+                        ProductImage proImg = new ProductImage
+                        {
+                            ProductId = pro.Id,
+                            Path = path,
+                        };
+
+                        db.ProductImages.Add(proImg);
                     }
+
+                    db.SaveChanges();
                 }
-
-
-                db.Products.Add(new Product
-                {
-                    Name = productViewModel.Name,
-                    Price = productViewModel.Price,
-                    Quantity = productViewModel.Quantity,
-                    Slug = slug.Create(productViewModel.Name),
-                    CategoryId = int.Parse(Request.Form["category_id"]),
-                    Status = 1,
-                    Description = productViewModel.Description,
-                    ImageDefault = productViewModel.ImageDefault,
-                });
-
-                db.SaveChanges();
 
                 return RedirectToAction("Index", "Product");
             }
@@ -122,15 +137,24 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                                                  Slug = productVariant.Slug
                                                              }).ToList();
 
+            List<ProductImage> productImages = (from proImg in db.ProductImages
+                                                where proImg.ProductId == id
+                                                select new ProductImage
+                                                {
+                                                    Id = proImg.Id,
+                                                    Path = proImg.Path,
+                                                }).ToList();
+
             ProductViewModel productViewModel = new ProductViewModel
             {
                 Categories = db.Categories.ToList(),
                 Id = id,
                 Name = pro.Name,
                 Price = pro.Price,
-                Quantity = pro.Quantity,
                 Description = pro.Description,
                 CategoryId = pro.CategoryId,
+                ImageDefault = pro.ImageDefault,
+                ProductImages = productImages,
                 ProductVariants = productVariants
             };
 
@@ -150,7 +174,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 pro.Name = productViewModel.Name;
                 pro.Slug = productViewModel.Slug;
                 pro.Description = productViewModel.Description;
-                pro.Quantity = productViewModel.Quantity;
                 pro.Price = productViewModel.Price;
                 pro.CategoryId = int.Parse(Request.Form["category_id"]);
                 db.Products.Update(pro);
@@ -170,8 +193,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
             if (dbPro != null)
             {
-                db.Products.Remove(dbPro);
-                db.SaveChanges();
                 try
                 {
                     string filePath = Path.Combine(_webHostEnvironment.WebRootPath, dbPro.ImageDefault);
@@ -181,6 +202,29 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                         System.IO.File.Delete(filePath);
                     }
 
+                    List<ProductImage> productImages = (from proImg in db.ProductImages
+                                                        where proImg.ProductId == id
+                                                        select new ProductImage
+                                                        {
+                                                            Id = proImg.Id,
+                                                            Path = proImg.Path,
+                                                        }).ToList();
+
+                    foreach (ProductImage image in productImages)
+                    {
+                        string path = Path.Combine(_webHostEnvironment.WebRootPath, image.Path);
+
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+
+                        db.ProductImages.Remove(db.ProductImages.Find(image.Id));
+                    }
+
+                    db.Products.Remove(dbPro);
+                    db.SaveChanges();
+
                     return Json(new { success = true, message = "done" });
                 }
                 catch (Exception ex)
@@ -189,7 +233,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     return BadRequest(JsonConvert.SerializeObject(
                         new
                         {
-                            error = "Can not delete this attribute."
+                            error = "Can not delete"
                         }
                     ));
                 }

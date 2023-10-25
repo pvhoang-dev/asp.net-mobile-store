@@ -6,7 +6,7 @@
 }
 
 @section Title {
-                        Create Product
+                                Create Product
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products">
@@ -17,23 +17,18 @@
 @model ProductViewModel
 
 <div class="card">
-    <form asp-controller="Product" asp-action="Create" enctype="multipart/form-data">
+    <form id="form" asp-controller="Product" asp-action="Create" enctype="multipart/form-data">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" class="form-control" >
-                </div>
-
-                <div class="form-group col-sm-6">
-                    <label asp-for="Quantity" class="required-input">Quantity</label>
-                    <input asp-for="Quantity" type="number" class="form-control" required>
+                    <input asp-for="Name" type="text" class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label class="required-input">Category</label>
                     <select name="category_id" id="category_id" class="custom-select select2" data-toggle="select2">
-                        <option>Select a category</option>
+                        <option value="0">Select a category</option>
                         @foreach (var category in Model.Categories)
                         {
                             <option value="@category.Id">@category.Name</option>
@@ -46,8 +41,8 @@
                     <input asp-for="Price" type="number" class="form-control" required>
                 </div>
 
-                <div class="form-group col-12">
-                    <label asp-for="Description">Description</label>
+                <div class="form-group col-sm-6">
+                    <label asp-for="Description">Short Description</label>
                     <input asp-for="Description" type="text" class="form-control">
                 </div>
 
@@ -58,7 +53,7 @@
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input hidden asp-for="Photo" class="form-control" id="proImg" type="file" onchange="ChangeFile(this)" />
+                                <input hidden asp-for="Photo" class="form-control" id="proImg" type="file" accept="image/*" onchange="ChangeFile(this)" />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -95,7 +90,7 @@
                         <div onclick="chooseFile2()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#">
                             <div class="fallback">
-                                <input hidden asp-for="ListPhotos" class="form-control" type="file" multiple />
+                                <input hidden asp-for="ListPhotos" class="form-control" type="file" multiple accept="image/*" />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -111,39 +106,64 @@
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="button" class="btn btn-primary" id="create">Create</button>
         </div>
     </form>
 </div>
 
 @section Scripts{
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
+        var checkHasImg = false;
         $(document).on('ready', () => {
+            $('#create').on('click', function () {
+                var name = $("#Name").val().trim();
+                var price = $("#Price").val().trim();
+                var selectedCate = $("#category_id").val();
+
+                if (name != "" && price != "" && selectedCate != "0" && checkHasImg == true) {
+                    Swal.fire(
+                        'Success!',
+                        'Product added successfully',
+                        'success'
+                    )
+                    setTimeout(
+                        function () {
+                            $("#form").submit();
+                        }, 1000);
+                } else {
+                    Swal.fire(
+                        'Warning!',
+                        'Please enter all fields',
+                        'warning'
+                    )
+                    return;
+                }
+            });
+
             $("#ListPhotos").on('change', function () {
                 $("#mulImages").empty();
                 for (let i = 0; i < this.files.length; ++i) {
                     let filereader = new FileReader();
                     let fileName = this.files[i].name;
                     let str = `
-                                    <div class="dropzone-previews col-md-6 mt-3">
-                                                <div class="" id="uploadPreviewTemplatee">
-                                                    <div class="card mt-1 mb-0 shadow-none border">
-                                                        <div class="p-2">
-                                                            <div class="row align-items-center">
-                                                                <div class="col-auto">
-                                                                    <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
-                                                                </div>
-                                                                <div class="col pl-0">
-                                                                    <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                                    <div class="dropzone-previews col-md-6 mt-3">
+                                                                <div class="" id="uploadPreviewTemplatee">
+                                                                    <div class="card mt-1 mb-0 shadow-none border">
+                                                                        <div class="p-2">
+                                                                            <div class="row align-items-center">
+                                                                                <div class="col-auto">
+                                                                                    <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
+                                                                                </div>
+                                                                                <div class="col pl-0">
+                                                                                    <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                            `;
+                                            `;
                     let $img = jQuery.parseHTML(str);
                     filereader.onload = function () {
                         var $imgElement = $($img).find('img');
@@ -154,18 +174,14 @@
                 }
             });
         });
-    </script>
-    <script>
-
         function chooseFile() {
             document.querySelector('#proImg').click();
-            //$('#proImg').click();
         }
         function chooseFile2() {
             document.querySelector('#ListPhotos').click();
-            //$('#proImg').click();
         }
         function ChangeFile(input) {
+            checkHasImg = true;
             var currentFile = $('#proImg')[0].files[0];
             var fileName = currentFile.name;
 

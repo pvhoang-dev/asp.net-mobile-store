@@ -13,7 +13,7 @@
         public int? Status { get; set; }
         public string? Description { get; set; }
         public string? ImageDefault { get; set; }
-        public List<ProductImage> ProductImages { get; set; }
+        public List<ProductImage>? ProductImages { get; set; }
         public string? CategoryName { get; set; }
         public int? CategoryId { get; set; }
         public IFormFile? Photo { get; set; }

@@ -64,15 +64,11 @@
                 if ($("#attribute_id option:selected").val() != 0 && input != "") {
                     $("#form").submit();
                 } else {
-                    // alert("Please enter all fields")
-                    $.toast({
-                        heading: 'Create failed',
-                        text: 'Please enter all fields',
-                        showHideTransition: 'plain',
-                        position: 'bottom-right',
-                        icon: 'error',
-                        hideAfter: 3000,
-                    });
+                    Swal.fire(
+                        'Warning',
+                        "Please enter all fields",
+                        'warning'
+                    )
                 }
             });
         });

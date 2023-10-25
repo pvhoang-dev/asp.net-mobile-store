@@ -109,14 +109,11 @@
                 if (checkAllFields != false && name != "") {
                     $("#form").submit();
                 } else {
-                    $.toast({
-                        heading: 'Create failed',
-                        text: 'Please enter all fields',
-                        showHideTransition: 'plain',
-                        position: 'bottom-right',
-                        icon: 'error',
-                        hideAfter: 3000,
-                    });
+                    Swal.fire(
+                        'Warning',
+                        "Please enter all fields",
+                        'warning'
+                    )
                 }
             });
         });
