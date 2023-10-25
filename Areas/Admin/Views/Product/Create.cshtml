@@ -6,7 +6,7 @@
 }
 
 @section Title {
-    Create Product
+                                Create Product
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products">
@@ -17,24 +17,19 @@
 @model ProductViewModel
 
 <div class="card">
-    <form asp-controller="Product" asp-action="Create" enctype="multipart/form-data">
+    <form id="form" asp-controller="Product" asp-action="Create" enctype="multipart/form-data">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label asp-for="Name">Name:</label>
+                    <label asp-for="Name" class="required-input">Name</label>
                     <input asp-for="Name" type="text" class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Quantity">Quantity:</label>
-                    <input asp-for="Quantity" type="number" class="form-control">
-                </div>
-
-                <div class="form-group col-sm-6">
-                    <label>Category:</label>
-                    <select name="category_id" id="category_id" class="custom-select">
-                        <option>Select a category</option>
-                        @foreach(var category in Model.Categories)
+                    <label class="required-input">Category</label>
+                    <select name="category_id" id="category_id" class="custom-select select2" data-toggle="select2">
+                        <option value="0">Select a category</option>
+                        @foreach (var category in Model.Categories)
                         {
                             <option value="@category.Id">@category.Name</option>
                         }
@@ -42,87 +37,167 @@
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Price">Price:</label>
+                    <label asp-for="Price" class="required-input">Price</label>
                     <input asp-for="Price" type="number" class="form-control" required>
                 </div>
 
-                <div class="form-group col-12">
-                    <label asp-for="Description">Description:</label>
+                <div class="form-group col-sm-6">
+                    <label asp-for="Description">Short Description</label>
                     <input asp-for="Description" type="text" class="form-control">
                 </div>
 
                 <!-- File Upload -->
-                <div class="form-group col-12 tab-content">
-                    <label asp-for="ImageDefault">Images:</label>
+                <div class="form-group col-lg-6 tab-content">
+                    <label class="required-input">Images Default (Only one)</label>
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input hidden asp-for="Photo" class="form-control" id="proImg" type="file" onchange="ChangeFile(this)" />
-                                <input type="text" asp-for="ImageDefault" class="form-control" hidden />
+                                <input hidden asp-for="Photo" class="form-control" id="proImg" type="file" accept="image/*" onchange="ChangeFile(this)" />
                             </div>
 
                             <div class="dz-message needsclick">
                                 <i class="h1 text-muted dripicons-cloud-upload"></i>
-                                <h4>Drop files here or click to upload.</h4>
+                                <h4>Click to upload.</h4>
                             </div>
                         </div>
                         <!-- Preview -->
-                        <div class="d-none dropzone-previews mt-3" id="file-previewss">
-                            <div class="" id="uploadPreviewTemplatee">
-                                <div class="card mt-1 mb-0 shadow-none border">
-                                    <div class="p-2">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <img id="preImg" data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                                            </div>
-                                            <div class="col pl-0">
-                                                <a href="javascript:void(0);" class="text-muted font-weight-bold" data-dz-name></a>
-                                                <p class="mb-0" data-dz-size id="preImgName"></p>
-                                            </div>
-                                            <div class="col-auto">
-                                                <!-- Button -->
-                                                <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                                                    <i class="dripicons-cross"></i>
-                                                </a>
+                        <div class="row">
+                            <div class="d-none dropzone-previews col-12 mt-3" id="file-previewss">
+                                <div class="" id="uploadPreviewTemplatee">
+                                    <div class="card mt-1 mb-0 shadow-none border">
+                                        <div class="p-2">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <img id="preImg" data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <p class="mb-0" data-dz-size id="preImgName"></p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div> <!-- end preview-->
-                </div> <!-- end tab-content-->
+                    </div>
+                </div>
+
+                <!-- File Upload -->
+                <div class="form-group col-lg-6 tab-content">
+                    <label>Images (Allow multiple)</label>
+                    <div class="tab-pane show active" id="file-upload-preview">
+                        <div onclick="chooseFile2()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
+                             data-upload-preview-template="#">
+                            <div class="fallback">
+                                <input hidden asp-for="ListPhotos" class="form-control" type="file" multiple accept="image/*" />
+                            </div>
+
+                            <div class="dz-message needsclick">
+                                <i class="h1 text-muted dripicons-cloud-upload"></i>
+                                <h4>Click to upload.</h4>
+                            </div>
+                        </div>
+                        <!-- Preview -->
+                        <div class="row" id="mulImages">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="button" class="btn btn-primary" id="create">Create</button>
         </div>
     </form>
 </div>
 
-<script>
-    function chooseFile() {
-        document.querySelector('#proImg').click();
-        //$('#proImg').click();
-    }
-    function ChangeFile(input) {
-        var currentFile = $('#proImg')[0].files[0];
-        var fileName = currentFile.name;
+@section Scripts{
+    <script>
+        var checkHasImg = false;
+        $(document).on('ready', () => {
+            $('#create').on('click', function () {
+                var name = $("#Name").val().trim();
+                var price = $("#Price").val().trim();
+                var selectedCate = $("#category_id").val();
 
-        $('#file-previewss').removeClass('d-none');
+                if (name != "" && price != "" && selectedCate != "0" && checkHasImg == true) {
+                    Swal.fire(
+                        'Success!',
+                        'Product added successfully',
+                        'success'
+                    )
+                    setTimeout(
+                        function () {
+                            $("#form").submit();
+                        }, 1000);
+                } else {
+                    Swal.fire(
+                        'Warning!',
+                        'Please enter all fields',
+                        'warning'
+                    )
+                    return;
+                }
+            });
 
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            $("#ListPhotos").on('change', function () {
+                $("#mulImages").empty();
+                for (let i = 0; i < this.files.length; ++i) {
+                    let filereader = new FileReader();
+                    let fileName = this.files[i].name;
+                    let str = `
+                                                    <div class="dropzone-previews col-md-6 mt-3">
+                                                                <div class="" id="uploadPreviewTemplatee">
+                                                                    <div class="card mt-1 mb-0 shadow-none border">
+                                                                        <div class="p-2">
+                                                                            <div class="row align-items-center">
+                                                                                <div class="col-auto">
+                                                                                    <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
+                                                                                </div>
+                                                                                <div class="col pl-0">
+                                                                                    <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
-            reader.onload = function (e) {
-                $('#preImg').attr('src', e.target.result);
-                $('#preImgName').text(fileName);
-            };
-
-            reader.readAsDataURL(input.files[0]);
+                                            `;
+                    let $img = jQuery.parseHTML(str);
+                    filereader.onload = function () {
+                        var $imgElement = $($img).find('img');
+                        $imgElement.attr('src', this.result);
+                    };
+                    filereader.readAsDataURL(this.files[i]);
+                    $("#mulImages").append($img);
+                }
+            });
+        });
+        function chooseFile() {
+            document.querySelector('#proImg').click();
         }
+        function chooseFile2() {
+            document.querySelector('#ListPhotos').click();
+        }
+        function ChangeFile(input) {
+            checkHasImg = true;
+            var currentFile = $('#proImg')[0].files[0];
+            var fileName = currentFile.name;
 
-        $('input[name="ImageDefault"]').val(fileName);
-    }
-</script>
+            $('#file-previewss').removeClass('d-none');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#preImg').attr('src', e.target.result);
+                    $('#preImgName').text(fileName);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
+

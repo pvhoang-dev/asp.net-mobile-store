@@ -21,7 +21,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
-                    <label asp-for="Name" for="name">Name</label>
+                    <label asp-for="Name" for="name" class="required-input">Name</label>
                     <input asp-for="Name" type="text" class="form-control" required>
                     
                 </div>
@@ -36,7 +36,7 @@
 
                 <!-- File Upload -->
                 <div class="form-group col-12 tab-content">
-                    <label asp-for="Image">Images:</label>
+                    <label asp-for="Image">Images</label>
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
@@ -115,14 +115,11 @@
                 if (name != "") {
                     $("#form").submit();
                 } else {
-                    $.toast({
-                        heading: 'Create failed',
-                        text: 'Please enter all fields',
-                        showHideTransition: 'plain',
-                        position: 'bottom-right',
-                        icon: 'error',
-                        hideAfter: 3000,
-                    });
+                    Swal.fire(
+                        'Warning',
+                        "Please enter all fields",
+                        'warning'
+                    )
                 }
             });
         });
