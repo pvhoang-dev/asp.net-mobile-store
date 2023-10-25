@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Admin\Data\**" />
+    <Compile Remove="wwwroot\UploadedFiles\banners\**" />
     <Content Remove="Areas\Admin\Data\**" />
+    <Content Remove="wwwroot\UploadedFiles\banners\**" />
     <EmbeddedResource Remove="Areas\Admin\Data\**" />
+    <EmbeddedResource Remove="wwwroot\UploadedFiles\banners\**" />
     <None Remove="Areas\Admin\Data\**" />
+    <None Remove="wwwroot\UploadedFiles\banners\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -109,10 +113,6 @@
     <None Include="wwwroot\web\assets\vendor\slick\slick.min.js" />
     <None Include="wwwroot\web\assets\vendor\slick\slick.scss" />
     <None Include="wwwroot\web\assets\vendor\sweetalert\sweetalert.min.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\UploadedFiles\banners\" />
   </ItemGroup>
 
 </Project>

@@ -5,42 +5,48 @@ namespace BTL_QuanLyBanDienThoai.Utils
 {
     public class Password
     {
-        public string HashPassword(string password, out string salt)
+        public  string HashPassword(string password)
         {
-            byte[] saltBytes = new byte[16];
+            byte[] salt = new byte[16];
             using (var rng = RandomNumberGenerator.Create())
             {
-                rng.GetBytes(saltBytes);
+                rng.GetBytes(salt);
             }
-
-            salt = Convert.ToBase64String(saltBytes);
 
             string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password,
-                saltBytes,
+                salt,
                 KeyDerivationPrf.HMACSHA256,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8 
+                iterationCount: 10000, // You can adjust this
+                numBytesRequested: 256 / 8 // 256 bits
             ));
 
-            return hashedPassword;
+            string saltBase64 = Convert.ToBase64String(salt);
+            return $"{saltBase64}:{hashedPassword}";
         }
 
-        public bool VerifyPassword(string enteredPassword, string storedHashedPassword, string storedSalt)
+        public  bool VerifyPassword(string password, string storedHashedPassword)
         {
-            byte[] saltBytes = Convert.FromBase64String(storedSalt);
+            var parts = storedHashedPassword.Split(':');
+            if (parts.Length != 2)
+            {
+                return false; // Invalid format
+            }
 
-            byte[] enteredPasswordBytes = KeyDerivation.Pbkdf2(
-                enteredPassword,
-                saltBytes,
+            string saltBase64 = parts[0];
+            string hashedPassword = parts[1];
+
+            byte[] salt = Convert.FromBase64String(saltBase64);
+
+            string enteredHashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password,
+                salt,
                 KeyDerivationPrf.HMACSHA256,
-                iterationCount: 10000, 
+                iterationCount: 10000,
                 numBytesRequested: 256 / 8
-            );
+            ));
 
-            string enteredPasswordHash = Convert.ToBase64String(enteredPasswordBytes);
-
-            return enteredPasswordHash == storedHashedPassword;
+            return enteredHashedPassword == hashedPassword;
         }
     }
 }
