@@ -6,7 +6,7 @@
 }
 
 @section Title {
-    Edit Product Variant
+            Edit Product Variant
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products/Edit/@Model.Product.Id">
@@ -21,42 +21,43 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label>Product Parent:</label>
+                    <label>Product Parent</label>
                     <input type="text" asp-for="Product.Name" class="form-control" disabled>
+                    <input type="number" asp-for="Product.Id" class="form-control" disabled hidden>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Name">Name:</label>
+                    <label asp-for="Name" class="required-input">Name</label>
                     <input type="text" asp-for="Name" class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Price">Price:</label>
+                    <label asp-for="Price" class="required-input">Price</label>
                     <input type="number" asp-for="Price" class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Quantity">Quantity:</label>
+                    <label asp-for="Quantity" class="required-input">Quantity</label>
                     <input type="number" asp-for="Quantity" class="form-control" required>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="attr1">Attribute 1:</label>
+                    <label asp-for="attr1">Attribute 1</label>
                     <input type="text" asp-for="attr1" class="form-control" disabled>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="attrVal1">Attribute Value 1:</label>
+                    <label asp-for="attrVal1">Attribute Value 1</label>
                     <input type="text" asp-for="attrVal1" class="form-control" disabled>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="attr2">Attribute 2:</label>
+                    <label asp-for="attr2">Attribute 2</label>
                     <input type="text" asp-for="attr2" class="form-control" disabled>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="attrVal2">Attribute Value 2:</label>
+                    <label asp-for="attrVal2">Attribute Value 2</label>
                     <input type="text" asp-for="attrVal2" class="form-control" disabled>
                 </div>
             </div>
@@ -71,27 +72,27 @@
     <script>
         $(document).ready(function () {
             $('#create').on('click', function () {
-                var name = $("#Name").val().trim();
-                var price = $("#Price").val().trim();
-                var quantity = $("#Quantity").val().trim();
 
-                if (name != "" && price != "" && quantity != "") {
-                    Swal.fire(
-                        'Success!',
-                        'Product added successfully',
-                        'success'
-                    )
-                    setTimeout(
-                        function () {
-                            $("#form").submit();
-                        }, 1000);
-                } else {
-                    Swal.fire(
-                        'Warning',
-                        "Please enter all fields",
-                        'warning'
-                    )
-                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, update it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Success!',
+                            'Product Variant updated successfully',
+                            'success'
+                        )
+                        setTimeout(
+                            function () {
+                                $("#form").submit();
+                            }, 700);
+                    }
+                })
             });
         });
     </script>

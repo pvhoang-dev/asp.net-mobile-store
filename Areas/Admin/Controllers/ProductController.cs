@@ -36,6 +36,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             List<ProductViewModel> productViewModel = (from product in db.Products
                                                        join category in db.Categories
                                                        on product.CategoryId equals category.Id
+                                                       orderby category.Id
                                                        select new ProductViewModel
                                                        {
                                                            Id = product.Id,
@@ -74,6 +75,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     Price = productViewModel.Price,
                     Slug = slug.Create(productViewModel.Name),
                     CategoryId = int.Parse(Request.Form["category_id"]),
+                    Quantity = 0,
                     Status = 1,
                     Description = productViewModel.Description,
                 };
@@ -151,6 +153,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 Id = id,
                 Name = pro.Name,
                 Price = pro.Price,
+                Quantity = pro.Quantity,
                 Description = pro.Description,
                 CategoryId = pro.CategoryId,
                 ImageDefault = pro.ImageDefault,
@@ -180,7 +183,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
                 db.SaveChanges();
 
-                return RedirectToAction("Index", "Product");
+                return RedirectToAction("Edit", "Product", new { id = id });
             }
             return View();
         }
@@ -191,9 +194,10 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             Product pro = db.Products.Find(id);
 
-            var photo = Request.Form.Files.GetFile("Photo"); // Lấy danh sách các tệp
-            
-            var listPhotos = Request.Form.Files.GetFiles("ListPhotos"); // Lấy danh sách các tệp
+            var photo = Request.Form.Files.GetFile("Photo");
+
+            var listPhotos = Request.Form.Files.GetFiles("ListPhotos");
+
 
             if (photo != null)
             {
@@ -203,17 +207,20 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 {
                     System.IO.File.Delete(filePath);
                 }
-
+                 
                 string path = Path.Combine("UploadedFiles\\products\\" + id + "\\default_image", photo.FileName);
+
                 await _bufferedFileUploadService.UploadFile(photo, "products\\" + id + "\\default_image");
+
                 pro.ImageDefault = path;
 
                 db.Products.Update(pro);
+
                 db.SaveChanges();
             }
 
 
-            if (listPhotos != null)
+            if (listPhotos.Count != 0)
             {
                 List<ProductImage> productImages = (from proImg in db.ProductImages
                                                     where proImg.ProductId == id
@@ -223,16 +230,19 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                                         Path = proImg.Path,
                                                     }).ToList();
 
-                foreach (ProductImage image in productImages)
+                if (productImages != null)
                 {
-                    string path = Path.Combine(_webHostEnvironment.WebRootPath, image.Path);
-
-                    if (System.IO.File.Exists(path))
+                    foreach (ProductImage image in productImages)
                     {
-                        System.IO.File.Delete(path);
-                    }
+                        string path = Path.Combine(_webHostEnvironment.WebRootPath, image.Path);
 
-                    db.ProductImages.Remove(db.ProductImages.Find(image.Id));
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+
+                        db.ProductImages.Remove(db.ProductImages.Find(image.Id));
+                    }
                 }
 
                 foreach (var Img in listPhotos)
@@ -281,26 +291,29 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                                             Path = proImg.Path,
                                                         }).ToList();
 
-                    foreach (ProductImage image in productImages)
+                    if (productImages != null)
                     {
-                        string path = Path.Combine(_webHostEnvironment.WebRootPath, image.Path);
-
-                        if (System.IO.File.Exists(path))
+                        foreach (ProductImage image in productImages)
                         {
-                            System.IO.File.Delete(path);
-                        }
+                            string path = Path.Combine(_webHostEnvironment.WebRootPath, image.Path);
 
-                        db.ProductImages.Remove(db.ProductImages.Find(image.Id));
+                            if (System.IO.File.Exists(path))
+                            {
+                                System.IO.File.Delete(path);
+                            }
+
+                            db.ProductImages.Remove(db.ProductImages.Find(image.Id));
+                        }
                     }
 
                     db.Products.Remove(dbPro);
+
                     db.SaveChanges();
 
                     return Json(new { success = true, message = "done" });
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.ToString());
                     return BadRequest(JsonConvert.SerializeObject(
                         new
                         {
@@ -313,7 +326,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return BadRequest(JsonConvert.SerializeObject(
                 new
                 {
-                    error = "Can not delete this attribute."
+                    error = "Can not delete this product"
                 }
             ));
         }
