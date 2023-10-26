@@ -22,9 +22,10 @@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" class="form-control" required>
+                    <input asp-for="Name" type="text" class="form-control">
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
-
+              
                 <div class="form-group col-sm-6">
                     <label class="required-input">Category</label>
                     <select name="category_id" id="category_id" class="custom-select select2" data-toggle="select2">
@@ -39,16 +40,19 @@
                 <div class="form-group col-sm-6">
                     <label asp-for="Price" class="required-input">Price</label>
                     <input asp-for="Price" type="number" class="form-control" required>
+                    <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Description">Short Description</label>
                     <input asp-for="Description" type="text" class="form-control">
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
                 <!-- File Upload -->
-                <div class="form-group col-lg-6 tab-content">
-                    <label class="required-input">Images Default (Only one)</label>
+                <div class="form-group col-12 tab-content">
+                    <label asp-for="ImageDefault">Images </label>
+                    <span asp-validation-for="ImageDefault" class="text-danger"></span>
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">

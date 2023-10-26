@@ -39,7 +39,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         public IActionResult Login(User user)
         {
 
-            if (HttpContext.Session.GetString("Role") == null)
+            if (ModelState.IsValid && HttpContext.Session.GetString("Role") == null)
             {
                 var checkUser = db.Users.Where(x => x.Email.Equals(user.Email) && x.Password.Equals(user.Password)).FirstOrDefault();
                 //if (password.VerifyPassword(user.Password, checkUser.Password) == false)

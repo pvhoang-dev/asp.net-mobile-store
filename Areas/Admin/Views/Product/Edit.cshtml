@@ -22,8 +22,9 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" name="name" class="form-control" required>
+                    <label asp-for="Name" for="name" class="required-input">Name:</label>
+                    <input asp-for="Name" type="text" name="name" class="form-control">
+                    <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
@@ -45,8 +46,9 @@
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Price" class="required-input">Price</label>
-                    <input asp-for="Price" type="number" class="form-control" required>
+                    <label asp-for="Price" for="price" class="required-input">Price</label>
+                    <input asp-for="Price" type="number" name="price" class="form-control">
+                    <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
@@ -56,6 +58,8 @@
 
                 <!-- Full width modal -->
                 <div class="form-group col-12">
+                    <label asp-for="Description" for="description" class="required-input">Description</label>
+                    <input asp-for="Description" type="text" name="description" class="form-control">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#full-width-modal">Change Images</button>
                 </div>
 
