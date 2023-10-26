@@ -7,7 +7,7 @@
 }
 
 @section Title {
-            Create Attribute
+                    Create Attribute
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Attributes">
@@ -23,8 +23,8 @@
             <div class="row">
                 <div class="form-group col-12">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input asp-for="Name" type="text" id="name" class="form-control" oninput="clearError('Name')">
+                    <span asp-validation-for="Name" id="Name" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -71,4 +71,51 @@
             )
         </script>
     }
+
+
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
+        $(document).on("ready", function () {
+            $("#form").submit(function (event) {
+                event.preventDefault();
+                console.log("Submit")
+
+                $.ajax({
+                    url: "/Admin/Attributes/Create",
+                    type: "POST",
+                    data: $("#form").serialize(),
+                    success: function (result) {
+                        switch (result.isValid) {
+                            case "success":
+                                Swal.fire(
+                                    'Success!',
+                                    'Atribute added successfully',
+                                    'success'
+                                )
+                                setTimeout(
+                                    function () {
+                                        window.location.href = "/admin/attributes/"
+                                    }, 1000);
+                                break;
+                            case "exist":
+                                Swal.fire(
+                                    'Warning',
+                                    result.error,
+                                    'warning'
+                                )
+                                break;
+                            case "error":
+                                var error = result.errors[0];
+                                $("#Name").html(error);
+                                break;
+                        }
+
+                        
+                    }
+                })
+            })
+        })
+    </script>
 }

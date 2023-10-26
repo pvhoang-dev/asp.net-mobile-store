@@ -4,6 +4,7 @@ using BTL_QuanLyBanDienThoai.Data;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
+using BTL_QuanLyBanDienThoai.Models.ViewModel;
 using BTL_QuanLyBanDienThoai.Utils;
 
 
@@ -41,11 +42,17 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
             if (ModelState.IsValid && HttpContext.Session.GetString("Role") == null)
             {
-                var checkUser = db.Users.Where(x => x.Email.Equals(user.Email) && x.Password.Equals(user.Password)).FirstOrDefault();
-                //if (password.VerifyPassword(user.Password, checkUser.Password) == false)
-                //{
-                //    return View();
-                //}
+                var checkUser = db.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
+                if(checkUser == null)
+                {
+                    ModelState.AddModelError("Password", "User does not exist, please re-enter.");
+                    return View();
+                }
+                if (!password.VerifyPassword(user.Password, checkUser.Password))
+                {
+                    ModelState.AddModelError("Password", "User does not exist, please re-enter.");
+                    return View();
+                }
                 if (checkUser != null)
                 {
                     HttpContext.Session.SetString("Role", checkUser.Role.ToString());
@@ -66,14 +73,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
-        [Route("Logout")]
-        [HttpPost]
-        public IActionResult Logout(User user)
-        {
-            HttpContext.Session.Clear();
-            HttpContext.Session.Remove("Role");
-            return RedirectToAction("Login", "Users");
-        }
+        
 
 
         [Authentication]
@@ -104,13 +104,28 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
         [Route("Edit/{id}")]
         [HttpPost]
-        public IActionResult Edit(User user)
+        public IActionResult Edit(User user, int id)
         {
 
             if (ModelState.IsValid)
             {
-                db.Users.Update(user);
+                var existUser = db.Users.Find(id);
+                if (existUser == null)
+                {
+                    ModelState.AddModelError("Email", "Email has already exist.");
+                    return View();
+                }
+                var checkDuplicateEmail = db.Users.Where(x => x.Email.Equals(existUser.Email)).FirstOrDefault();
+                if (checkDuplicateEmail == null)
+                {
+                    ModelState.AddModelError("Email", "Email has already exist.");
+                    return View();
+                }
+
+                existUser.Password = password.HashPassword(existUser.Password);
+                db.Users.Update(existUser);
                 db.SaveChanges();
+               
                 return RedirectToAction("Index", "User");
             }
             return View();
@@ -126,7 +141,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
         [Route("Create")]
         [HttpPost]
-        public IActionResult Create(User user)
+        public IActionResult Create(UserViewModel user)
         {
             if (ModelState.IsValid)
             {
@@ -140,7 +155,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     Name = user.Name,
                     Email = user.Email,
                     Role = int.Parse(Request.Form["role"]),
-                    Password = user.Password,
+                    Password = password.HashPassword(user.Password),
 
                 });
                 db.SaveChanges();
@@ -181,7 +196,14 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             ));
         }
 
-
+        [Route("Logout")]
+        [HttpPost]
+        public IActionResult Logout(User user)
+        {
+            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("Role");
+            return RedirectToAction("Login", "Users");
+        }
 
     }
 }

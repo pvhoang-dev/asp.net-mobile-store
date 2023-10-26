@@ -5,48 +5,41 @@ namespace BTL_QuanLyBanDienThoai.Utils
 {
     public class Password
     {
-        public  string HashPassword(string password)
+        public string HashPassword(string password)
         {
-            byte[] salt = new byte[16];
-            using (var rng = RandomNumberGenerator.Create())
+            byte[] saltBytes = new byte[16];
+            using (var rng = new RNGCryptoServiceProvider())
             {
-                rng.GetBytes(salt);
+                rng.GetBytes(saltBytes);
             }
+            string salt = Convert.ToBase64String(saltBytes);
 
-            string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password,
-                salt,
-                KeyDerivationPrf.HMACSHA256,
-                iterationCount: 10000, // You can adjust this
-                numBytesRequested: 256 / 8 // 256 bits
-            ));
-
-            string saltBase64 = Convert.ToBase64String(salt);
-            return $"{saltBase64}:{hashedPassword}";
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, 10000, HashAlgorithmName.SHA256))
+            {
+                byte[] hash = pbkdf2.GetBytes(32); // 32-byte hash
+                string hashedPassword = Convert.ToBase64String(hash);
+                return salt + ":" + hashedPassword; // Combine salt and hash
+            }
         }
 
-        public  bool VerifyPassword(string password, string storedHashedPassword)
+
+        public bool VerifyPassword(string enteredPassword, string storedHashedPassword)
         {
-            var parts = storedHashedPassword.Split(':');
+            string[] parts = storedHashedPassword.Split(':');
             if (parts.Length != 2)
             {
-                return false; // Invalid format
+                return false; 
             }
 
-            string saltBase64 = parts[0];
-            string hashedPassword = parts[1];
+            string salt = parts[0];
+            string storedHash = parts[1];
 
-            byte[] salt = Convert.FromBase64String(saltBase64);
-
-            string enteredHashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password,
-                salt,
-                KeyDerivationPrf.HMACSHA256,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8
-            ));
-
-            return enteredHashedPassword == hashedPassword;
+            using (var pbkdf2 = new Rfc2898DeriveBytes(enteredPassword, Convert.FromBase64String(salt), 10000, HashAlgorithmName.SHA256))
+            {
+                byte[] hash = pbkdf2.GetBytes(32);
+                string enteredHash = Convert.ToBase64String(hash);
+                return storedHash == enteredHash;
+            }
         }
     }
 }
