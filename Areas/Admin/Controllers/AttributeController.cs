@@ -91,15 +91,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 ViewBag.Message = "Edit Attribute Successful";
                 ViewBag.Text = "success";
             }
-            //else
-            //{
-            //    ViewBag.Message = "Edit Attribute Failing";
-            //    ViewBag.Text = "warning";
-            //    return View(attr);
-            //}
-
-            
-
             return View(attr);
         }
 

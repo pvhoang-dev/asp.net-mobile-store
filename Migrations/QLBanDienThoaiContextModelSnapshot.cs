@@ -123,6 +123,9 @@ namespace BTL_QuanLyBanDienThoai.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("District")
                         .HasColumnType("nvarchar(max)");
 
@@ -256,9 +259,6 @@ namespace BTL_QuanLyBanDienThoai.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
