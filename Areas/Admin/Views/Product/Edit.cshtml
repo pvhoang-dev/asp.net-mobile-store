@@ -7,7 +7,7 @@
 }
 
 @section Title {
-                                                Edit Product
+                                                    Edit Product
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products">
@@ -60,6 +60,9 @@
                 <div class="form-group col-12">
                     <label asp-for="Description" for="description" class="required-input">Description</label>
                     <input asp-for="Description" type="text" name="description" class="form-control">
+                </div>
+
+                <div class="form-group col-12">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#full-width-modal">Change Images</button>
                 </div>
 
@@ -261,22 +264,22 @@
                     let fileName = this.files[i].name;
                     let str =
                         `
-                                    <div class="dropzone-previews col-md-6 mt-3">
-                                        <div class="" id="uploadPreviewTemplatee">
-                                            <div class="card mt-1 mb-0 shadow-none border">
-                                                <div class="p-2">
-                                                    <div class="row align-items-center">
-                                                        <div class="col-auto">
-                                                            <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
-                                                        </div>
-                                                        <div class="col pl-0">
-                                                            <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                            <div class="dropzone-previews col-md-6 mt-3">
+                                                <div class="" id="uploadPreviewTemplatee">
+                                                    <div class="card mt-1 mb-0 shadow-none border">
+                                                        <div class="p-2">
+                                                            <div class="row align-items-center">
+                                                                <div class="col-auto">
+                                                                    <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
+                                                                </div>
+                                                                <div class="col pl-0">
+                                                                    <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>`;
+                                            </div>`;
                     let $img = jQuery.parseHTML(str);
                     filereader.onload = function () {
                         var $imgElement = $($img).find('img');
@@ -326,7 +329,7 @@
 
                         console.log(formData);
 
-                        
+
                         $.ajax({
                             type: "POST",
                             url: "/Admin/Products/UpdateImage?id=" + id,
