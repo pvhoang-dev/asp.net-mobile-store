@@ -10,8 +10,7 @@ public partial class Attr
     [Key]
     public int Id { get; set; }
 
-    [Required]
-    [DisplayName("Category Name")]
+    [Required(ErrorMessage = "Please enter attribute name.")]
     [MaxLength(50)]
     public string? Name { get; set; }
 

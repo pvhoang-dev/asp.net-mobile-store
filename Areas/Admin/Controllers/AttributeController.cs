@@ -88,16 +88,17 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 attr.Code = slug.Create(attr.Name);
                 db.Attrs.Update(attr);
                 db.SaveChanges();
+                ViewBag.Message = "Edit Attribute Successful";
+                ViewBag.Text = "success";
             }
-            else
-            {
-                ViewBag.Message = "Edit Attribute Failing";
-                ViewBag.Text = "warning";
-                return View(attr);
-            }
+            //else
+            //{
+            //    ViewBag.Message = "Edit Attribute Failing";
+            //    ViewBag.Text = "warning";
+            //    return View(attr);
+            //}
 
-            ViewBag.Message = "Edit Attribute Successful";
-            ViewBag.Text = "success";
+            
 
             return View(attr);
         }
