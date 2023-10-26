@@ -38,26 +38,30 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Attr attr)
         {
-            string code = slug.Create(attr.Name);
-            var existingAttr = db.Attrs.FirstOrDefault(a => a.Code == code);
-
-            if (existingAttr == null)
+            if(ModelState.IsValid)
             {
-                db.Attrs.Add(new Attr
+                string code = slug.Create(attr.Name);
+                var existingAttr = db.Attrs.FirstOrDefault(a => a.Code == code);
+
+                if (existingAttr == null)
                 {
-                    Name = attr.Name,
-                    Code = code,
-                });
-                db.SaveChanges();
+                    db.Attrs.Add(new Attr
+                    {
+                        Name = attr.Name,
+                        Code = code,
+                    });
+                    db.SaveChanges();
 
-                return RedirectToAction("Index", "Attribute");
-            }
-            else
-            {
-                ViewBag.Message = "Attribute '" + attr.Name + "' existed";
+                    return RedirectToAction("Index", "Attribute");
+                }
+                else
+                {
+                    ViewBag.Message = "Attribute '" + attr.Name + "' existed";
 
-                return View(attr);
+                    return View(attr);
+                }
             }
+            return View(attr);
         }
 
         [Route("Edit/{id}")]
