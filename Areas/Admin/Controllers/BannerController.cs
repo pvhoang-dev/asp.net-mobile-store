@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
-    //[Authentication]
+    [Authentication]
     [Area("Admin")]
     [Route("Admin/Banners")]
     public class BannerController : Controller
@@ -95,13 +95,13 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                         }
 
                         if (banner.Image != null)
-                            banner.Image = Path.Combine("UploadedFiles\\categories", banner.Image);
+                            banner.Image = Path.Combine("UploadedFiles\\banners", banner.Image);
 
                         ban.Image = banner.Image;
 
-                        if (await _bufferedFileUploadService.UploadFile(cateImg, "categories"))
+                        if (await _bufferedFileUploadService.UploadFile(cateImg, "banners"))
                         {
-                            ViewBag.Message = "Edit Category Successful";
+                            ViewBag.Message = "Edit Banner Successful";
                             ViewBag.Text = "success";
                         }
                         else
@@ -117,7 +117,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     }
             }
 
-            ViewBag.Message = "Edit Category Successful";
+            ViewBag.Message = "Edit Banner Successful";
             ViewBag.Text = "success";
 
             ban.Name = banner.Name;

@@ -64,6 +64,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
+        [Authentication]
         [Route("Logout")]
         [HttpGet]
         public IActionResult Logout()
@@ -73,9 +74,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
-        
-
-
         [Authentication]
         [Route("")]
         public IActionResult Index()
@@ -84,8 +82,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View(users);
         }
 
-
-
+        [Authentication]
         [Route("Edit/{id}")]
         public IActionResult Edit(int? id)
         {
@@ -101,7 +98,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View(user);
         }
 
-
+        [Authentication]
         [Route("Edit/{id}")]
         [HttpPost]
         public IActionResult Edit(User user, int id)
@@ -164,6 +161,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
+        [Authentication]
         [Route("Delete")]
         [HttpPost]
         public IActionResult Delete(int id)
@@ -196,6 +194,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             ));
         }
 
+        [Authentication]
         [Route("Logout")]
         [HttpPost]
         public IActionResult Logout(User user)

@@ -8,6 +8,7 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
+    [Authentication]
     [Area("admin")]
     [Route("Admin/Attributes")]
     public class AttributeController : Controller
@@ -20,7 +21,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             this.db = _db;
         }
 
-        [Authentication]
         public IActionResult Index()
         {
             List<Attr> attrs = db.Attrs.ToList();
@@ -116,32 +116,21 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             var dbAttr = db.Attrs.FirstOrDefault(x => x.Id == id);
 
             if (dbAttr != null)
-            {
-                db.Attrs.Remove(dbAttr);
+            {                
                 try
                 {
+                    db.Attrs.Remove(dbAttr);
                     db.SaveChanges();
 
                     return Json(new { success = true, message = "done" });
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.ToString());
-                    return BadRequest(JsonConvert.SerializeObject(
-                        new
-                        {
-                            error = "Can not delete this attribute."
-                        }
-                    ));
+                    return Json(new { success = false, message = "You need to delete attribute values in this attribute first !!!" });
                 }
             }
 
-            return BadRequest(JsonConvert.SerializeObject(
-                new
-                {
-                    error = "Can not delete this attribute."
-                }
-            ));
+            return Json(new { success = false, message = "That attribute does not exist !!!" });
         }
     }
 }

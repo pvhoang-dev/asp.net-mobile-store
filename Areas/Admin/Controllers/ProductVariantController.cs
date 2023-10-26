@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
+    [Authentication]
     [Area("Admin")]
     [Route("Admin/Product-Variants")]
     public class ProductVariantController : Controller
@@ -23,7 +24,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             db = _db;
             _webHostEnvironment = webHostEnvironment;
         }
-        [Authentication]
         public IActionResult Index()
         {
             List<ProductVariantViewModel> productVariants = (from productVariant in db.ProductVariants

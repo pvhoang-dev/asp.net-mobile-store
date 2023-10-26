@@ -133,10 +133,10 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             var dbCat = db.Categories.FirstOrDefault(x => x.Id == id);
 
             if (dbCat != null)
-            {
-                db.Categories.Remove(dbCat);
+            { 
                 try
                 {
+                    db.Categories.Remove(dbCat);
                     db.SaveChanges();
 
                     string filePath = Path.Combine(_webHostEnvironment.WebRootPath, dbCat.Image);
@@ -150,22 +150,11 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.ToString());
-                    return BadRequest(JsonConvert.SerializeObject(
-                        new
-                        {
-                            error = "Can not delete this attribute."
-                        }
-                    ));
+                    return Json(new { success = false, message = "You need to delete products in this category first !!!" });
                 }
             }
 
-            return BadRequest(JsonConvert.SerializeObject(
-                new
-                {
-                    error = "Can not delete this attribute."
-                }
-            ));
+            return Json(new { success = false, message = "That category does not exist !!!" });
         }
     }
 

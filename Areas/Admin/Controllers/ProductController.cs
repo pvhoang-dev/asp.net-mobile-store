@@ -302,9 +302,21 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                 System.IO.File.Delete(path);
                             }
 
-                            db.ProductImages.Remove(db.ProductImages.Find(image.Id));
+                            db.ProductImages.Remove(image);
                         }
                     }
+
+                    var pvToRemove = db.ProductVariants.Where(pav => pav.ProductId == id).ToList();
+
+                    var pvToRemoveIds = pvToRemove.Select(pv => pv.Id).ToList();
+
+                    var pavToRemove = db.ProductAttributeValues
+                        .Where(pav => pvToRemoveIds.Contains((int)pav.ProductVariantId))
+                        .ToList();
+
+                    db.ProductVariants.RemoveRange(pvToRemove);
+
+                    db.ProductAttributeValues.RemoveRange(pavToRemove);
 
                     db.Products.Remove(dbPro);
 

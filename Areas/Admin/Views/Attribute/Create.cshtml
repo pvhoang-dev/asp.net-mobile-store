@@ -7,7 +7,7 @@
 }
 
 @section Title {
-                    Create Attribute
+                        Create Attribute
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Attributes">
@@ -23,8 +23,8 @@
             <div class="row">
                 <div class="form-group col-12">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control" oninput="clearError('Name')">
-                    <span asp-validation-for="Name" id="Name" class="text-danger"></span>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('Name')">
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -36,30 +36,12 @@
 
 @section Scripts {
     <script>
-        $(document).on('ready', () => {
-            // $('#create').on('click', function () {
-            //     var name = $("#Name").val().trim();
-
-            //     if (name != "") {
-            //         Swal.fire(
-            //             'Success!',
-            //             'Atribute added successfully',
-            //             'success'
-            //         )
-            //         setTimeout(
-            //             function () {
-            //                 $("#form").submit();
-            //             }, 1000);
-            //     } else {
-            //         Swal.fire(
-            //             'Warning!',
-            //             'Please enter all fields',
-            //             'warning'
-            //         )
-            //         return;
-            //     }
-            // });
-        });
+        // $('#create').on('click', function () {
+        //         $("#form").submit();
+        //     });
+        // $(document).on('ready', () => {
+            
+        // });
     </script>
     @if (ViewBag.Message != null)
     {
@@ -112,7 +94,7 @@
                                 break;
                         }
 
-                        
+
                     }
                 })
             })

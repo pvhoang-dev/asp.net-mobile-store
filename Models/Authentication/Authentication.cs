@@ -7,7 +7,7 @@ namespace BTL_QuanLyBanDienThoai.Models.Authentication
     {
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if(context.HttpContext.Session.GetString("Role") != "1")
+            if(context.HttpContext.Session.GetString("Role") == "1")
             {
                 context.Result = new RedirectToRouteResult(
                         new RouteValueDictionary

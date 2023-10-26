@@ -9,7 +9,8 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
-{
+{  
+    [Authentication]
     [Area("admin")]
     [Route("admin/attribute-values")]
     public class AttributeValueController : Controller
@@ -22,7 +23,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             db = _db;
         }
 
-        [Authentication]
         public IActionResult Index()
         {
             List<AttributeValueViewModel> attributeAndAttributeValues = (from attr in db.Attrs
