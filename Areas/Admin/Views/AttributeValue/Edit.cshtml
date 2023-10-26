@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="button" class="btn btn-primary" id="create">Save</button>
+            <button type="submit" class="btn btn-primary" id="create">Save</button>
         </div>
     </form>
 </div>
@@ -61,20 +61,20 @@
             document.getElementById('Id').value = selectedValue;
         });
 
-        $(document).ready(function () {
-            $('#create').on('click', function () {
-                var input = $("#value").val().trim();
-                if ($("#attribute_id option:selected").val() != 0 && input != "") {
-                    $("#form").submit();
-                } else {
-                    Swal.fire(
-                        'Warning',
-                        "Please enter all fields",
-                        'warning'
-                    )
-                }
-            });
-        });
+        // $(document).ready(function () {
+        //     $('#create').on('click', function () {
+        //         var input = $("#value").val().trim();
+        //         if ($("#attribute_id option:selected").val() != 0 && input != "") {
+        //             $("#form").submit();
+        //         } else {
+        //             Swal.fire(
+        //                 'Warning',
+        //                 "Please enter all fields",
+        //                 'warning'
+        //             )
+        //         }
+        //     });
+        // });
     </script>
     @if (ViewBag.Message != null)
     {

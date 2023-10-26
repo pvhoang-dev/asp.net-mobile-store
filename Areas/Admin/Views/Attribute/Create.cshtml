@@ -26,11 +26,10 @@
                     <input asp-for="Name" type="text" id="name" class="form-control">
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
-
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="button" class="btn btn-primary" id="create">Create</button>
+            <button type="submit" class="btn btn-primary" id="create">Create</button>
         </div>
     </form>
 </div>
@@ -38,28 +37,28 @@
 @section Scripts {
     <script>
         $(document).on('ready', () => {
-            $('#create').on('click', function () {
-                var name = $("#Name").val().trim();
+            // $('#create').on('click', function () {
+            //     var name = $("#Name").val().trim();
 
-                if (name != "") {
-                    Swal.fire(
-                        'Success!',
-                        'Atribute added successfully',
-                        'success'
-                    )
-                    setTimeout(
-                        function () {
-                            $("#form").submit();
-                        }, 1000);
-                } else {
-                    Swal.fire(
-                        'Warning!',
-                        'Please enter all fields',
-                        'warning'
-                    )
-                    return;
-                }
-            });
+            //     if (name != "") {
+            //         Swal.fire(
+            //             'Success!',
+            //             'Atribute added successfully',
+            //             'success'
+            //         )
+            //         setTimeout(
+            //             function () {
+            //                 $("#form").submit();
+            //             }, 1000);
+            //     } else {
+            //         Swal.fire(
+            //             'Warning!',
+            //             'Please enter all fields',
+            //             'warning'
+            //         )
+            //         return;
+            //     }
+            // });
         });
     </script>
     @if (ViewBag.Message != null)
