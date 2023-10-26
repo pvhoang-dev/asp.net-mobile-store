@@ -18,14 +18,14 @@
 @model Attr
 
 <div class="card col-md-6">
-    <form method="post">
+    <form method="post" id="form">
         <input asp-for="Id" hidden />
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control" required>
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input asp-for="Name" type="text" id="name" class="form-control" onchange="clearError('Name')">
+                    <span asp-validation-for="Name" id="Name" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -47,4 +47,36 @@
             )
         </script>
     }
+
+
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
+        $(document).on("ready", function () {
+            $("#form").submit(function (event) {
+                event.preventDefault();
+                console.log("Submit")
+
+                $.ajax({
+                    url: "/Admin/Attributes/Edit/" + @Model.Id,
+                    type: "POST",
+                    data: $("#form").serialize(),
+                    success: function (result) {
+                        if (result.isValid) {
+                            Swal.fire(
+                                'Success!',
+                                'Edit added successfully',
+                                'success'
+                            )
+                        } else {
+                            console.log(result.errors)
+                            var error = result.errors[0];
+                            $("#Name").html(error);
+                        }
+                    }
+                })
+            })
+        })
+    </script>
 }

@@ -7,7 +7,7 @@
 }
 
 @section Title {
-                        Edit User
+                            Edit User
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/Admin/Users">
@@ -57,14 +57,16 @@
                             </div>
                             <div class="form-group col-12">
                                 <label for="new_password">Password:</label>
-                                <div  class="input-group input-group-merge">
+                                <div class="input-group input-group-merge">
                                     <input asp-for="Password" type="password" id="new_password" class="form-control">
                                     <div class="input-group-append" data-password="false">
                                         <div class="input-group-text">
                                             <span class="password-eye"></span>
                                         </div>
                                     </div>
+
                                 </div>
+                                <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-12">
@@ -84,14 +86,15 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-group col-sm-6">
                     <label asp-for="Role">Role:</label>
-                    <select class="form-control select2" data-toggle="select2" id="role" name="role">
+                    <select asp-for="Role" class="form-control select2" data-toggle="select2" id="role" name="role">
                         <option>Select a role</option>
                         <option value="1">Admin</option>
                         <option value="2">User</option>
                     </select>
+                    <span asp-validation-for="Role" class="text-danger"> </span>
                 </div>
             </div>
         </div>

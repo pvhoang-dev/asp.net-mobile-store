@@ -7,7 +7,7 @@ using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
-{ 
+{
     [Area("admin")]
     [Route("Admin/Attributes")]
     public class AttributeController : Controller
@@ -38,7 +38,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Attr attr)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 string code = slug.Create(attr.Name);
                 var existingAttr = db.Attrs.FirstOrDefault(a => a.Code == code);
@@ -51,17 +51,32 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                         Code = code,
                     });
                     db.SaveChanges();
-
-                    return RedirectToAction("Index", "Attribute");
+                    return new JsonResult(new
+                    {
+                        status = "success"
+                    });
                 }
                 else
                 {
-                    ViewBag.Message = "Attribute '" + attr.Name + "' existed";
-
-                    return View(attr);
+                    return new JsonResult(new
+                    {
+                        status = "exist",
+                        error = "Attribute '" + attr.Name + "' existed"
+                    });
                 }
             }
-            return View(attr);
+            else
+            {
+                var errors = ModelState.Values
+                        .SelectMany(value => value.Errors)
+                        .Select(error => error.ErrorMessage);
+
+                return new JsonResult(new
+                {
+                    status = "error",
+                    errors
+                });
+            }
         }
 
         [Route("Edit/{id}")]
