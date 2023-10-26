@@ -185,6 +185,77 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
+        [Route("UpdateImage")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateImage(IFormCollection form, int id)
+        {
+            Product pro = db.Products.Find(id);
+
+            var photo = Request.Form.Files.GetFile("Photo"); // Lấy danh sách các tệp
+            
+            var listPhotos = Request.Form.Files.GetFiles("ListPhotos"); // Lấy danh sách các tệp
+
+            if (photo != null)
+            {
+                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, pro.ImageDefault);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                string path = Path.Combine("UploadedFiles\\products\\" + id + "\\default_image", photo.FileName);
+                await _bufferedFileUploadService.UploadFile(photo, "products\\" + id + "\\default_image");
+                pro.ImageDefault = path;
+
+                db.Products.Update(pro);
+                db.SaveChanges();
+            }
+
+
+            if (listPhotos != null)
+            {
+                List<ProductImage> productImages = (from proImg in db.ProductImages
+                                                    where proImg.ProductId == id
+                                                    select new ProductImage
+                                                    {
+                                                        Id = proImg.Id,
+                                                        Path = proImg.Path,
+                                                    }).ToList();
+
+                foreach (ProductImage image in productImages)
+                {
+                    string path = Path.Combine(_webHostEnvironment.WebRootPath, image.Path);
+
+                    if (System.IO.File.Exists(path))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+
+                    db.ProductImages.Remove(db.ProductImages.Find(image.Id));
+                }
+
+                foreach (var Img in listPhotos)
+                {
+                    await _bufferedFileUploadService.UploadFile(Img, "products\\" + id + "\\images");
+
+                    string path = Path.Combine("UploadedFiles\\products\\" + id + "\\images", Img.FileName);
+
+                    ProductImage proImg = new ProductImage
+                    {
+                        ProductId = id,
+                        Path = path,
+                    };
+
+                    db.ProductImages.Add(proImg);
+                }
+
+                db.SaveChanges();
+            }
+
+            return Json(new { message = "Success" });
+        }
+
         [Route("Delete")]
         [HttpPost]
         public IActionResult Delete(int id)
