@@ -26,6 +26,8 @@ public partial class Order
 
     public double? Amount { get; set; }
 
+    public DateTime? CreateAt { get; set; }
+
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual User? User { get; set; }

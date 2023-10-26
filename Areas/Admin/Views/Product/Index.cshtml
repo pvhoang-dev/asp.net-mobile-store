@@ -5,7 +5,7 @@
 }
 
 @section Title {
-                    Products
+                                    Products
 
     <a class="btn btn-primary float-right align-items-center"
        href="/admin/Products/Create">
@@ -58,7 +58,7 @@
                                     <a asp-area="admin" asp-controller="Product" asp-action="Edit" asp-route-id="@productViewModel.Id" class="action-icon">
                                         <i class="mdi mdi-pencil"></i>
                                     </a>
-                                    <a onclick="HandleDelete(@productViewModel.Id)" href="javascript:void(0)" class="action-icon">
+                                    <a onclick="HandleDelete(@productViewModel.Id)" href="javascript:void(0)" class="action-icon delete">
                                         <i class="mdi mdi-delete"></i>
                                     </a>
                                 </div>
@@ -111,7 +111,6 @@
                     });
                 }
             })
-
         }
         $(document).ready(function () {
             // Update Status
@@ -137,6 +136,7 @@
                         alert("Error");
                     }
                 });
+
             });
         });
     </script>
