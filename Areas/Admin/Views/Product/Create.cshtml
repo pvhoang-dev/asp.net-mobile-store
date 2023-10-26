@@ -21,16 +21,34 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
+<<<<<<<<< Temporary merge branch 1
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" class="form-control">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input asp-for="Name" type="text" class="form-control" required>
                 </div>
-              
+
                 <div class="form-group col-sm-6">
                     <label class="required-input">Category</label>
                     <select name="category_id" id="category_id" class="custom-select select2" data-toggle="select2">
                         <option value="0">Select a category</option>
                         @foreach (var category in Model.Categories)
+=========
+                    <label asp-for="Name">Name:</label>
+                    <input asp-for="Name" type="text" class="form-control">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label asp-for="Quantity">Quantity:</label>
+                    <input asp-for="Quantity" type="number" class="form-control">
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label>Category:</label>
+                    <select name="category_id" id="category_id" class="custom-select">
+                        <option>Select a category</option>
+                        @foreach(var category in Model.Categories)
+>>>>>>>>> Temporary merge branch 2
                         {
                             <option value="@category.Id">@category.Name</option>
                         }
@@ -49,10 +67,12 @@
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
-                <!-- File Upload -->
-                <div class="form-group col-12 tab-content">
-                    <label asp-for="ImageDefault">Images </label>
-                    <span asp-validation-for="ImageDefault" class="text-danger"></span>
+<<<<<<<<< Temporary merge branch 1
+                <div class="form-group col-lg-6 tab-content">
+                    <label class="required-input">Images Default (Only one)</label>
+=========
+
+>>>>>>>>> Temporary merge branch 2
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
