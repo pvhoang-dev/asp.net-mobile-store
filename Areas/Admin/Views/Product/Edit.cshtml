@@ -7,7 +7,7 @@
 }
 
 @section Title {
-                                                    Edit Product
+                Edit Product
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products">
@@ -18,17 +18,23 @@
 @model ProductViewModel
 
 <div class="card">
-    <form asp-controller="Product" asp-action="Edit">
+    <form asp-controller="Product" asp-action="Edit" id="form">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" name="name" class="form-control">
+                    <input asp-for="Name" type="text" class="form-control">
                     <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
+
                 <div class="form-group col-sm-6">
-                    <label for="category_id">Category:</label>
-                    <select name="category_id" class="custom-select">
+                    <label asp-for="Quantity">Quantity</label>
+                    <input asp-for="Quantity" type="text" class="form-control" disabled>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="category_id" class="required-input">Category</label>
+                    <select name="category_id" class="custom-select select2" data-toggle="select2">
                         @foreach (var category in Model.Categories)
                         {
                             @if (@category.Id == Model.CategoryId)
@@ -46,50 +52,49 @@
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Price" class="required-input">Price</label>
-                    <input asp-for="Price" type="number" class="form-control" required>
-                </div>
-
-                <div class="form-group col-sm-6">
-                    <label asp-for="Price" for="price">Price:</label>
-                    <input asp-for="Price" type="number" name="price" class="form-control">
+                    <input asp-for="Price" type="number" class="form-control">
                     <span asp-validation-for="Price" class="text-danger"></span>
-
                 </div>
 
                 <div class="form-group col-12">
-                    <label asp-for="Description" for="description">Description:</label>
-                    <input asp-for="Description" type="text" name="description" class="form-control">
-                </div>
-                
-                <!-- Full width modal -->
-                <div class="form-group col-12">
-                    <label asp-for="Description" for="description" class="required-input">Description</label>
-                    <input asp-for="Description" type="text" name="description" class="form-control">
+                    <label asp-for="Description">Description</label>
+                    <input asp-for="Description" type="text" class="form-control">
                 </div>
 
                 <div class="form-group col-12">
-                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#full-width-modal">Change Images</button>
+                    <label>Images</label>
+                    <div>
+                        <button type="button" class="btn btn-outline-primary mr-3" data-toggle="modal" data-target="#full-width-modal">Change Images</button>
+                        <button class="btn btn-outline-info" type="button"
+                                data-toggle="collapse" data-target="#collapseExample"
+                                aria-expanded="false" aria-controls="collapseExample">
+                            View Images
+                        </button>
+                    </div>
                 </div>
 
-                <div class="form-group col-6 col-sm-4 col-md-3">
-                    <label class="required-input">Default Image</label>
-                    <img src="/@Model.ImageDefault"
-                         class="d-block img-thumbnail w-100"
-                         style="border-radius: 5px" />
-                </div>
-
-                <div class="form-group row col-12">
-                    <label class="col-12">Images</label>
-                    @foreach (var productImage in Model.ProductImages)
-                    {
-                        <div class="col-6 col-sm-4 col-md-3 mb-3">
-                            <img src="/@productImage.Path"
-                                 class="d-block img-thumbnail"
+                <div class="collapse col-12" id="collapseExample">
+                    <div class="card card-body mb-0">
+                        <div class="form-group col-6 col-sm-4 col-md-3">
+                            <label class="required-input">Default Image</label>
+                            <img src="/@Model.ImageDefault"
+                                 class="d-block img-thumbnail w-100"
                                  style="border-radius: 5px" />
                         </div>
-                    }
-                </div>
 
+                        <div class="form-group row col-12">
+                            <label class="col-12">Images</label>
+                            @foreach (var productImage in Model.ProductImages)
+                            {
+                                <div class="col-6 col-sm-4 col-md-3 mb-3">
+                                    <img src="/@productImage.Path"
+                                         class="d-block img-thumbnail"
+                                         style="border-radius: 5px" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
                 <div id="full-width-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fullWidthModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-full-width">
                         <div class="modal-content">
@@ -168,7 +173,7 @@
             </div>
         </div>
         <div class="card-footer border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary float-right">Save</button>
+            <button type="submit" class="btn btn-primary float-right" id="create">Save</button>
         </div>
     </form>
 </div>
@@ -214,7 +219,7 @@
                                     <a asp-area="admin" asp-controller="ProductVariant" asp-action="Edit" asp-route-id="@proVariant.Id" class="action-icon">
                                         <i class="mdi mdi-pencil"></i>
                                     </a>
-                                    <a href="" class="action-icon">
+                                    <a onclick="HandleDelete(@proVariant.Id)" href="javascript:void(0)" class="action-icon">
                                         <i class="mdi mdi-delete"></i>
                                     </a>
                                 </div>
@@ -236,30 +241,62 @@
 @section Scripts{
     <script>
         var checkHasImg = false;
-        $(document).on('ready', () => {
-            $('#create').on('click', function () {
-                var name = $("#Name").val().trim();
-                var price = $("#Price").val().trim();
-                var selectedCate = $("#category_id").val();
+        function HandleDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Admin/Product-Variants/Delete",
+                        data: {
+                            id: id
+                        },
 
-                if (name != "" && price != "" && selectedCate != "0" && checkHasImg == true) {
-                    Swal.fire(
-                        'Success!',
-                        'Product added successfully',
-                        'success'
-                    )
-                    setTimeout(
-                        function () {
-                            $("#form").submit();
-                        }, 1000);
-                } else {
-                    Swal.fire(
-                        'Warning!',
-                        'Please enter all fields',
-                        'warning'
-                    )
-                    return;
+                        success: function (response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Product Variant has been deleted.',
+                                'success'
+                            )
+                            setTimeout(
+                                function () {
+                                    location.reload();
+                                }, 700);
+                        }
+                    });
                 }
+            })
+        }
+        $(document).on('ready', () => {
+
+            $('#create').on('click', function () {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, update it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Success!',
+                            'Product updated successfully',
+                            'success'
+                        )
+                        setTimeout(
+                            function () {
+                                $("#form").submit();
+                            }, 1000);
+                    }
+                })
             });
 
             $("#ListPhotos").on('change', function () {
@@ -269,22 +306,22 @@
                     let fileName = this.files[i].name;
                     let str =
                         `
-                                            <div class="dropzone-previews col-md-6 mt-3">
-                                                <div class="" id="uploadPreviewTemplatee">
-                                                    <div class="card mt-1 mb-0 shadow-none border">
-                                                        <div class="p-2">
-                                                            <div class="row align-items-center">
-                                                                <div class="col-auto">
-                                                                    <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
-                                                                </div>
-                                                                <div class="col pl-0">
-                                                                    <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                                    <div class="dropzone-previews col-md-6 mt-3">
+                                                        <div class="" id="uploadPreviewTemplatee">
+                                                            <div class="card mt-1 mb-0 shadow-none border">
+                                                                <div class="p-2">
+                                                                    <div class="row align-items-center">
+                                                                        <div class="col-auto">
+                                                                            <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
+                                                                        </div>
+                                                                        <div class="col pl-0">
+                                                                            <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>`;
+                                                    </div>`;
                     let $img = jQuery.parseHTML(str);
                     filereader.onload = function () {
                         var $imgElement = $($img).find('img');
@@ -306,17 +343,10 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         var id = $(this).data('id');
-
                         var formData = new FormData($("#image-form")[0]);
-
                         var photoInput = $("#proImg")[0];
                         var listPhotosInput = $("#ListPhotos")[0];
 
-                        // console.log(listPhotosInput.files);
-
-                        // return;
-
-                        // Thêm các tệp ảnh vào formData (nếu đã chọn)
                         if (photoInput.files.length > 0) {
                             formData.append("Photo", photoInput.files[0]);
                         }
@@ -326,14 +356,6 @@
                                 formData.append("ListPhotos", listPhotosInput.files[i]);
                             }
                         }
-
-
-                        console.log(formData.getAll("ListPhotos"));
-
-                        //return;
-
-                        console.log(formData);
-
 
                         $.ajax({
                             type: "POST",
@@ -347,9 +369,9 @@
                                     'Product Images have been updated.',
                                     'success'
                                 );
-                                // setTimeout(function () {
-                                //     $("#modal-close-button").click();
-                                // }, 1000);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1000);
                             }
                         });
                     }

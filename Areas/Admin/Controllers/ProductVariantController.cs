@@ -4,8 +4,7 @@ using BTL_QuanLyBanDienThoai.Models.ViewModel;
 using BTL_QuanLyBanDienThoai.Utils;
 using Microsoft.AspNetCore.Mvc;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
-
-
+using Newtonsoft.Json;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -15,15 +14,32 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
     {
         Slug slug = new Slug();
         private readonly QLBanDienThoaiContext db;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductVariantController(QLBanDienThoaiContext _db)
+        public ProductVariantController(
+            QLBanDienThoaiContext _db,
+            IWebHostEnvironment webHostEnvironment)
         {
             db = _db;
+            _webHostEnvironment = webHostEnvironment;
         }
         [Authentication]
         public IActionResult Index()
         {
-            return View();
+            List<ProductVariantViewModel> productVariants = (from productVariant in db.ProductVariants
+                                                             join product in db.Products
+                                                             on productVariant.ProductId equals product.Id
+                                                             orderby product.Id
+                                                             select new ProductVariantViewModel
+                                                             {
+                                                                 Id = productVariant.Id,
+                                                                 Name = productVariant.Name,
+                                                                 Price = productVariant.Price,
+                                                                 Quantity = productVariant.Quantity,
+                                                                 Slug = productVariant.Slug,
+                                                                 Product = product
+                                                             }).ToList();
+            return View(productVariants);
         }
 
         [Route("Create/{id}")]
@@ -60,9 +76,9 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             ProductVariantViewModel productVariantViewModel = new ProductVariantViewModel
             {
                 Product = db.Products.Find(id),
-                attributeWithValueViewModel = attributeWithValueViewModel,
                 resultDict = resultDictionary
             };
+
             return View(productVariantViewModel);
         }
 
@@ -81,6 +97,12 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     Slug = slug.Create(productVariantViewModel.Name),
                 };
                 db.ProductVariants.Add(pV);
+
+                Product product = db.Products.Find(id);
+
+                product.Quantity = product.Quantity + pV.Quantity;
+
+                db.Update(product);
 
                 db.SaveChanges();
 
@@ -168,11 +190,13 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             ProductVariant proVariant = db.ProductVariants.Find(id);
 
-            ProductVariantViewModel productVariantViewModel = new ProductVariantViewModel();
-            productVariantViewModel.Product = db.Products.Find(proVariant.ProductId);
-            productVariantViewModel.Name = proVariant.Name;
-            productVariantViewModel.Price = proVariant.Price;
-            productVariantViewModel.Quantity = proVariant.Quantity;
+            ProductVariantViewModel productVariantViewModel = new ProductVariantViewModel
+            {
+                Product = db.Products.Find(proVariant.ProductId),
+                Name = proVariant.Name,
+                Price = proVariant.Price,
+                Quantity = proVariant.Quantity,
+            };
 
             List<ProductAttributeValue> productAttributeValues =
                             (from pav in db.ProductAttributeValues
@@ -184,7 +208,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
             int a1 = productAttributeValues[0].AttributeValueId.Value;
             int a2 = productAttributeValues[1].AttributeValueId.Value;
-            
+
             AttributeValue attributeValue1 = db.AttributeValues.Find(a1);
             AttributeValue attributeValue2 = db.AttributeValues.Find(a2);
 
@@ -197,24 +221,82 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             productVariantViewModel.attr1 = attr1.Name;
             productVariantViewModel.attr2 = attr2.Name;
 
-
             return View(productVariantViewModel);
         }
 
         [Route("Edit/{id}")]
         [HttpPost]
-        public IActionResult Edit(ProductVariantViewModel productVariantViewModel,int id)
+        public IActionResult Edit(ProductVariantViewModel productVariantViewModel, int id)
         {
             ProductVariant proVariant = db.ProductVariants.Find(id);
-             
+
+            int amountPro = (int)proVariant.Quantity;
+
+            Product product = db.Products.Find(proVariant.ProductId);
+
+            product.Quantity = product.Quantity - amountPro + productVariantViewModel.Quantity;
+
             proVariant.Name = productVariantViewModel.Name;
             proVariant.Price = productVariantViewModel.Price;
             proVariant.Quantity = productVariantViewModel.Quantity;
 
-            db.Update(proVariant);
+            db.Update(product);
             db.SaveChanges();
 
-            return RedirectToAction("Edit", "Product", new { id = proVariant.ProductId });
+            return RedirectToAction("Edit", "ProductVariant", new { id = id });
+        }
+
+        [Route("Delete")]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var productVariant = db.ProductVariants.FirstOrDefault(x => x.Id == id);
+
+            if (productVariant != null)
+            {
+                try
+                {
+                    //List<ProductAttributeValue> productAttributeValues =
+                    //        (from pav in db.ProductAttributeValues
+                    //         where pav.ProductVariantId == id
+                    //         select new ProductAttributeValue
+                    //         {
+                    //             AttributeValueId = pav.AttributeValueId,
+                    //         }).ToList();
+
+                    var itemsToRemove = db.ProductAttributeValues.Where(pav => pav.ProductVariantId == id).ToList();
+
+                    Product product = db.Products.Find(productVariant.ProductId);
+
+                    product.Quantity = (product.Quantity - productVariant.Quantity) >= 0 ? (product.Quantity - productVariant.Quantity) : 0;
+
+                    db.Update(product);
+
+                    db.ProductAttributeValues.RemoveRange(itemsToRemove);
+
+                    db.ProductVariants.Remove(productVariant);
+
+                    db.SaveChanges();
+
+                    return Json(new { success = true, message = "done" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(JsonConvert.SerializeObject(
+                        new
+                        {
+                            error = "Can not delete"
+                        }
+                    ));
+                }
+            }
+
+            return BadRequest(JsonConvert.SerializeObject(
+                new
+                {
+                    error = "Can not delete this product variant"
+                }
+            ));
         }
     }
 }

@@ -8,7 +8,7 @@
 @model ProductVariantViewModel
 
 @section Title {
-                                                Create Product Variant
+        Create Product Variant
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products/Edit/@Model.Product.Id">
@@ -16,33 +16,32 @@
     </a>
 }
 
-
 <div class="card">
     <form asp-action="Create" asp-controller="ProductVariant" method="post" id="form">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label>Product Parent:</label>
+                    <label asp-for="Product.Name" class="required-input">Product Parent</label>
                     <input type="text" asp-for="Product.Name" class="form-control" disabled>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Name">Name:</label>
-                    <input type="text" asp-for="Name" class="form-control" required>
+                    <label asp-for="Name" class="required-input">Name</label>
+                    <input type="text" asp-for="Name" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Price">Price:</label>
-                    <input type="number" asp-for="Price" class="form-control" required>
+                    <label asp-for="Price" class="required-input">Price:</label>
+                    <input type="number" asp-for="Price" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Quantity">Quantity:</label>
-                    <input type="number" asp-for="Quantity" class="form-control" required>
+                    <label asp-for="Quantity" class="required-input">Quantity:</label>
+                    <input type="number" asp-for="Quantity" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-6" id="option-1">
-                    <label>Attribute 1: <span class="index-1"></span></label>
+                    <label class="required-input">Attribute 1<span class="index-1"></span></label>
                     <select class="form-control" data-toggle="" id="attribute_1" name="attribute_1">
                         <option>Select a attribute</option>
                         @foreach (var attr in Model.resultDict)
@@ -52,7 +51,7 @@
                     </select>
                 </div>
                 <div class="col-sm-6" id="option-2">
-                    <label>Attribute 1 Value: <span class="index-1"></span></label>
+                    <label class="required-input">Attribute 1 Value<span class="index-1"></span></label>
                     <select class="form-control" data-toggle="" id="attribute_1_value" name="attribute_1_value" disabled>
                         <option>Select a attribute value</option>
                         @foreach (var attr in Model.resultDict)
@@ -66,7 +65,7 @@
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label>Attribute 2: <span class="index-2"></span></label>
+                    <label class="required-input">Attribute 2<span class="index-2"></span></label>
                     <select class="form-control" data-toggle="" id="attribute_2" name="attribute_2" disabled>
                         <option value="">Select a attribute</option>
                         @foreach (var attr in Model.resultDict)
@@ -76,7 +75,7 @@
                     </select>
                 </div>
                 <div class="col-sm-6">
-                    <label>Attribute 2 Value: <span class="index-2"></span></label>
+                    <label class="required-input">Attribute 2 Value<span class="index-2"></span></label>
                     <select class="form-control" data-toggle="" id="attribute_2_value" name="attribute_2_value" disabled>
                         <option>Select a attribute value</option>
                         @foreach (var attr in Model.resultDict)
@@ -127,30 +126,15 @@
             });
 
             $('#create').on('click', function () {
-                var name = $("#Name").val().trim();
-                var price = $("#Price").val().trim();
-                var quantity = $("#Quantity").val().trim();
-                var check = $("#create").val();
-
-                console.log(check);
-
-                if (name != "" && price != "" && quantity != "" && check == 1) {
-                    Swal.fire(
-                        'Success!',
-                        'Product added successfully',
-                        'success'
-                    )
-                    setTimeout(
-                        function () {
-                            $("#form").submit();
-                        }, 1000);
-                } else {
-                    Swal.fire(
-                        'Warning',
-                        "Please enter all fields",
-                        'warning'
-                    )
-                }
+                Swal.fire(
+                    'Success!',
+                    'Product Variant added successfully',
+                    'success'
+                )
+                setTimeout(
+                    function () {
+                        $("#form").submit();
+                    }, 1000);
             });
         });
     </script>
