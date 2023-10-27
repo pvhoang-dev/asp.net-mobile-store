@@ -15,6 +15,8 @@ public partial class Product
 
     public double? Price { get; set; }
 
+    public double? Price2 { get; set; }
+
     public int? Quantity { get; set; }
 
     public string? Description { get; set; }

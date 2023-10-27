@@ -22,7 +22,6 @@ namespace BTL_QuanLyBanDienThoai.Models.ViewModel
         
         [StringLength(50, MinimumLength = 8, ErrorMessage = "Confirm password must have 8 characters")]
         public string? ConfirmPassword { get; set; }
-
        
         public int? Role { get; set; }
     }

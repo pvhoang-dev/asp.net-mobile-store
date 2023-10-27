@@ -42,6 +42,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                                            Id = product.Id,
                                                            Name = product.Name,
                                                            Price = product.Price,
+                                                           Price2 = product.Price2,
                                                            Quantity = product.Quantity,
                                                            Slug = product.Slug,
                                                            Status = product.Status,
@@ -73,6 +74,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 {
                     Name = productViewModel.Name,
                     Price = productViewModel.Price,
+                    Price2 = productViewModel.Price2,
                     Slug = slug.Create(productViewModel.Name),
                     CategoryId = int.Parse(Request.Form["category_id"]),
                     Quantity = 0,
@@ -153,6 +155,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 Id = id,
                 Name = pro.Name,
                 Price = pro.Price,
+                Price2 = pro.Price2,
                 Quantity = pro.Quantity,
                 Description = pro.Description,
                 CategoryId = pro.CategoryId,
@@ -178,6 +181,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 pro.Slug = productViewModel.Slug;
                 pro.Description = productViewModel.Description;
                 pro.Price = productViewModel.Price;
+                pro.Price2 = productViewModel.Price2;
                 pro.CategoryId = int.Parse(Request.Form["category_id"]);
                 db.Products.Update(pro);
 
@@ -314,15 +318,14 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                         .Where(pav => pvToRemoveIds.Contains((int)pav.ProductVariantId))
                         .ToList();
 
-                    if (!pvToRemove.Any())
-                    {
-                        db.ProductVariants.RemoveRange(pvToRemove);
-                    }
-
-                    if (!pavToRemove.Any())
+                    if (pavToRemove != null)
                     {
                         db.ProductAttributeValues.RemoveRange(pavToRemove);
+                    }
 
+                    if (pvToRemove != null)
+                    {
+                        db.ProductVariants.RemoveRange(pvToRemove);
                     }
 
                     db.Products.Remove(dbPro);
