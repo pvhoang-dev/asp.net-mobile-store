@@ -7,7 +7,7 @@
 }
 
 @section Title {
-                Edit Product
+                        Edit Product
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products">
@@ -23,8 +23,8 @@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" class="form-control">
-                    <span class="text-danger" asp-validation-for="Name"></span>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')">
+                    <span class="text-danger" asp-validation-for="Name" id="name-error"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
@@ -34,7 +34,8 @@
 
                 <div class="form-group col-sm-6">
                     <label for="category_id" class="required-input">Category</label>
-                    <select name="category_id" class="custom-select select2" data-toggle="select2">
+                    <select name="category_id" class="custom-select select2" data-toggle="select2" onchange="clearError('categoryid-error')">
+                        <option selected value="0">Select the category</option>
                         @foreach (var category in Model.Categories)
                         {
                             @if (@category.Id == Model.CategoryId)
@@ -48,18 +49,19 @@
                         }
 
                     </select>
+                    <span class="text-danger" asp-validation-for="CategoryId" id="categoryid-error"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Price" class="required-input">Price</label>
-                    <input asp-for="Price" type="number" class="form-control">
-                    <span asp-validation-for="Price" class="text-danger"></span>
+                    <input asp-for="Price" type="number" class="form-control" oninput="clearError('price-error')">
+                    <span asp-validation-for="Price" class="text-danger" id="price-error"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Price2" class="required-input">Price2</label>
-                    <input asp-for="Price2" type="number" class="form-control">
-                    <span asp-validation-for="Price2" class="text-danger"></span>
+                    <input asp-for="Price2" type="number" class="form-control" oninput="clearError('price-error-2')">
+                    <span asp-validation-for="Price2" class="text-danger" id="price-error-2"></span>
                 </div>
 
                 <div class="form-group col-12">
@@ -145,6 +147,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <span asp-validation-for="Photo" class="text-danger" id="price-error-2"></span>
                                     </div>
 
                                     <!-- File Upload -->
@@ -179,7 +182,7 @@
             </div>
         </div>
         <div class="card-footer border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary float-right" id="create">Save</button>
+            <button type="button" class="btn btn-primary float-right" id="create">Save</button>
         </div>
     </form>
 </div>
@@ -283,6 +286,7 @@
         $(document).on('ready', () => {
 
             $('#create').on('click', function () {
+                
                 Swal.fire({
                     title: 'Are you sure?',
                     icon: 'warning',
@@ -312,22 +316,22 @@
                     let fileName = this.files[i].name;
                     let str =
                         `
-                                                    <div class="dropzone-previews col-md-6 mt-3">
-                                                        <div class="" id="uploadPreviewTemplatee">
-                                                            <div class="card mt-1 mb-0 shadow-none border">
-                                                                <div class="p-2">
-                                                                    <div class="row align-items-center">
-                                                                        <div class="col-auto">
-                                                                            <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
+                                                                    <div class="dropzone-previews col-md-6 mt-3">
+                                                                        <div class="" id="uploadPreviewTemplatee">
+                                                                            <div class="card mt-1 mb-0 shadow-none border">
+                                                                                <div class="p-2">
+                                                                                    <div class="row align-items-center">
+                                                                                        <div class="col-auto">
+                                                                                            <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
+                                                                                        </div>
+                                                                                        <div class="col pl-0">
+                                                                                            <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col pl-0">
-                                                                            <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>`;
+                                                                    </div>`;
                     let $img = jQuery.parseHTML(str);
                     filereader.onload = function () {
                         var $imgElement = $($img).find('img');
@@ -407,6 +411,11 @@
 
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+    </script>
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
         }
     </script>
 }

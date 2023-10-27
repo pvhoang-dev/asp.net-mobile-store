@@ -22,43 +22,47 @@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" class="form-control" required>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')" >
+                    <span class="text-danger" asp-validation-for="Name" id="name-error"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label class="required-input">Category</label>
-                    <select name="category_id" id="category_id" class="custom-select select2" data-toggle="select2">
+                    <select name="category_id" id="category_id" class="custom-select select2" data-toggle="select2" onchange="clearError('category-error')">
                         <option value="0">Select a category</option>
                         @foreach (var category in Model.Categories)
                         {
                             <option value="@category.Id">@category.Name</option>
                         }
                     </select>
+                    <span class="text-danger" asp-validation-for="CategoryId" id="category-error"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Price" class="required-input">Price</label>
-                    <input asp-for="Price" type="number" class="form-control" required>
+                    <input asp-for="Price" type="number" class="form-control" oninput="clearError('price-error')">
+                    <span class="text-danger" asp-validation-for="Price" id="price-error" > </span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Price2" class="required-input">Price2</label>
-                    <input asp-for="Price2" type="number" class="form-control" required>
+                    <input asp-for="Price2" type="number" class="form-control" oninput="clearError('price-error-1')">
+                    <span class="text-danger" asp-validation-for="Price2" id="price-error-1"></span>
                 </div>
 
-                <div class="form-group col-sm-6">
+                <div class="form-group col-12">
                     <label asp-for="Description">Short Description</label>
-                    <input asp-for="Description" type="text" class="form-control">
+                    <input asp-for="Description" type="text" class="form-control" >
                 </div>
 
                 <!-- File Upload -->
                 <div class="form-group col-lg-6 tab-content">
-                    <label class="required-input">Images Default (Only one)</label>
+                    <label asp-for="Photo" class="required-input">Images Default (Only one)</label>
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input hidden asp-for="Photo" class="form-control" id="proImg" type="file" accept="image/*" onchange="ChangeFile(this)" />
+                                <input hidden asp-for="Photo" class="form-control" id="proImg" type="file" accept="image/*" onchange="ChangeFile(this)" oninput="clearError('photo-error')" />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -86,6 +90,7 @@
                             </div>
                         </div>
                     </div>
+                    <span class="text-danger" asp-validation-for="Photo" id="photo-error"></span>
                 </div>
 
                 <!-- File Upload -->
@@ -111,7 +116,7 @@
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="button" class="btn btn-primary" id="create">Create</button>
+            <button type="submit" class="btn btn-primary" id="create">Create</button>
         </div>
     </form>
 </div>
@@ -121,28 +126,29 @@
         var checkHasImg = false;
         $(document).on('ready', () => {
             $('#create').on('click', function () {
-                var name = $("#Name").val().trim();
-                var price = $("#Price").val().trim();
-                var selectedCate = $("#category_id").val();
+                $("#form").submit();
+                // var name = $("#Name").val().trim();
+                // var price = $("#Price").val().trim();
+                // var selectedCate = $("#category_id").val();
 
-                if (name != "" && price != "" && selectedCate != "0" && checkHasImg == true) {
-                    Swal.fire(
-                        'Success!',
-                        'Product added successfully',
-                        'success'
-                    )
-                    setTimeout(
-                        function () {
-                            $("#form").submit();
-                        }, 1000);
-                } else {
-                    Swal.fire(
-                        'Warning!',
-                        'Please enter all fields',
-                        'warning'
-                    )
-                    return;
-                }
+                // if (name != "" && price != "" && selectedCate != "0" && checkHasImg == true) {
+                //     Swal.fire(
+                //         'Success!',
+                //         'Product added successfully',
+                //         'success'
+                //     )
+                //     setTimeout(
+                //         function () {
+                //             $("#form").submit();
+                //         }, 1000);
+                // } else {
+                //     Swal.fire(
+                //         'Warning!',
+                //         'Please enter all fields',
+                //         'warning'
+                //     )
+                //     return;
+                // }
             });
 
             $("#ListPhotos").on('change', function () {
@@ -202,6 +208,11 @@
 
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+    </script>
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
         }
     </script>
 }
