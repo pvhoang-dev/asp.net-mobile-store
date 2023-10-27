@@ -9,7 +9,7 @@ namespace BTL_QuanLyBanDienThoai.Models.ViewModel
         [Key]
         public int? Id { get; set; }
         [Required(ErrorMessage = "Please enter your name.")]
-        [StringLength(50)]
+        [StringLength(250)]
         public string? Name { get; set; }
 
         [Required(ErrorMessage = "Please enter your email.")]
@@ -17,10 +17,10 @@ namespace BTL_QuanLyBanDienThoai.Models.ViewModel
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Please enter your password.")]
-        [StringLength(50, MinimumLength = 8, ErrorMessage = "Password must have 8 characters")]
+        [StringLength(250, MinimumLength = 8, ErrorMessage = "Password must have 8 characters")]
         public string? Password { get; set; }
         
-        [StringLength(50, MinimumLength = 8, ErrorMessage = "Confirm password must have 8 characters")]
+        [StringLength(250, MinimumLength = 8, ErrorMessage = "Confirm password must have 8 characters")]
         public string? ConfirmPassword { get; set; }
 
        

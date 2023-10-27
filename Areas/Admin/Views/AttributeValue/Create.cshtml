@@ -23,25 +23,26 @@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="attrId" for="attribute_id" class="required-input">Attribute</label>
-                    <select name="attribute_id" id="attribute_id" class="form-control select2" data-toggle="select2">
-                        <option value="0">Selected attribute</option>
+                    <select asp-for="attrId" id="attribute_id" name="attribute_id" class="form-control" data-toggle="" onchange="clearError('attribute-error')">
+                        <option>Selected attribute</option>
                         @foreach (var attr in Model.attrs)
                         {
                             if (Model.attrId != null && Model.attrId == @attr.Id)
                             {
-                                <option selected asp-for="attrId" value="@attr.Id">@attr.Name</option>
+                                <option value="@attr.Id">@attr.Name</option>
                             }
                             else
                             {
-                                <option asp-for="attrId" value="@attr.Id">@attr.Name</option>
+                                <option value="@attr.Id">@attr.Name</option>
                             }
                         }
                     </select>
+                    <span class="text-danger" id="attribute-error" asp-validation-for="attrId"></span>
                 </div>
                 <div class="form-group col-sm-6">
                     <label asp-for="Name" class="required-input">Value</label>
-                    <input asp-for="Name" type="text" id="value" class="form-control">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input asp-for="Name" type="text" id="value" class="form-control" oninput="clearError('name-error')">
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -85,4 +86,10 @@
             )
         </script>
     }
+
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
+    </script>
 }

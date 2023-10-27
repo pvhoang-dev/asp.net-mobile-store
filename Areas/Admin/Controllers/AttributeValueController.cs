@@ -9,7 +9,7 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
-{  
+{
     [Authentication]
     [Area("admin")]
     [Route("admin/attribute-values")]
@@ -52,18 +52,20 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(AttributeValueViewModel attributeValue)
         {
-            int attrId = int.Parse(Request.Form["attribute_id"]);
-            string attrValue = attributeValue.Name;
-
-            var existingAttrValue = db.AttributeValues.FirstOrDefault(
-                a => a.AttributeId == attrId &&
-                a.Name == attrValue
-            );
-
-            if (existingAttrValue == null)
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                int attrId = int.Parse(Request.Form["attribute_id"]);
+
+                string attrValue = attributeValue.Name;
+
+                var existingAttrValue = db.AttributeValues.FirstOrDefault(
+                    a => a.AttributeId == attrId &&
+                    a.Name == attrValue
+                );
+
+                if (existingAttrValue == null)
                 {
+
                     db.AttributeValues.Add(new AttributeValue
                     {
                         AttributeId = attrId,
@@ -73,16 +75,19 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     db.SaveChanges();
 
                     return RedirectToAction("Index", "AttributeValue");
+
                 }
-                return View(attributeValue);
+                else
+                {
+                    ViewBag.Message = "Attribute value '" + attrValue + "' existed";
+                    attributeValue.attrs = db.Attrs.ToList();
+                    attributeValue.attrId = attrId;
+                    return View(attributeValue);
+                }
             }
-            else
-            {
-                ViewBag.Message = "Attribute value '" + attrValue + "' existed";
-                attributeValue.attrs = db.Attrs.ToList();
-                attributeValue.attrId = attrId;
-                return View(attributeValue);
-            }
+
+            attributeValue.attrs = db.Attrs.ToList();
+            return View(attributeValue);
         }
 
         [Route("Edit/{id}")]
@@ -131,7 +136,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 ViewBag.Message = "Edit Attribute Value Failing";
                 ViewBag.Text = "warning";
             }
-            
+
             attributeValue.attrs = db.Attrs.ToList();
 
             return View(attributeValue);

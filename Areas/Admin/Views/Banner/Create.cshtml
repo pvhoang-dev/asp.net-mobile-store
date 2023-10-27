@@ -23,14 +23,14 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label asp-for="Name">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input asp-for="Name" type="text" id="name" class="form-control" oninput="clearError('name-error')">
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-6">
                     <label asp-for="Title">Title</label>
-                    <input asp-for="Title" type="text" id="title" class="form-control">
-                    <span asp-validation-for="Title" class="text-danger"></span>
+                    <input asp-for="Title" type="text" id="title" class="form-control" oninput="clearError('title-error')">
+                    <span asp-validation-for="Title" id="title-error" class="text-danger"></span>
                 </div>
 
                 <!-- File Upload -->
@@ -41,8 +41,8 @@
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" />
-                                <input type="text" asp-for="Image" class="form-control" hidden />
+                                <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" oninput="clearError('image-error')" />
+                                <input type="text" asp-for="Image" class="form-control" hidden oninput="clearError('image-error')" />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -75,6 +75,7 @@
                             </div>
                         </div>
                     </div> <!-- end preview-->
+                    <span id="image-error" class="text-danger" asp-validation-for="Image"></span>
                 </div> <!-- end tab-content-->
                 <!-- Preview -->
                 <div class="dropzone-previews mt-3" id="file-previews"></div>
@@ -111,4 +112,9 @@
 
         $('input[name="Image"]').val(fileName);
     }
+
+
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
 </script>
