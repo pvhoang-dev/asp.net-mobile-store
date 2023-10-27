@@ -24,7 +24,7 @@
                 <div class="form-group col-12">
                     <label asp-for="Name" class="required-input">Name</label>
                     <input asp-for="Name" type="text" class="form-control" oninput="clearError('Name')">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -62,13 +62,14 @@
         $(document).on("ready", function () {
             $("#form").submit(function (event) {
                 event.preventDefault();
-                console.log("Submit")
+                
 
                 $.ajax({
                     url: "/Admin/Attributes/Create",
                     type: "POST",
                     data: $("#form").serialize(),
                     success: function (result) {
+                        console.log(result.status)
                         switch (result.status) {
                             case "success":
                                 Swal.fire(
@@ -90,7 +91,7 @@
                                 break;
                             case "error":
                                 var error = result.errors[0];
-                                $("#Name").html(error);
+                                $("#name-error").html(error);
                                 break;
                         }
 
