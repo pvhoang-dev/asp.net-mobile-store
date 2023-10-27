@@ -87,7 +87,7 @@
                     type: "POST",
                     data: $("#form").serialize(),
                     success: function (result) {
-                        switch (result.isValid) {
+                        switch (result.status) {
                             case "success":
                                 Swal.fire(
                                     'Success!',
