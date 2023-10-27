@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BTL_QuanLyBanDienThoai.Models.ViewModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -6,37 +8,41 @@
             Product Variants
 }
 
+@model List<ProductVariantViewModel>
+
 <div class="card">
     <div class="card-body p-0">
         <div class="table-responsive users-table">
             <table class="table table-centered mb-0 " id="product-variants-table">
                 <thead>
                     <tr>
+                        <th class="d-none d-sm-table-cell">Product</th>
                         <th>Name</th>
                         <th class="d-none d-sm-table-cell">Qty</th>
                         <th class="d-none d-sm-table-cell">Price</th>
-                        <th class="d-none d-lg-table-cell">Slug</th>
-                        <th colspan="2">Action</th>
+                        <th colspan="1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Name</td>
-                        <td class="d-none d-sm-table-cell">
-                            <h4><span class="badge badge-primary">Qty</span></h4>
-                        </td>
-                        <td class="d-none d-sm-table-cell">Price</td>
-                        <td class="d-none d-lg-table-cell">Slug</td>
-                        <td>
-                            <div class='btn-group'>
-                                <a href="/Admin/Product-Variants/Edit" class="action-icon">
-                                    <i class="mdi mdi-pencil"></i>
-                                </a>
-                                <a href="" class="action-icon">
-                                    <i class="mdi mdi-delete"></i>
-                                </a>
-                            </div>
-                        </td>
+                        @foreach (var proVariant in Model)
+                        {
+                        <tr>
+                            <td class="d-none d-sm-table-cell">@proVariant.Product.Name</td>
+                            <td>@proVariant.Name</td>
+                            <td class="d-none d-sm-table-cell">
+                                <h4><span class="badge badge-primary">@proVariant.Quantity</span></h4>
+                            </td>
+                            <td class="d-none d-sm-table-cell">@proVariant.Price</td>
+                            <td>
+                                <div class='btn-group'>
+                                    <a asp-area="admin" asp-controller="Product" asp-action="Edit" asp-route-id="@proVariant.Product.Id" asp-fragment="products-table" class="action-icon">
+                                        <i class="mdi mdi-settings"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        }
                     </tr>
                 </tbody>
             </table>

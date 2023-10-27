@@ -17,23 +17,32 @@
 @model Category;
 
 <div class="card col-lg-6">
-    <form method="post" action="">
-        
+    <form method="post" enctype="multipart/form-data" id="form">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
-                    <label asp-for="Name">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control" required>
+                    <label asp-for="Name" for="name" class="required-input">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')">
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
+                </div>
+
+                <input asp-for="Id" type="text" class="form-control" hidden>
+                <div class="form-group col-md-6">
+                    <label>Old Image:</label>
+                    <img src="/@Model.Image"
+                         class="d-block img-thumbnail"
+                         style="border-radius: 5px" />
                 </div>
 
                 <!-- File Upload -->
                 <div class="form-group col-12 tab-content">
-                    <label>Images:</label>
+                    <label asp-for="Image">Images</label>
                     <div class="tab-pane show active" id="file-upload-preview">
-                        <div action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
+                        <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input name="image[]" type="file" />
+                                <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" />
+                                <input type="text" class="form-control" asp-for="Image" hidden oninput="clearError('image-error')" />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -42,37 +51,95 @@
                             </div>
                         </div>
                         <!-- Preview -->
-                        <div class="dropzone-previews mt-3" id="file-previews"></div>
+                        <div class="d-none dropzone-previews mt-3" id="file-previewss">
+                            <div class="" id="uploadPreviewTemplatee">
+                                <div class="card mt-1 mb-0 shadow-none border">
+                                    <div class="p-2">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <img id="preImg" data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
+                                            </div>
+                                            <div class="col pl-0">
+                                                <a href="javascript:void(0);" class="text-muted font-weight-bold" data-dz-name></a>
+                                                <p class="mb-0" data-dz-size id="preImgName"></p>
+                                            </div>
+                                            <div class="col-auto">
+                                                <!-- Button -->
+                                                <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
+                                                    <i class="dripicons-cross"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div> <!-- end preview-->
+                    <span class="text-danger" asp-validation-for="Image" id="image-error"></span>
                 </div> <!-- end tab-content-->
-                <!-- Preview -->
-                <div class="dropzone-previews mt-3" id="file-previews"></div>
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary" id="create" >Save</button>
         </div>
     </form>
 </div>
-<!-- Preview -->
-<div class="d-none" id="uploadPreviewTemplate">
-    <div class="card mt-1 mb-0 shadow-none border">
-        <div class="p-2">
-            <div class="row align-items-center">
-                <div class="col-auto">
-                    <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                </div>
-                <div class="col pl-0">
-                    <a href="javascript:void(0);" class="text-muted font-weight-bold" data-dz-name></a>
-                    <p class="mb-0" data-dz-size></p>
-                </div>
-                <div class="col-auto">
-                    <!-- Button -->
-                    <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                        <i class="dripicons-cross"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+@section Scripts{
+    <script>
+        function chooseFile() {
+            document.querySelector('#cateImg').click();
+            //$('#cateImg').click();
+        }
+        function ChangeFile(input) {
+            var currentFile = $('#cateImg')[0].files[0];
+            var fileName = currentFile.name;
+
+            $('#file-previewss').removeClass('d-none');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#preImg').attr('src', e.target.result);
+                    $('#preImgName').text(fileName);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+
+            $('input[name="Image"]').val(fileName);
+        }
+        // $(document).ready(function () {
+        //     $('#create').on('click', function () {
+        //         var name = $("#Name").val().trim();
+        //         if (name != "") {
+        //             $("#form").submit();
+        //         } else {
+        //             Swal.fire(
+        //                 'Warning',
+        //                 "Please enter all fields",
+        //                 'warning'
+        //             )
+        //         }
+        //     });
+        // });
+    </script>
+
+    @if (ViewBag.Message != null)
+    {
+        <script>
+            Swal.fire(
+                'Status',
+                "@ViewBag.Message",
+                "@ViewBag.Text"
+            )
+        </script>
+    }
+
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
+    </script>
+}

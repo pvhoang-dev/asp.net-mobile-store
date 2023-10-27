@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace BTL_QuanLyBanDienThoai.Models;
 
 public partial class OrderItem
 {
+    [Key]
     public int Id { get; set; }
 
     public int? OrderId { get; set; }

@@ -7,27 +7,98 @@
 }
 
 @section Title {
-    Create Attribute
+                        Create Attribute
+
+    <a class="btn btn-outline-primary float-right align-items-center"
+       href="/admin/Attributes">
+        <i class="uil uil-corner-up-left-alt"></i>&nbsp;Back
+    </a>
 }
 
 @model Attr
 
-<div class="card">
-    <form method="post">
+<div class="card col-md-6">
+    <form method="post" id="form">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
-                    <label asp-for="Name">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control" required>
+                    <label asp-for="Name" class="required-input">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')">
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
                 </div>
-               
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary" id="create">Create</button>
         </div>
     </form>
 </div>
 
+@section Scripts {
+    <script>
+        // $('#create').on('click', function () {
+        //         $("#form").submit();
+        //     });
+        // $(document).on('ready', () => {
+            
+        // });
+    </script>
+    @if (ViewBag.Message != null)
+    {
+        <script>
+            Swal.fire(
+                'Warning',
+                "@ViewBag.Message",
+                'warning'
+            )
+        </script>
+    }
 
 
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
+        $(document).on("ready", function () {
+            $("#form").submit(function (event) {
+                event.preventDefault();
+                
+
+                $.ajax({
+                    url: "/Admin/Attributes/Create",
+                    type: "POST",
+                    data: $("#form").serialize(),
+                    success: function (result) {
+                        console.log(result.status)
+                        switch (result.status) {
+                            case "success":
+                                Swal.fire(
+                                    'Success!',
+                                    'Atribute added successfully',
+                                    'success'
+                                )
+                                setTimeout(
+                                    function () {
+                                        window.location.href = "/admin/attributes/"
+                                    }, 1000);
+                                break;
+                            case "exist":
+                                Swal.fire(
+                                    'Warning',
+                                    result.error,
+                                    'warning'
+                                )
+                                break;
+                            case "error":
+                                var error = result.errors[0];
+                                $("#name-error").html(error);
+                                break;
+                        }
+
+
+                    }
+                })
+            })
+        })
+    </script>
+}

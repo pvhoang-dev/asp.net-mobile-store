@@ -8,18 +8,24 @@
 
 @section Title {
     Edit Attribute
+
+    <a class="btn btn-outline-primary float-right align-items-center"
+       href="/admin/Attributes">
+        <i class="uil uil-corner-up-left-alt"></i>&nbsp;Back
+    </a>
 }
 
 @model Attr
 
-<div class="card">
-    <form method="post">
+<div class="card col-md-6">
+    <form method="post" id="form">
         <input asp-for="Id" hidden />
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
-                    <label asp-for="Name">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control" required>
+                    <label asp-for="Name" class="required-input">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')">
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -28,3 +34,23 @@
         </div>
     </form>
 </div>
+
+
+@section Scripts{
+    @if (ViewBag.Message != null)
+    {
+        <script>
+            Swal.fire(
+                'Status',
+                "@ViewBag.Message",
+                "@ViewBag.Text"
+            )
+        </script>
+    }
+
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
+    </script>
+}

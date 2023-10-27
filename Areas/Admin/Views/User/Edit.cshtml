@@ -1,10 +1,13 @@
-﻿@{
+﻿@using BTL_QuanLyBanDienThoai.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
     ViewData["Title"] = "Edit User";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 @section Title {
-                        Edit User
+                            Edit User
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/Admin/Users">
@@ -13,18 +16,23 @@
 }
 
 
+
+@model User
+
 <div class="card">
-    <form>
+    <form method="post">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label for="name">Name:</label>
-                    <input type="text" class="form-control" name="name" required>
+                    <label asp-for="Name">Name:</label>
+                    <input asp-for="Name" type="text" class="form-control">
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" class="form-control" required>
+                    <label asp-for="Email">Email:</label>
+                    <input asp-for="Email" type="text" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group col-sm-6">
                     <label>Password:</label>
@@ -50,13 +58,15 @@
                             <div class="form-group col-12">
                                 <label for="new_password">Password:</label>
                                 <div class="input-group input-group-merge">
-                                    <input type="password" id="new_password" name="new_password" class="form-control">
+                                    <input asp-for="Password" type="password" id="new_password" class="form-control">
                                     <div class="input-group-append" data-password="false">
                                         <div class="input-group-text">
                                             <span class="password-eye"></span>
                                         </div>
                                     </div>
+
                                 </div>
+                                <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-12">
@@ -70,25 +80,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group border-0 bg-transparent">
-                                <button type="button" class="btn btn-outline-info">Change</button>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-group col-sm-6">
-                    <label for="role">Role:</label>
-                    <select class="form-control" id="role" name="role">
+                    <label asp-for="Role">Role:</label>
+                    <select asp-for="Role" class="form-control select2" data-toggle="select2" id="role" name="role">
                         <option>Select a role</option>
                         <option value="1">Admin</option>
                         <option value="2">User</option>
                     </select>
+                    <span asp-validation-for="Role" class="text-danger"> </span>
                 </div>
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
 </div>

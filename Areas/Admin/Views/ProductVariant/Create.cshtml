@@ -5,44 +5,44 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+@model ProductVariantViewModel
+
 @section Title {
-                                            Create Product Variant
+        Create Product Variant
 
     <a class="btn btn-outline-primary float-right align-items-center"
-       href="/admin/Product-Variants">
+       href="/admin/Products/Edit/@Model.Product.Id">
         <i class="uil uil-corner-up-left-alt"></i>&nbsp;Back
     </a>
 }
 
-@model ProductVariantViewModel
-
 <div class="card">
-    <form asp-action="Create" asp-controller="ProductVariant" method="post">
+    <form asp-action="Create" asp-controller="ProductVariant" method="post" id="form">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label>Product Parent:</label>
+                    <label asp-for="Product.Name" class="required-input">Product Parent</label>
                     <input type="text" asp-for="Product.Name" class="form-control" disabled>
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Name">Name:</label>
-                    <input type="text" asp-for="Name" class="form-control" required>
+                    <label asp-for="Name" class="required-input">Name</label>
+                    <input type="text" asp-for="Name" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Price">Price:</label>
-                    <input type="number" asp-for="Price" class="form-control" required>
+                    <label asp-for="Price" class="required-input">Price:</label>
+                    <input type="number" asp-for="Price" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label asp-for="Quantity">Quantity:</label>
-                    <input type="number" asp-for="Quantity" class="form-control" required>
+                    <label asp-for="Quantity" class="required-input">Quantity:</label>
+                    <input type="number" asp-for="Quantity" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-6" id="option-1">
-                    <label>Attribute 1: <span class="index-1"></span></label>
-                    <select class="form-control" id="attribute_1" name="attribute_id_1">
+                    <label class="required-input">Attribute 1<span class="index-1"></span></label>
+                    <select class="form-control" data-toggle="" id="attribute_1" name="attribute_1">
                         <option>Select a attribute</option>
                         @foreach (var attr in Model.resultDict)
                         {
@@ -51,8 +51,8 @@
                     </select>
                 </div>
                 <div class="col-sm-6" id="option-2">
-                    <label>Attribute 1 Value: <span class="index-1"></span></label>
-                    <select class="form-control" id="attribute_1_value" name="attribute_1_value">
+                    <label class="required-input">Attribute 1 Value<span class="index-1"></span></label>
+                    <select class="form-control" data-toggle="" id="attribute_1_value" name="attribute_1_value" disabled>
                         <option>Select a attribute value</option>
                         @foreach (var attr in Model.resultDict)
                         {
@@ -65,9 +65,9 @@
                 </div>
 
                 <div class="form-group col-sm-6">
-                    <label>Attribute 2: <span class="index-2"></span></label>
-                    <select class="form-control" id="attribute_2" name="attribute_id_2">
-                        <option>Select a attribute</option>
+                    <label class="required-input">Attribute 2<span class="index-2"></span></label>
+                    <select class="form-control" data-toggle="" id="attribute_2" name="attribute_2" disabled>
+                        <option value="">Select a attribute</option>
                         @foreach (var attr in Model.resultDict)
                         {
                             <option value="@attr.Key"> @attr.Key </option>
@@ -75,8 +75,8 @@
                     </select>
                 </div>
                 <div class="col-sm-6">
-                    <label>Attribute 2 Value: <span class="index-2"></span></label>
-                    <select class="form-control" id="attribute_2_value" name="attribute_2_value">
+                    <label class="required-input">Attribute 2 Value<span class="index-2"></span></label>
+                    <select class="form-control" data-toggle="" id="attribute_2_value" name="attribute_2_value" disabled>
                         <option>Select a attribute value</option>
                         @foreach (var attr in Model.resultDict)
                         {
@@ -90,27 +90,67 @@
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="button" class="btn btn-primary" id="create" value="0">Create</button>
         </div>
     </form>
 </div>
 
-
-
 @section Scripts {
     <script>
+        var checkAllFields = false;
         $(document).ready(function () {
             $('#attribute_1').on('change', function () {
+                $("#attribute_1_value").removeAttr("disabled");
                 $("#attribute_1_value option").addClass("d-none");
                 var key = $("#attribute_1 option:selected").attr("value");
                 $("#attribute_1_value option." + key).removeClass("d-none");
+                $("#attribute_2 option").removeClass("d-none");
+                var attr1 = $("#attribute_1 option:selected").val();
+                $("#attribute_2").find('option[value="' + attr1 + '"]').addClass("d-none");
+                $("#attribute_2").find('option[value=""]').addClass("d-none");
+            });
+
+            $('#attribute_1_value').on('change', function () {
+                $("#attribute_2").removeAttr("disabled");
             });
 
             $('#attribute_2').on('change', function () {
+                $("#attribute_2_value").removeAttr("disabled");
                 $("#attribute_2_value option").addClass("d-none");
                 var key = $("#attribute_2 option:selected").attr("value");
                 $("#attribute_2_value option." + key).removeClass("d-none");
             });
+
+            $('#attribute_2_value').on('change', function () {
+                $('#create').attr("value", 1);
+            });
+
+            $('#create').on('click', function () {
+                Swal.fire({
+                    title: 'Adding...',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                            b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                    },
+                }).then((result) => {
+                    $("#form").submit();
+                })
+            });
         });
     </script>
+    @if (ViewBag.Message != null)
+    {
+        <script>
+            Swal.fire(
+                "@ViewBag.Greeting",
+                "@ViewBag.Message",
+                "@ViewBag.Text"
+            )
+        </script>
+    }
 }

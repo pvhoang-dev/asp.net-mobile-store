@@ -1,4 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using BTL_QuanLyBanDienThoai.Models;
+using BTL_QuanLyBanDienThoai.Data;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using BTL_QuanLyBanDienThoai.Models.Authentication;
+using BTL_QuanLyBanDienThoai.Models.ViewModel;
+using BTL_QuanLyBanDienThoai.Utils;
+
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -6,34 +14,193 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
     [Route("Admin/Users")]
     public class UserController : Controller
     {
-        [Route("")]
-        public IActionResult Index()
+        private readonly QLBanDienThoaiContext db;
+        Password password = new Password();
+        public UserController(QLBanDienThoaiContext _db)
         {
-            return View();
+            db = _db;
+        }
+        [Route("Login")]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            if (HttpContext.Session.GetString("Role") != "1")
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
         }
 
         [Route("Login")]
-        public IActionResult Login()
+        [HttpPost]
+        public IActionResult Login(User user)
         {
+
+            if (ModelState.IsValid && HttpContext.Session.GetString("Role") == null)
+            {
+                var checkUser = db.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
+                if(checkUser == null)
+                {
+                    ModelState.AddModelError("Password", "User does not exist, please re-enter.");
+                    return View();
+                }
+                if (!password.VerifyPassword(user.Password, checkUser.Password))
+                {
+                    ModelState.AddModelError("Password", "User does not exist, please re-enter.");
+                    return View();
+                }
+                if (checkUser != null)
+                {
+                    HttpContext.Session.SetString("Role", checkUser.Role.ToString());
+                    HttpContext.Session.SetString("Name", checkUser.Name.ToString());
+                    HttpContext.Session.SetString("Email", checkUser.Email.ToString());
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
             return View();
         }
 
+        [Authentication]
         [Route("Logout")]
+        [HttpGet]
         public IActionResult Logout()
         {
+            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("Role");
             return View();
         }
 
-        [Route("Edit")]
-        public IActionResult Edit()
+        [Authentication]
+        [Route("")]
+        public IActionResult Index()
         {
+            List<User> users = db.Users.ToList();
+            return View(users);
+        }
+
+        [Authentication]
+        [Route("Edit/{id}")]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            User user = db.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        [Authentication]
+        [Route("Edit/{id}")]
+        [HttpPost]
+        public IActionResult Edit(User user, int id)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var existUser = db.Users.Find(id);
+                if (existUser == null)
+                {
+                    ModelState.AddModelError("Email", "Email has already exist.");
+                    return View();
+                }
+                var checkDuplicateEmail = db.Users.Where(x => x.Email.Equals(existUser.Email)).FirstOrDefault();
+                if (checkDuplicateEmail == null)
+                {
+                    ModelState.AddModelError("Email", "Email has already exist.");
+                    return View();
+                }
+
+                existUser.Password = password.HashPassword(user.Password);
+                db.Users.Update(existUser);
+                db.SaveChanges();
+               
+                return RedirectToAction("Index", "User");
+            }
             return View();
         }
+
 
         [Route("Create")]
         public IActionResult Create()
         {
             return View();
+        }
+
+
+        [Route("Create")]
+        [HttpPost]
+        public IActionResult Create(UserViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                var existUser = db.Users.FirstOrDefault(u => u.Email == user.Email);
+                if (existUser != null)
+                {
+                    ViewBag.Message = "User already exist!";
+                }
+                db.Users.Add(new User
+                {
+                    Name = user.Name,
+                    Email = user.Email,
+                    Role = int.Parse(Request.Form["role"]),
+                    Password = password.HashPassword(user.Password),
+                });
+                db.SaveChanges();
+                return RedirectToAction("Index", "User");
+            }
+            return View();
+        }
+
+        [Authentication]
+        [Route("Delete")]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var dbUser = db.Users.FirstOrDefault(x => x.Id == id);
+            if (dbUser != null)
+            {
+                db.Users.Remove(dbUser);
+                try
+                {
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "done" });
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    return BadRequest(JsonConvert.SerializeObject(
+                        new
+                        {
+                            error = "Can not delete this attribute."
+                        }
+                    ));
+                }
+            }
+            return BadRequest(JsonConvert.SerializeObject(
+                new
+                {
+                    error = "Can not delete this attribute."
+                }
+            ));
+        }
+
+        [Authentication]
+        [Route("Logout")]
+        [HttpPost]
+        public IActionResult Logout(User user)
+        {
+            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("Role");
+            return RedirectToAction("Login", "Users");
         }
 
     }

@@ -6,7 +6,7 @@
 }
 
 @section Title {
-            Create Category
+                    Create Category
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/Admin/Categories">
@@ -16,24 +16,26 @@
 
 @model Category
 
-<div class="card">
-    <form action="/Admin/Categories/Create" method="post" enctype="multipart/form-data">
+<div class="card col-lg-6">
+    <form id="form" method="post" enctype="multipart/form-data">
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-12">
-                    <label asp-for="Name" for="name">Name</label>
-                    <input asp-for="Name" type="text" id="name" class="form-control" required>
+                    <label asp-for="Name" class="required-input">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')">
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
                 </div>
 
                 <!-- File Upload -->
                 <div class="form-group col-12 tab-content">
-                    <label asp-for="Image">Images:</label>
+                    <label asp-for="Image" class="required-input">Images</label>
+                    
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" />
-                                <input type="text" asp-for="Image" class="form-control d-none" />
+                                <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" oninput="clearError('image-error')" />
+                                <input type="text" asp-for="Image" class="form-control" hidden oninput="clearError('image-error')" />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -66,37 +68,63 @@
                             </div>
                         </div>
                     </div> <!-- end preview-->
+                    <span asp-validation-for="Image" id="image-error" class="text-danger"></span>
                 </div> <!-- end tab-content-->
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary" id="create">Create</button>
         </div>
     </form>
 </div>
 
-<script>
-    function chooseFile() {
-        document.querySelector('#cateImg').click();
-        //$('#cateImg').click();
-    }
-    function ChangeFile(input) {
-        var currentFile = $('#cateImg')[0].files[0];
-        var fileName = currentFile.name;
+@section Scripts{
+    <script>
+        var checkAllFields = false;
+        function chooseFile() {
+            document.querySelector('#cateImg').click();
+            //$('#cateImg').click();
+        }
+        function ChangeFile(input) {
+            checkAllFields = true;
+            var currentFile = $('#cateImg')[0].files[0];
+            var fileName = currentFile.name;
 
-        $('#file-previewss').removeClass('d-none');
+            $('#file-previewss').removeClass('d-none');
 
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#preImg').attr('src', e.target.result);
-                $('#preImgName').text(fileName);
-            };
+                reader.onload = function (e) {
+                    $('#preImg').attr('src', e.target.result);
+                    $('#preImgName').text(fileName);
+                };
 
-            reader.readAsDataURL(input.files[0]);
+                reader.readAsDataURL(input.files[0]);
+            }
+
+            $('input[name="Image"]').val(fileName);
         }
 
-        $('input[name="Image"]').val(fileName);
-    }
-</script>
+        // $(document).ready(function () {
+        //     $('#create').on('click', function () {
+        //         var name = $("#Name").val().trim();
+        //         if (checkAllFields != false && name != "") {
+        //             $("#form").submit();
+        //         } else {
+        //             Swal.fire(
+        //                 'Warning',
+        //                 "Please enter all fields",
+        //                 'warning'
+        //             )
+        //         }
+        //     });
+        // });
+    </script>
+
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
+    </script>
+}

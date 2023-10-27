@@ -1,6 +1,11 @@
-﻿@{
+﻿@using BTL_QuanLyBanDienThoai.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAuthAdmin.cshtml";
 }
+
+
+@model User
 
 <div class="card">
     <div class="card-body p-4">
@@ -10,24 +15,27 @@
             <p class="text-muted mb-4">Enter your email address and password to access admin panel.</p>
         </div>
 
-        <form action="#">
+        <form method="post">
 
             <div class="form-group">
-                <label for="emailaddress">Email address</label>
-                <input class="form-control" type="email" id="emailaddress" required="" placeholder="Enter your email">
+                <label asp-for="Email">Email address</label>
+                <input asp-for="Email" class="form-control" type="email" id="emailaddress"  placeholder="Enter your email">
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <a href="pages-recoverpw.html" class="text-muted float-right"><small>Forgot your password?</small></a>
-                <label for="password">Password</label>
+                <label asp-for="Password">Password</label>
                 <div class="input-group input-group-merge">
-                    <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                    <input asp-for="Password"  type="password" id="password" class="form-control" placeholder="Enter your password">
+                   
                     <div class="input-group-append" data-password="false">
                         <div class="input-group-text">
                             <span class="password-eye"></span>
                         </div>
                     </div>
                 </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
