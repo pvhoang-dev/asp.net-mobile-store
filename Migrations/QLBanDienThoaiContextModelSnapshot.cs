@@ -331,8 +331,8 @@ namespace BTL_QuanLyBanDienThoai.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<int?>("Role")
                         .HasColumnType("int");
