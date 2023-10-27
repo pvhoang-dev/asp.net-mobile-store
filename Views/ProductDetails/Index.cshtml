@@ -8,12 +8,12 @@
 <!-- breadcrumb -->
 <div class="container p-t-80">
     <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+        <a href="javascripts:void(0)" class="stext-109 cl8 hov-cl1 trans-04">
             Home
             <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
 
-        <a href="product.html" class="stext-109 cl8 hov-cl1 trans-04">
+        <a href="javascripts:void(0)" class="stext-109 cl8 hov-cl1 trans-04">
             @Model.Product.Category.Name
             <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
@@ -34,37 +34,19 @@
                     <div class="wrap-slick3 flex-sb flex-w">
                         <div class="wrap-slick3-dots"></div>
                         <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
-
                         <div class="slick3 gallery-lb">
-                            <div class="item-slick3" data-thumb="@Url.Content("~/web/assets/images/product-detail-01.jpg")">
-                                <div class="wrap-pic-w pos-relative">
-                                    <img src="~/web/assets/images/product-detail-01.jpg" alt="IMG-PRODUCT">
+                            @foreach (var image in Model.productImages)
+                            {
+                                <div class="item-slick3" data-thumb="/@image.Path">
+                                    <div class="wrap-pic-w pos-relative">
+                                        <img src="/@image.Path" alt="IMG-PRODUCT">
 
-                                    <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="~/web/assets/images/product-detail-01.jpg">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
+                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/@image.Path">
+                                            <i class="fa fa-expand"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="item-slick3" data-thumb="@Url.Content("~/web/assets/images/product-detail-02.jpg")">
-                                <div class="wrap-pic-w pos-relative">
-                                    <img src="~/web/assets/images/product-detail-02.jpg" alt="IMG-PRODUCT">
-
-                                    <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="~/web/assets/images/product-detail-02.jpg">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="item-slick3" data-thumb="@Url.Content("~/web/assets/images/product-detail-03.jpg")">
-                                <div class="wrap-pic-w pos-relative">
-                                    <img src="~/web/assets/images/product-detail-03.jpg" alt="IMG-PRODUCT">
-
-                                    <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="~/web/assets/images/product-detail-03.jpg">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -90,8 +72,8 @@
                     <div class="p-t-33">
                         @{
                             List<string> aryAttr1 = new List<string>();
-                                string attrName1 = @Model.AttrNames[0];
-                                string attrName2 = @Model.AttrNames[1];
+                            string attrName1 = @Model.AttrNames[0];
+                            string attrName2 = @Model.AttrNames[1];
                         }
 
                         <div class="size-203 respon6">

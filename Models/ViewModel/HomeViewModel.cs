@@ -7,5 +7,6 @@ namespace BTL_QuanLyBanDienThoai.Models.ViewModel
     {
         public List<Category> ?Categories { get; set; }
         public List<Product> ?Products { get; set; }
+        public List<Banner> ?Banners { get; set; }
     }
 }

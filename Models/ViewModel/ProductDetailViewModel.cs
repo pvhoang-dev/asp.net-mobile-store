@@ -7,6 +7,7 @@
         public Product Product { get; set; }
         public Attribute? Attribute { get; set; }
         public AttributeValue AttributeValue { get; set; }
+        public List<ProductImage>? productImages { get; set; }
         public Dictionary<int, Dictionary<int, Dictionary<string, string>>> ProductVariants { get; set; }
         public List<Product> CategoryProducts { get; set; }
         public string?[] AttrNames { get; internal set; }
