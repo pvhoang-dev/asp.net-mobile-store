@@ -78,21 +78,27 @@
                         },
 
                         success: function (response) {
-                            Swal.fire(
-                                'Deleted!',
-                                'Attribute value has been deleted.',
-                                'success'
-                            )
-                            setTimeout(
-                                function () {
-                                    location.reload();
-                                }, 700);
-                        }
+                            if (response.success) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Attribute value has been deleted.',
+                                    'success'
+                                )
+                                setTimeout(
+                                    function () {
+                                        location.reload();
+                                    }, 700);
+                            } else {
+                                Swal.fire(
+                                    'Warning!',
+                                    response.message,
+                                    'warning'
+                                )
+                            }
+                        },
                     });
-
                 }
             })
-
         }
     </script>
 }
