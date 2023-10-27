@@ -208,7 +208,15 @@
                         return;
                     }
 
-                    $('#billing').submit();
+                    Swal.fire(
+                        'Success!',
+                        'Ordered successfully',
+                        'success'
+                    )
+                    setTimeout(
+                        function () {
+                            $("#billing").submit();
+                        }, 1000);
                 }
             })
         });

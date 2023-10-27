@@ -56,7 +56,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userId = 1;
+                var userId = 12;
                 var productIds = Request.Form["product_id[]"];
                 var productVariantIds = Request.Form["product_variant_id[]"];
                 var quantities = Request.Form["quantity[]"];
