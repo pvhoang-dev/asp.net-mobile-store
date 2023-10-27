@@ -76,7 +76,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     Slug = slug.Create(productViewModel.Name),
                     CategoryId = int.Parse(Request.Form["category_id"]),
                     Quantity = 0,
-                    Status = 1,
+                    Status = 0,
                     Description = productViewModel.Description,
                 };
 
@@ -207,7 +207,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 {
                     System.IO.File.Delete(filePath);
                 }
-                 
+
                 string path = Path.Combine("UploadedFiles\\products\\" + id + "\\default_image", photo.FileName);
 
                 await _bufferedFileUploadService.UploadFile(photo, "products\\" + id + "\\default_image");
@@ -302,7 +302,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                 System.IO.File.Delete(path);
                             }
 
-                            db.ProductImages.Remove(image);
+                            db.ProductImages.Remove(db.ProductImages.Find(image.Id));
                         }
                     }
 
@@ -314,9 +314,16 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                         .Where(pav => pvToRemoveIds.Contains((int)pav.ProductVariantId))
                         .ToList();
 
-                    db.ProductVariants.RemoveRange(pvToRemove);
+                    if (!pvToRemove.Any())
+                    {
+                        db.ProductVariants.RemoveRange(pvToRemove);
+                    }
 
-                    db.ProductAttributeValues.RemoveRange(pavToRemove);
+                    if (!pavToRemove.Any())
+                    {
+                        db.ProductAttributeValues.RemoveRange(pavToRemove);
+
+                    }
 
                     db.Products.Remove(dbPro);
 
@@ -326,21 +333,11 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(JsonConvert.SerializeObject(
-                        new
-                        {
-                            error = "Can not delete"
-                        }
-                    ));
+                    return Json(new { success = false, message = "Can not delete this product !" });
                 }
             }
 
-            return BadRequest(JsonConvert.SerializeObject(
-                new
-                {
-                    error = "Can not delete this product"
-                }
-            ));
+            return Json(new { success = false, message = "This id product do not exist !!!" });
         }
 
         [HttpPost]

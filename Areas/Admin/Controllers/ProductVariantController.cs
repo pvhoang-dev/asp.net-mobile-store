@@ -98,12 +98,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 };
                 db.ProductVariants.Add(pV);
 
-                Product product = db.Products.Find(id);
-
-                product.Quantity = product.Quantity + pV.Quantity;
-
-                db.Update(product);
-
                 db.SaveChanges();
 
                 int attrVal_1 = int.Parse(Request.Form["attribute_1_value"]);
@@ -124,6 +118,9 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     db.ProductVariants.Remove(pV);
                     db.SaveChanges();
 
+                    // var pVariant = db.ProductVariants.Where(pav => pav.Name == productVariantViewModel.Name).ToList();
+
+                    ViewBag.Greeting = "Warning";
                     ViewBag.Message = "Product variant with these attributes existed";
                     ViewBag.Text = "warning";
 
@@ -162,6 +159,12 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 }
                 else
                 {
+                    Product product = db.Products.Find(id);
+
+                    product.Quantity = product.Quantity + pV.Quantity;
+
+                    db.Update(product);
+
                     db.ProductAttributeValues.Add(new ProductAttributeValue
                     {
                         ProductId = id,
@@ -177,9 +180,11 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     });
 
                     db.SaveChanges();
+
                     return RedirectToAction("Edit", "Product", new { id = id });
                 }
             }
+
             ViewBag.Message = "Error";
             ViewBag.Text = "warning";
             return View();
@@ -241,6 +246,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             proVariant.Quantity = productVariantViewModel.Quantity;
 
             db.Update(product);
+
             db.SaveChanges();
 
             return RedirectToAction("Edit", "ProductVariant", new { id = id });

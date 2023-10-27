@@ -119,6 +119,13 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             {                
                 try
                 {
+                    var existingChildAttrValue = db.AttributeValues.FirstOrDefault(a => a.AttributeId == id);
+
+                    if(existingChildAttrValue != null)
+                    {
+                        return Json(new { success = false, message = "You need to delete attribute values in this attribute first !!!" });
+                    }
+
                     db.Attrs.Remove(dbAttr);
                     db.SaveChanges();
 

@@ -145,9 +145,16 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
             if (dbAttrVal != null)
             {
-                db.AttributeValues.Remove(dbAttrVal);
                 try
                 {
+                    var existingPAV = db.ProductAttributeValues.FirstOrDefault(a => a.AttributeValueId == id);
+
+                    if (existingPAV != null)
+                    {
+                        return Json(new { success = false, message = "You need to delete product variants in this attribute first !!!" });
+                    }
+
+                    db.AttributeValues.Remove(dbAttrVal);
                     db.SaveChanges();
 
                     return Json(new { success = true, message = "done" });
