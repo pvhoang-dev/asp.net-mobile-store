@@ -153,7 +153,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     Email = user.Email,
                     Role = int.Parse(Request.Form["role"]),
                     Password = password.HashPassword(user.Password),
-
                 });
                 db.SaveChanges();
                 return RedirectToAction("Index", "User");

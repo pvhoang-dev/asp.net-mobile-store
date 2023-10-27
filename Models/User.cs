@@ -19,7 +19,7 @@ public partial class User
     public string? Email { get; set; }
 
     [Required(ErrorMessage = "Please enter your password")]
-    [StringLength(50, MinimumLength = 4, ErrorMessage = "Password must have 4 characters")]
+    [StringLength( 255,MinimumLength = 4, ErrorMessage = "Password must have 4 characters")]
     public string? Password { get; set; }
     public int? Role { get; set; }
 
