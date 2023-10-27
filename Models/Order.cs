@@ -31,4 +31,11 @@ public partial class Order
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual User? User { get; set; }
+
+    public class OrderViewModel
+    {
+        public int UserId { get; set; }
+        public int Status { get; set; }
+        public List<OrderItem>? OrderItems { get; set; }
+    }
 }
