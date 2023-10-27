@@ -34,7 +34,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
         }
         public ActionResult GetProducts(int? page)
         {
-            int pageSize = 10;
+            int pageSize = 4;
 
             // Lấy giá trị trang nếu tồn tại
             int currentPage = Math.Max(page ?? 1,1);

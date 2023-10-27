@@ -13,6 +13,12 @@ builder.Services.AddDbContext<QLBanDienThoaiContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IBufferedFileUploadService, BufferedFileUploadLocalService>();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession();
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,4 +40,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.UseSession();
 app.Run();
