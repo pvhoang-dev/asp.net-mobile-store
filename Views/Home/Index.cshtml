@@ -7,103 +7,38 @@
 <section class="section-slide">
     <div class="wrap-slick1">
         <div class="slick1">
-            <div class="item-slick1"
-                 style="background-image: url('@Url.Content("~/web/assets/images/banner/banner-1.jpg")');">
-                <div class="container h-full">
-                    <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="fadeInDown"
-                             data-delay="0">
-                            <span class="ltext-101 cl2 respon2"> Iphone 15 Pro Max </span>
-                        </div>
+            @foreach (var banner in Model.Banners)
+            {
+                var imageUrl = banner.Image.Replace("\\", "\\\\");
+                <div class="item-slick1" style="background-image: url('@imageUrl');">
+                    <div class="container h-full">
+                        <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
+                            <div class="layer-slick1 animated visible-false"
+                                 data-appear="fadeInDown"
+                                 data-delay="0">
+                                <span class="ltext-101 cl2 respon2"> @banner.Name </span>
+                            </div>
 
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="fadeInUp"
-                             data-delay="800">
-                            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-                                New Version
-                            </h2>
-                        </div>
+                            <div class="layer-slick1 animated visible-false"
+                                 data-appear="fadeInUp"
+                                 data-delay="800">
+                                <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
+                                    @banner.Title
+                                </h2>
+                            </div>
 
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="zoomIn"
-                             data-delay="1600">
-                            <a href="product.html"
-                               class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-                                Shop Now
-                            </a>
+                            <div class="layer-slick1 animated visible-false"
+                                 data-appear="zoomIn"
+                                 data-delay="1600">
+                                <a asp-controller="Shop" asp-action="Index"
+                                   class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                                    Shop Now
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="item-slick1"
-                 style="background-image: url('@Url.Content("~/web/assets/images/banner/banner-2.jpg")');">
-                <div class="container h-full">
-                    <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="fadeInDown"
-                             data-delay="0">
-                            <span class="ltext-101 cl2 respon2"> Iphone 14 Pro Max </span>
-                        </div>
-
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="fadeInUp"
-                             data-delay="800">
-                            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-                                New Version
-                            </h2>
-                        </div>
-
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="zoomIn"
-                             data-delay="1600">
-                            <a href="product.html"
-                               class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-                                Shop Now
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item-slick1"
-                 style="background-image: url('@Url.Content("~/web/assets/images/banner/banner-3.jpg")');">
-                <div class="container h-full">
-                    <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="fadeInDown"
-                             data-delay="0">
-                            <span class="ltext-101 cl2 respon2"> Iphone 13 Pro Max </span>
-                        </div>
-
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="fadeInUp"
-                             data-delay="800">
-                            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-                                New Version
-                            </h2>
-                        </div>
-
-                        <div class="layer-slick1 animated visible-false"
-                             data-appear="zoomIn"
-                             data-delay="1600">
-                            <a href="product.html"
-                               class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-                                Shop Now
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- <div
-              class="item-slick1"
-              style="background-image: url(~/web/assets/images/banner/banner-2.jpg)"
-            >
-            </div>
-
-            <div
-              class="item-slick1"
-              style="background-image: url(~/web/assets/images/banner/banner-3.jpg)"
-              </div> -->
+            }
         </div>
     </div>
 </section>
@@ -190,7 +125,7 @@
                         html += `<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">`;
                         html += `<div class="block2">`;
                         html += `<div class="block2-pic hov-img0">`;
-                        html += `<img src="@Url.Content("~/web/assets/images/product-12.jpg")" alt="IMG-PRODUCT">`;
+                        html += `<img src="${value.imageDefault}" alt="IMG-PRODUCT">`;
                         html += `<a href="${productDetail}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"> Quick View </a>`;
                         html += `</div>`;
                         html += `<div class="block2-txt flex-w flex-t p-t-14">`;

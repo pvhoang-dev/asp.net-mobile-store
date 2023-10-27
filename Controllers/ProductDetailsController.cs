@@ -80,12 +80,15 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                 .Select(pa => pa.AttributeName)
                 .ToArray(); 
 
+            var productImages = _context.ProductImages.Where(i => i.ProductId == id).ToList();
+
             return View(new ProductDetailViewModel
             {
                 Product = product,
                 ProductVariants = productVariants,
                 CategoryProducts = categoryProducts,
-                AttrNames = attrNames
+                AttrNames = attrNames,
+                productImages = productImages
             });
         }
     }

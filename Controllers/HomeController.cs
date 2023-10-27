@@ -23,11 +23,13 @@ namespace BTL_QuanLyBanDienThoai.Controllers
         {
             var categories = db.Categories.ToList();
             var products = db.Products.ToList();
+            var banners = db.Banners.ToList();
 
             var HomeViewModel = new HomeViewModel
             {
                 Categories = categories,
-                Products = products
+                Products = products,
+                Banners = banners
             };
 
             return View(HomeViewModel);
