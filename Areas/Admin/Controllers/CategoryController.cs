@@ -113,15 +113,17 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                         ViewBag.Message = "File Upload Failed";
                         ViewBag.Text = "warning";
                     }
+                    ViewBag.Message = "Edit Category Successful";
+                    ViewBag.Text = "success";
+
+                    cate.Name = category.Name;
+                    db.Categories.Update(cate);
+                    db.SaveChanges();
             }
 
-            ViewBag.Message = "Edit Category Successful";
-            ViewBag.Text = "success";
+            
 
-            cate.Name = category.Name;
-
-            db.Categories.Update(cate);
-            db.SaveChanges();
+           
 
             return View(cate);
         }

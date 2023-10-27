@@ -22,19 +22,20 @@
             <div class="row">
                 <div class="form-group col-12">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" class="form-control">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')">
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
                 </div>
 
                 <!-- File Upload -->
                 <div class="form-group col-12 tab-content">
                     <label asp-for="Image" class="required-input">Images</label>
+                    
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
                             <div class="fallback">
-                                <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" />
-                                <input type="text" asp-for="Image" class="form-control" hidden />
+                                <input hidden id="cateImg" name="cateImg" type="file" class="form-control" onchange="ChangeFile(this)" oninput="clearError('image-error')" />
+                                <input type="text" asp-for="Image" class="form-control" hidden oninput="clearError('image-error')" />
                             </div>
 
                             <div class="dz-message needsclick">
@@ -67,6 +68,7 @@
                             </div>
                         </div>
                     </div> <!-- end preview-->
+                    <span asp-validation-for="Image" id="image-error" class="text-danger"></span>
                 </div> <!-- end tab-content-->
             </div>
         </div>
@@ -118,5 +120,11 @@
         //         }
         //     });
         // });
+    </script>
+
+    <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
     </script>
 }

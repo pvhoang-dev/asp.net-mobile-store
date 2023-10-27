@@ -24,8 +24,8 @@
             <div class="row">
                 <div class="form-group col-12">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input asp-for="Name" type="text" class="form-control" onchange="clearError('Name')">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')">
+                    <span asp-validation-for="Name" id="name-error" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -48,35 +48,9 @@
         </script>
     }
 
-
     <script>
         function clearError(errorSpanId) {
             $("#" + errorSpanId).html("");
         }
-        $(document).on("ready", function () {
-            $("#form").submit(function (event) {
-                event.preventDefault();
-                console.log("Submit")
-
-                $.ajax({
-                    url: "/Admin/Attributes/Edit/" + @Model.Id,
-                    type: "POST",
-                    data: $("#form").serialize(),
-                    success: function (result) {
-                        if (result.isValid) {
-                            Swal.fire(
-                                'Success!',
-                                'Edit added successfully',
-                                'success'
-                            )
-                        } else {
-                            console.log(result.errors)
-                            var error = result.errors[0];
-                            $("#Name").html(error);
-                        }
-                    }
-                })
-            })
-        })
     </script>
 }

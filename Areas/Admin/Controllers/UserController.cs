@@ -119,7 +119,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     return View();
                 }
 
-                existUser.Password = password.HashPassword(existUser.Password);
+                existUser.Password = password.HashPassword(user.Password);
                 db.Users.Update(existUser);
                 db.SaveChanges();
                
