@@ -5,6 +5,7 @@ using BTL_QuanLyBanDienThoai.Utils;
 using Microsoft.AspNetCore.Mvc;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
 using Newtonsoft.Json;
+using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -24,7 +25,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             db = _db;
             _webHostEnvironment = webHostEnvironment;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             List<ProductVariantViewModel> productVariants = (from productVariant in db.ProductVariants
                                                              join product in db.Products
@@ -39,7 +40,11 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                                                  Slug = productVariant.Slug,
                                                                  Product = product
                                                              }).ToList();
-            return View(productVariants);
+            int pageSize = 8;
+
+            IPagedList<ProductVariantViewModel> pagedList = productVariants.ToPagedList(page, pageSize);
+
+            return View(pagedList);
         }
 
         [Route("Create/{id}")]

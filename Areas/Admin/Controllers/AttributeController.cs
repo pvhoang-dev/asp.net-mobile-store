@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
+using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -21,10 +22,15 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             this.db = _db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             List<Attr> attrs = db.Attrs.ToList();
-            return View(attrs);
+            
+            int pageSize = 5;
+
+            IPagedList<Attr> pagedList = attrs.ToPagedList(page, pageSize);
+
+            return View(pagedList);
         }
 
         [Route("Create")]

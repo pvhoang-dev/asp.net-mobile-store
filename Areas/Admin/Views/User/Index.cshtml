@@ -1,4 +1,6 @@
 ﻿@using BTL_QuanLyBanDienThoai.Models;
+@using X.PagedList;
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
@@ -13,8 +15,7 @@
     </a>
 }
 
-
-@model List<User>
+@model X.PagedList.PagedList<User>
 
 <div class="card">
     <div class="card-body p-0">
@@ -60,9 +61,35 @@
         </div>
 
         <div class="card-footer clearfix">
-            <div class="float-right">
-                @* @include('adminlte-templates::common.paginate', ['records' => $products]) *@
-            </div>
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@Model.PageNumber - 1)">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    }
+                    @for (var i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item">
+
+                            <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@i)">@i</a>
+                        </li>
+                    }
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@Model.PageNumber + 1)">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -70,6 +97,17 @@
 
 
 @section Scripts {
+    <script>
+        function LoadPage(page) {
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Users?page=" + page,
+                success: function (data) {
+                    $(".card-body").html($(data).find(".card-body").html());
+                }
+            });
+        }
+    </script>
     <script>
         function HandleDelete(id) {
             Swal.fire({

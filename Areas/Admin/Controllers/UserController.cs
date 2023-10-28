@@ -6,7 +6,7 @@ using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
 using BTL_QuanLyBanDienThoai.Models.ViewModel;
 using BTL_QuanLyBanDienThoai.Utils;
-
+using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -76,10 +76,15 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
         [Authentication]
         [Route("")]
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             List<User> users = db.Users.ToList();
-            return View(users);
+
+            int pageSize = 8;
+
+            IPagedList<User> pagedList = users.ToPagedList(page, pageSize);
+
+            return View(pagedList);
         }
 
         [Authentication]

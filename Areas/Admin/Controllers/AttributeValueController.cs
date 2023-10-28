@@ -6,6 +6,7 @@ using BTL_QuanLyBanDienThoai.Models.ViewModel;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Models.Authentication;
+using X.PagedList;
 
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
@@ -23,7 +24,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             db = _db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             List<AttributeValueViewModel> attributeAndAttributeValues = (from attr in db.Attrs
                                                                          join attrValue in db.AttributeValues
@@ -35,7 +36,11 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                                                              Name = attr.Name,
                                                                              Value = attrValue.Name
                                                                          }).ToList();
-            return View(attributeAndAttributeValues);
+            int pageSize = 5;
+
+            IPagedList<AttributeValueViewModel> pagedList = attributeAndAttributeValues.ToPagedList(page, pageSize);
+
+            return View(pagedList);
         }
 
         [Route("Create")]

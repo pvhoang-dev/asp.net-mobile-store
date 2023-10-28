@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -31,7 +32,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             List<ProductViewModel> productViewModel = (from product in db.Products
                                                        join category in db.Categories
@@ -49,7 +50,12 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                                                            CategoryName = category.Name,
                                                            ImageDefault = product.ImageDefault,
                                                        }).ToList();
-            return View(productViewModel);
+
+            int pageSize = 8;
+
+            IPagedList<ProductViewModel> pagedList = productViewModel.ToPagedList(page, pageSize);
+
+            return View(pagedList);
         }
 
         [Route("Create")]

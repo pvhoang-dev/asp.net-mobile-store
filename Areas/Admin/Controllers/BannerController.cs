@@ -6,6 +6,7 @@ using BTL_QuanLyBanDienThoai.Models;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -27,10 +28,15 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             _bufferedFileUploadService = bufferedFileUploadService;
             _webHostEnvironment = webHostEnvironment;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             List<Banner> banners = db.Banners.ToList();
-            return View(banners);
+
+            int pageSize = 5;
+
+            IPagedList<Banner> pagedList = banners.ToPagedList(page, pageSize);
+
+            return View(pagedList);
         }
 
         [Route("Create")]

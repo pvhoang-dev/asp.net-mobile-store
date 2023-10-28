@@ -1,13 +1,14 @@
 ﻿@using BTL_QuanLyBanDienThoai.Models;
+@using X.PagedList;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-@model List<Attr>
+@model X.PagedList.PagedList<Attr>
 
 @section Title {
-                        Attributes
+                                Attributes
 
     <a class="btn btn-primary float-right align-items-center"
        href="/admin/attributes/create">
@@ -49,14 +50,52 @@
         </div>
 
         <div class="card-footer clearfix">
-            <div class="float-right">
-                @* @include('adminlte-templates::common.paginate', ['records' => $attributes]) *@
-            </div>
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@Model.PageNumber - 1)">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    }
+                    @for (var i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item">
+
+                            <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@i)">@i</a>
+                        </li>
+                    }
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@Model.PageNumber + 1)">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script>
+        function LoadPage(page) {
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Attributes?page=" + page,
+                success: function (data) {
+                    $(".card-body").html($(data).find(".card-body").html());
+                }
+            });
+        }
+    </script>
+
     <script>
         function HandleDelete(id) {
             Swal.fire({

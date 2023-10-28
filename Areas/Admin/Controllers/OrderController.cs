@@ -3,6 +3,7 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 using BTL_QuanLyBanDienThoai.Models;
 using BTL_QuanLyBanDienThoai.Data;
 using BTL_QuanLyBanDienThoai.Models.ViewModel;
+using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -18,10 +19,15 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             this.db = _db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             List<Order> orders = db.Orders.ToList();
-            return View(orders);
+
+            int pageSize = 8;
+
+            IPagedList<Order> pagedList = orders.ToPagedList(page, pageSize);
+
+            return View(pagedList);
         }
 
         [Route("Show/{id}")]
