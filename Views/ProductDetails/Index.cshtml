@@ -95,11 +95,11 @@
                                     name="attribute_@attrName1" data-attribute_name="attribute_@attrName1" data-show_option_none="yes">
                                 @foreach (var variant in Model.ProductVariants)
                                 {
-                                    var attrValue = variant.Value[1]["attr_value"];
+                                    var attrValue = variant.Value[3]["attr_value"];
                                     if (!aryAttr1.Contains(attrValue))
                                     {
                                         <option id="@attrValue" value="@attrValue" class=""
-                                                data-name="@variant.Value[1]["attr_value"]" data-product-variant-id="@variant.Key">
+                                                data-name="@variant.Value[3]["attr_value"]" data-product-variant-id="@variant.Key">
                                             @attrValue
                                         </option>
                                         aryAttr1.Add(attrValue);
@@ -117,10 +117,10 @@
                                     name="attribute_@attrName2" data-attribute_name="attribute_@attrName2" data-show_option_none="yes">
                                 @foreach (var variant in Model.ProductVariants)
                                 {
-                                    var attrValue = variant.Value[2]["attr_value"];
+                                    var attrValue = variant.Value[21]["attr_value"];
 
-                                    <option id="@variant.Value[1]["attr_value"]-@attrValue" value="@attrValue" class="d-none"
-                                            data-name="@variant.Value[1]["attr_value"]" data-product-variant-id="@variant.Key">
+                                    <option id="@variant.Value[3]["attr_value"]-@attrValue" value="@attrValue" class="d-none"
+                                            data-name="@variant.Value[3]["attr_value"]" data-product-variant-id="@variant.Key">
                                         @attrValue
                                     </option>
 
