@@ -145,7 +145,14 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 var existUser = db.Users.FirstOrDefault(u => u.Email == user.Email);
                 if (existUser != null)
                 {
-                    ViewBag.Message = "User already exist!";
+                    ModelState.AddModelError("Email", "Email has already exist.");
+                    return View(user);
+                }
+
+                if(user.Password != user.ConfirmPassword)
+                {
+                    ModelState.AddModelError("Password", "Password not equal confirm password.");
+                    return View(user);
                 }
                 db.Users.Add(new User
                 {
@@ -157,7 +164,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index", "User");
             }
-            return View();
+            return View(user);
         }
 
         [Authentication]
