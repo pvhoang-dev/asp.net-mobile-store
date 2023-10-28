@@ -410,5 +410,21 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
             return Json(new { message = "Error" });
         }
+
+        [HttpPost]
+        [Route("Search")]
+        public IActionResult Search(string query)
+        {
+            var searchResults = db.Products
+                .Where(product => product.Name.Contains(query))
+                .Select(product => new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                })
+                .ToList();
+
+            return Json(searchResults);
+        }
     }
 }
