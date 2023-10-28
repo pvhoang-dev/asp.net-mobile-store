@@ -3,35 +3,45 @@ using BTL_QuanLyBanDienThoai.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BTL_QuanLyBanDienThoai.Models.ViewModel;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace BTL_QuanLyBanDienThoai.Controllers
 {
-    public class ShopController : Controller
-    {
-        private readonly QLBanDienThoaiContext _context;
+	public class ShopController : Controller
+	{
+		private readonly QLBanDienThoaiContext _context;
 
-        public ShopController(QLBanDienThoaiContext context)
-        {
-            _context = context;
-        }
+		public ShopController(QLBanDienThoaiContext context)
+		{
+			_context = context;
+		}
 
-        [Route("shops")]
-        public IActionResult Index()
-        {
-            var categories = _context.Categories.ToList();
+		[Route("shops")]
+		public IActionResult Index()
+		{
+			List<Product> allProducts;
 
-            var allProducts = _context.Products
-                .Include(p => p.Category)
-                .ToList();
+			var searchProduct = HttpContext.Request.Query["search-product"];
 
-            var viewModel = new ShopViewModel
-            {
-                Product = allProducts,
-                Category = categories,
-            };
+			var categories = _context.Categories.ToList();
+			var products = _context.Products.Include(p => p.Category);
 
-            return View(viewModel);
-        }
+			if (!string.IsNullOrEmpty(searchProduct))
+			{
+				allProducts = products.Where(p => p.Name.Contains(searchProduct)).ToList();
+			}
+			else
+			{
+				allProducts = products.ToList(); 
+			}
 
-    }
+			var viewModel = new ShopViewModel
+			{
+				Product = allProducts,
+				Category = categories,
+			};
+
+			return View(viewModel);
+		}
+	}
 }

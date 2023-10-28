@@ -141,26 +141,36 @@ namespace BTL_QuanLyBanDienThoai.Controllers
 
                     foreach (var item in arr)
                     {
+
                         int key = item.Key; // Đây là ID của sản phẩm
                         int value = item.Value; // Đây là số lượng cần cập nhật
 
-                        // Tìm sản phẩm và thêm vào giỏ hàng
-                        var productVariant = db.ProductVariants.Include("Product").FirstOrDefault(p => p.Id == key);
-
-                        if (productVariant != null)
+                        if (value <= 0)
                         {
-                            // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng hay chưa
-                            var existingCartItem = cartList.FirstOrDefault(cartItem => cartItem.Id == productVariant.Id);
-
-                            if (existingCartItem != null)
-                            {
-                                // Nếu sản phẩm đã tồn tại, cập nhật Quantity
-                                existingCartItem.Quantity = value;
-                            }
-
-                            // Lưu trạng thái giỏ hàng vào phiên
+                            // Nếu số lượng là 0 hoặc âm, xóa mục này khỏi giỏ hàng
+                            cartList.RemoveAll(cartItem => cartItem.Id == key);
                             string cartString = JsonConvert.SerializeObject(cartList);
                             HttpContext.Session.SetString("cart", cartString);
+                        }
+                        else
+                        {
+                            var productVariant = db.ProductVariants.Include("Product").FirstOrDefault(p => p.Id == key);
+
+                            if (productVariant != null)
+                            {
+                                // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng hay chưa
+                                var existingCartItem = cartList.FirstOrDefault(cartItem => cartItem.Id == productVariant.Id);
+
+                                if (existingCartItem != null)
+                                {
+                                    // Nếu sản phẩm đã tồn tại, cập nhật Quantity
+                                    existingCartItem.Quantity = value;
+                                }
+
+                                // Lưu trạng thái giỏ hàng vào phiên
+                                string cartString = JsonConvert.SerializeObject(cartList);
+                                HttpContext.Session.SetString("cart", cartString);
+                            }
                         }
                     }
 
