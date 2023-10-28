@@ -8,7 +8,7 @@ namespace BTL_QuanLyBanDienThoai.Models.ViewModel
 		public string Name { get; set; }
 		public double? Price { get; set; }
 		public int Quantity { get; set; }
-		public CartItemAttributesViewModel Attributes { get; set; }
+        public CartItemAttributesViewModel Attributes { get; set; }
         public int ProductId { get;  set; }
     }
 
