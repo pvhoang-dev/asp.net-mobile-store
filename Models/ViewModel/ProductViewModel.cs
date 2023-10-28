@@ -12,11 +12,10 @@ namespace BTL_QuanLyBanDienThoai.Models.ViewModel
 
         public string? Slug { get; set; }
 
-        [Required(ErrorMessage = "Please enter price name.")]
+        [Required(ErrorMessage = "Please enter price.")]
         public double? Price { get; set; }
-        [Required(ErrorMessage = "Please enter price 2 name.")]
+        [Required(ErrorMessage = "Please enter price 2.")]
         public double? Price2 { get; set; }
-
         public int? Quantity { get; set; }
         public int? Status { get; set; }
         public string? Description { get; set; }
