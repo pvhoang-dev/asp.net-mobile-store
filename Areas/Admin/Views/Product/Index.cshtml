@@ -7,7 +7,7 @@
 }
 
 @section Title {
-                                    Products
+                                                Products
 
     <a class="btn btn-primary float-right align-items-center"
        href="/admin/Products/Create">
@@ -19,7 +19,26 @@
 
 <div class="card">
     <div class="card-body p-0">
-        <div class="table-responsive users-table">
+        <div class="app-search dropdown d-lg-block bg-white p-2">
+            <div class="input-group row pl-4">
+                <div class="">
+                    <input type="text" class="form-control dropdown-toggle" placeholder="Search..." id="searchInput">
+                    <span class="mdi mdi-magnify search-icon pl-4"></span>
+                </div>
+               
+                <div class="col-12" id="searchResults">
+                </div>
+            </div>
+        </div>
+
+
+        @* <div class="form-group">
+        <label for="searchInput">Search Product by Name:</label>
+        <input type="text" id="searchInput" class="form-control" placeholder="Enter product name">
+        </div>*@
+
+
+        <div class="table-responsive users-tabl p-2">
             <table class="table table-centered mb-0 " id="products-table">
                 <thead>
                     <tr>
@@ -160,6 +179,36 @@
             })
         }
         $(document).ready(function () {
+            // Search
+            $("#searchInput").on("input", function () {
+                var query = $(this).val();
+                if (query.length >= 3) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/Products/Search",
+                        data: { query: query },
+                        success: function (data) {
+                            $("#searchResults").empty();
+                            if (data.length > 0) {
+                                data.forEach(function (product) {
+                                    var resultItem = $("<div>").addClass("search-result");
+                                    resultItem.text(product.Name);
+                                    $("#searchResults").append(resultItem);
+                                });
+                            } else {
+                                $("#searchResults").html("No results found");
+                            }
+                        },
+                        error: function () {
+                            // Handle any errors
+                        }
+                    });
+                } else {
+                    $("#searchResults").empty();
+                }
+            });
+
+
             // Update Status
             $(document).on('click', '.updateStatus', function () {
                 var object_id = $(this).attr('object_id');
