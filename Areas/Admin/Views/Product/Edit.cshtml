@@ -21,7 +21,7 @@
     <form asp-controller="Product" asp-action="Edit" id="form">
         <div class="card-body">
             <div class="row">
-                <div class="form-group col-sm-6">
+                <div class="form-group col-12">
                     <label asp-for="Name" class="required-input">Name</label>
                     <input asp-for="Name" type="text" class="form-control" oninput="clearError('name-error')">
                     <span class="text-danger" asp-validation-for="Name" id="name-error"></span>
@@ -34,7 +34,7 @@
 
                 <div class="form-group col-sm-6">
                     <label for="category_id" class="required-input">Category</label>
-                    <select name="category_id" class="custom-select select2" data-toggle="select2" onchange="clearError('categoryid-error')">
+                    <select name="category_id" class="custom-select select2" data-toggle="select2" onchange="clearError('category-error')">
                         <option selected value="0">Select the category</option>
                         @foreach (var category in Model.Categories)
                         {
@@ -47,9 +47,8 @@
                                 <option value="@category.Id">@category.Name</option>
                             }
                         }
-
                     </select>
-                    <span class="text-danger" asp-validation-for="CategoryId" id="categoryid-error"></span>
+                    <span class="text-danger" asp-validation-for="CategoryId" id="category-error"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
@@ -284,9 +283,7 @@
             })
         }
         $(document).on('ready', () => {
-
             $('#create').on('click', function () {
-                
                 Swal.fire({
                     title: 'Are you sure?',
                     icon: 'warning',
@@ -296,15 +293,29 @@
                     confirmButtonText: 'Yes, update it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Swal.fire(
-                            'Success!',
-                            'Product updated successfully',
-                            'success'
-                        )
-                        setTimeout(
-                            function () {
-                                $("#form").submit();
-                            }, 1000);
+                        Swal.fire({
+                            title: 'Updating...',
+                            timer: 1000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                                timerInterval = setInterval(() => {
+                                    b.textContent = Swal.getTimerLeft()
+                                }, 100)
+                            },
+                        }).then((result) => {
+                            $("#form").submit();
+                        })
+                        // Swal.fire(
+                        //     'Success!',
+                        //     'Product updated successfully',
+                        //     'success'
+                        // )
+                        // setTimeout(
+                        //     function () {
+                        //         $("#form").submit();
+                        //     }, 1000);
                     }
                 })
             });

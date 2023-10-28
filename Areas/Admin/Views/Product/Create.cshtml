@@ -126,7 +126,20 @@
         var checkHasImg = false;
         $(document).on('ready', () => {
             $('#create').on('click', function () {
-                $("#form").submit();
+                Swal.fire({
+                    title: 'Adding...',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                            b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                    },
+                }).then((result) => {
+                    $("#form").submit();
+                })
                 // var name = $("#Name").val().trim();
                 // var price = $("#Price").val().trim();
                 // var selectedCate = $("#category_id").val();
@@ -157,24 +170,23 @@
                     let filereader = new FileReader();
                     let fileName = this.files[i].name;
                     let str = `
-                                                            <div class="dropzone-previews col-md-6 mt-3">
-                                                                        <div class="" id="uploadPreviewTemplatee">
-                                                                            <div class="card mt-1 mb-0 shadow-none border">
-                                                                                <div class="p-2">
-                                                                                    <div class="row align-items-center">
-                                                                                        <div class="col-auto">
-                                                                                            <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
-                                                                                        </div>
-                                                                                        <div class="col pl-0">
-                                                                                            <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                    `;
+                        <div class="dropzone-previews col-md-6 mt-3">
+                                    <div class="" id="uploadPreviewTemplatee">
+                                        <div class="card mt-1 mb-0 shadow-none border">
+                                            <div class="p-2">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        <img data-dz-thumbnail src="" class="avatar-sm rounded bg-light" alt="">
+                                                    </div>
+                                                    <div class="col pl-0">
+                                                        <p class="mb-0 img-name" data-dz-size>` + fileName + `</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    `;
                     let $img = jQuery.parseHTML(str);
                     filereader.onload = function () {
                         var $imgElement = $($img).find('img');

@@ -71,6 +71,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                     Address = Request.Form["address"],
                     Phone = Request.Form["phone_number"],
                     Note = Request.Form["note"],
+                    CreateAt = DateTime.Now,
                 };
 
                 db.Orders.Add(order);

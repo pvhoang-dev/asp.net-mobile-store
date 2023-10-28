@@ -68,6 +68,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductViewModel productViewModel)
         {
+            ModelState.Remove("CategoryId");
             if (ModelState.IsValid)
             {
                 Product pro = new Product
@@ -171,62 +172,64 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(ProductViewModel productViewModel, int? id)
         {
-            //if (ModelState.IsValid)
-            //{
-            productViewModel.Slug = slug.Create(productViewModel.Name);
+            ModelState.Remove("Photo");
+            ModelState.Remove("CategoryId");
+            if (ModelState.IsValid)
+            {
+                productViewModel.Slug = slug.Create(productViewModel.Name);
 
-            var pro = db.Products.Find(id);
+                var pro = db.Products.Find(id);
 
-            pro.Name = productViewModel.Name;
-            pro.Slug = productViewModel.Slug;
-            pro.Description = productViewModel.Description;
-            pro.Price = productViewModel.Price;
-            pro.Price2 = productViewModel.Price2;
-            pro.CategoryId = int.Parse(Request.Form["category_id"]);
-            db.Products.Update(pro);
+                pro.Name = productViewModel.Name;
+                pro.Slug = productViewModel.Slug;
+                pro.Description = productViewModel.Description;
+                pro.Price = productViewModel.Price;
+                pro.Price2 = productViewModel.Price2;
+                pro.CategoryId = int.Parse(Request.Form["category_id"]);
+                db.Products.Update(pro);
 
-            db.SaveChanges();
+                db.SaveChanges();
 
-            return RedirectToAction("Edit", "Product", new { id = id });
-            //}
-            //var proExist = db.Products.Find(id);
+                return RedirectToAction("Edit", "Product", new { id = id });
+            }
+            var proExist = db.Products.Find(id);
 
-            //List<ProductVariantViewModel> productVariants = (from productVariant in db.ProductVariants
-            //                                                 join product in db.Products
-            //                                                 on productVariant.ProductId equals product.Id
-            //                                                 where product.Id == id
-            //                                                 select new ProductVariantViewModel
-            //                                                 {
-            //                                                     Id = productVariant.Id,
-            //                                                     Name = productVariant.Name,
-            //                                                     Price = productVariant.Price,
-            //                                                     Quantity = productVariant.Quantity,
-            //                                                     Slug = productVariant.Slug
-            //                                                 }).ToList();
+            List<ProductVariantViewModel> productVariants = (from productVariant in db.ProductVariants
+                                                             join product in db.Products
+                                                             on productVariant.ProductId equals product.Id
+                                                             where product.Id == id
+                                                             select new ProductVariantViewModel
+                                                             {
+                                                                 Id = productVariant.Id,
+                                                                 Name = productVariant.Name,
+                                                                 Price = productVariant.Price,
+                                                                 Quantity = productVariant.Quantity,
+                                                                 Slug = productVariant.Slug
+                                                             }).ToList();
 
-            //List<ProductImage> productImages = (from proImg in db.ProductImages
-            //                                    where proImg.ProductId == id
-            //                                    select new ProductImage
-            //                                    {
-            //                                        Id = proImg.Id,
-            //                                        Path = proImg.Path,
-            //                                    }).ToList();
+            List<ProductImage> productImages = (from proImg in db.ProductImages
+                                                where proImg.ProductId == id
+                                                select new ProductImage
+                                                {
+                                                    Id = proImg.Id,
+                                                    Path = proImg.Path,
+                                                }).ToList();
 
-            //ProductViewModel productViewModels = new ProductViewModel
-            //{
-            //    Categories = db.Categories.ToList(),
-            //    Id = id,
-            //    Name = proExist.Name,
-            //    Price = proExist.Price,
-            //    Price2 = proExist.Price2,
-            //    Quantity = proExist.Quantity,
-            //    Description = proExist.Description,
-            //    CategoryId = proExist.CategoryId,
-            //    ImageDefault = proExist.ImageDefault,
-            //    ProductImages = productImages,
-            //    ProductVariants = productVariants
-            //};
-            //    return View(productViewModels);
+            ProductViewModel productViewModels = new ProductViewModel
+            {
+                Categories = db.Categories.ToList(),
+                Id = id,
+                Name = proExist.Name,
+                Price = proExist.Price,
+                Price2 = proExist.Price2,
+                Quantity = proExist.Quantity,
+                Description = proExist.Description,
+                CategoryId = proExist.CategoryId,
+                ImageDefault = proExist.ImageDefault,
+                ProductImages = productImages,
+                ProductVariants = productVariants
+            };
+            return View(productViewModels);
         }
 
         [Route("UpdateImage")]
