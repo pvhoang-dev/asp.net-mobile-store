@@ -162,7 +162,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 }
             }
 
-            return Json(new { success = false, message = "That category does not exist !!!" });
+            return Json(new { success = false, message = "That banner does not exist !!!" });
         }
     }
 

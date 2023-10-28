@@ -124,6 +124,8 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(AttributeValueViewModel attributeValue, int id)
         {
+
+            AttributeValue attrValue = db.AttributeValues.Find(id);
             if (ModelState.IsValid)
             {
                 var attrVal = db.AttributeValues.Find(id);
@@ -136,15 +138,20 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 ViewBag.Text = "success";
                 attributeValue.attrId = attrId;
             }
-            else
+            //else
+            //{
+            //    ViewBag.Message = "Edit Attribute Value Failing";
+            //    ViewBag.Text = "warning";
+            //}
+
+            AttributeValueViewModel attributeValueExist = new AttributeValueViewModel
             {
-                ViewBag.Message = "Edit Attribute Value Failing";
-                ViewBag.Text = "warning";
-            }
+                attrs = db.Attrs.ToList(),
+                attrId = attrValue.AttributeId,
+                Name = attrValue.Name,
+            };
 
-            attributeValue.attrs = db.Attrs.ToList();
-
-            return View(attributeValue);
+            return View(attributeValueExist);
         }
 
         [Route("Delete")]
