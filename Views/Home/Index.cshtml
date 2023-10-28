@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model BTL_QuanLyBanDienThoai.Models.ViewModel.HomeViewModel
 
 
 <!-- Slider -->
@@ -42,7 +43,6 @@
         </div>
     </div>
 </section>
-@model BTL_QuanLyBanDienThoai.Models.ViewModel.HomeViewModel
 <!-- Category -->
 <div class="sec-banner bg0 p-t-80 p-b-50">
     <div class="container">
@@ -130,7 +130,7 @@
                         html += `</div>`;
                         html += `<div class="block2-txt flex-w flex-t p-t-14">`;
                         html += `<div class="block2-txt-child1 flex-col-l ">`;
-                        html += `<a href="#" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">`
+                        html += `<a href="${productDetail}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">`
                         html += `${value.name}`;
                         html += `</a>`;
                         html += `<span class="stext-105 cl3">`;

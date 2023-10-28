@@ -4,6 +4,10 @@ using System.Diagnostics;
 using BTL_QuanLyBanDienThoai.Data;
 using BTL_QuanLyBanDienThoai.Services.Interfaces;
 using BTL_QuanLyBanDienThoai.Models.ViewModel;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Text;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BTL_QuanLyBanDienThoai.Controllers
 {
@@ -11,17 +15,17 @@ namespace BTL_QuanLyBanDienThoai.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-		private readonly QLBanDienThoaiContext db;
+        private readonly QLBanDienThoaiContext db;
 
         public HomeController(QLBanDienThoaiContext _db, ILogger<HomeController> logger)
         {
-			db = _db;
-			_logger = logger;
+            db = _db;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
-            var categories = db.Categories.ToList();
+            var categories = db.Categories.Take(3).ToList();
             var products = db.Products.ToList();
             var banners = db.Banners.ToList();
 
@@ -39,10 +43,10 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             int pageSize = 4;
 
             // Lấy giá trị trang nếu tồn tại
-            int currentPage = Math.Max(page ?? 1,1);
+            int currentPage = Math.Max(page ?? 1, 1);
 
             // Giả sử bạn đã có DbContext và DbSet cho sản phẩm
-            var query = db.Products; 
+            var query = db.Products;
 
             var products = query
                 .Where(p => p.Status == 1)
@@ -60,6 +64,36 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             return Json(result);
         }
 
+        [Route("products/ajax-search")]
+        [HttpGet]
+        public ActionResult AjaxSearch(string searchValue)
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                try
+                {
+                    var data = db.Products
+                    .Where(p => p.Name.Contains(searchValue) || p.Description.Contains(searchValue))
+                    .Select(p => new
+                    {
+                        p.Id,
+                        p.Name,
+                        p.ImageDefault,
+                        p.Price,
+                        p.Price2
+                    })
+                    .ToList();
+
+                    return Json(new { success = true, data = data });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, error = ex.Message });
+                }
+            }
+
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

@@ -1,4 +1,6 @@
 ﻿@using BTL_QuanLyBanDienThoai.Models.ViewModel;
+@model CartViewModel
+
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -26,7 +28,6 @@
 <!-- Shoping Cart -->
 <form class="bg0 p-t-75 p-b-85">
     <div class="container">
-        @model CartViewModel
 
         @if (Model != null && Model.CartList != null && Model.CartList.Count() > 0)
         {
@@ -49,11 +50,10 @@
                                 }
                                 @foreach (var item in Model.CartList)
                                 {
-                                    @item.ProductId
                                     <tr class="table_row cart_item" data-id="@item.Id">
                                         <td class="column-1">
                                             <div class="how-itemcart1">
-                                                <img src="~/web/assets/images/item-cart-04.jpg" alt="IMG">
+                                                <img src="/@item.Attributes.Image" alt="IMG">
                                             </div>
                                         </td>
                                         <td class="column-2">@item.Name</td>
@@ -134,13 +134,13 @@
                                 </div>
                             }
 
-                            <div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
+                            <div class="p-r-18 p-r-0-sm w-full-ssm">
                                 <div class="p-t-15">
                                     <span class="stext-112 cl8">
                                         New Address
                                     </span>
                                     <div class="form-group city p-t-10">
-                                        <select name="cart_city" id="select-city" class="form-control select-city"
+                                        <select name="cart_city" id="select-city" class="form-control select-city browser-default custom-select"
                                                 data-placeholder="Select a city">
                                             <option>Select a city</option>
                                         </select>
@@ -148,14 +148,14 @@
 
                                     <div class="form-group district">
                                         <select name="cart_district" id="select-district"
-                                                class="form-control select-district"
+                                                class="form-control select-district browser-default custom-select"
                                                 data-placeholder="Select a district">
                                             <option>Select a district</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group ward">
-                                        <select name="cart_ward" id="select-ward" class="form-control select-ward"
+                                        <select name="cart_ward" id="select-ward" class="form-control select-ward browser-default custom-select"
                                                 data-placeholder="Select a ward">
                                             <option>Select a ward</option>
                                         </select>
@@ -273,17 +273,6 @@
     }
 
     $(document).ready(function () {
-        $('#select-city').select2({
-            tags: true
-        });
-
-        $('#select-district').select2({
-            tags: true
-        });
-
-        $('#select-ward').select2({
-            tags: true
-        });
 
         // Load city
         loadCity();
