@@ -10,8 +10,6 @@ public partial class AttributeValue
     [Key]
     public int Id { get; set; }
 
-
-    [Required(ErrorMessage = "Please enter the attribute value name.")]
     public int? AttributeId { get; set; }
 
     [Required(ErrorMessage = "Please enter the attribute value name.")]

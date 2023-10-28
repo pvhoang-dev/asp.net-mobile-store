@@ -6,7 +6,7 @@ namespace BTL_QuanLyBanDienThoai.Models.ViewModel
     {
         public List<Attr>? attrs { get; set; }
 
-        [Required(ErrorMessage = "Please enter the attribute")]
+        // [Required(ErrorMessage = "Please enter the attribute")]
         public int? attrId { get; set; }
         public string? Value { get; set; }
 
