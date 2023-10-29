@@ -7,6 +7,7 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 using BTL_QuanLyBanDienThoai.Models.ViewModel;
 using BTL_QuanLyBanDienThoai.Utils;
 using X.PagedList;
+using Microsoft.EntityFrameworkCore;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -186,10 +187,18 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             var dbUser = db.Users.FirstOrDefault(x => x.Id == id);
             if (dbUser != null)
             {
-                db.Users.Remove(dbUser);
                 try
                 {
+                    db.Users.Remove(dbUser);
+
+                    var ordersToBeUpdated = db.Orders.Where(o => o.UserId == id);
+
+                    foreach (var order in ordersToBeUpdated)
+                    {
+                        order.UserId = null; 
+                    }
                     db.SaveChanges();
+
                     return Json(new { success = true, message = "done" });
                 }
                 catch (Exception ex)
@@ -198,7 +207,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     return BadRequest(JsonConvert.SerializeObject(
                         new
                         {
-                            error = "Can not delete this attribute."
+                            error = "Can not delete."
                         }
                     ));
                 }
@@ -206,7 +215,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return BadRequest(JsonConvert.SerializeObject(
                 new
                 {
-                    error = "Can not delete this attribute."
+                    error = "Can not delete this user."
                 }
             ));
         }

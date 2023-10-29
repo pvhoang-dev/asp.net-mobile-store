@@ -166,9 +166,9 @@
     </div>
 </form>
 
-@if (ViewBag.Text != null)
-{
-    <script>
+
+<script>
+    if (@ViewBag.Text != null) {
         $(document).ready(function () {
             Swal.fire({
                 title: 'Warning',
@@ -180,8 +180,9 @@
                 confirmButtonAriaLabel: 'Thumbs up, great!',
             })
         });
-    </script>
-}
+    }
+</script>
+
 <script>
     $(document).ready(function () {
 
