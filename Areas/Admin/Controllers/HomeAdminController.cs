@@ -3,7 +3,7 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
-    [Authentication]
+    [Authorization]
     [Area("admin")]
     [Route("admin")]
     public class HomeAdminController : Controller

@@ -75,21 +75,13 @@
                                             decimal totalPrice = (decimal)item.Quantity * (decimal)item.Price;
                                             Total += totalPrice;
                                         }
-                                        <td class="column-5">@totalPrice đ</td>
+                                        <td class="column-5">$ @totalPrice</td>
                                     </tr>
                                 }
                             </table>
                         </div>
 
                         <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-                            <div class="flex-w flex-m m-r-20 m-tb-5">
-                                <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
-
-                                <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-                                    Apply coupon
-                                </div>
-                            </div>
-
                             <button id="update-cart" type="button" name="update_cart"
                                     class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
                                 Update Cart
@@ -185,7 +177,7 @@
 
                             <div class="size-209 p-t-1">
                                 <span class="mtext-110 cl2">
-                                    @Total đ
+                                    $ @Total
                                 </span>
                             </div>
                         </div>

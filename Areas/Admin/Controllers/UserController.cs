@@ -39,10 +39,15 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-
-            if (ModelState.IsValid && HttpContext.Session.GetString("Role") == null)
+            if (ModelState.IsValid && (HttpContext.Session.GetString("Role") == null))
             {
                 var checkUser = db.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
+
+                if(checkUser.Role == 2)
+                {
+                    return View();
+                }
+
                 if(checkUser == null)
                 {
                     ModelState.AddModelError("Password", "User does not exist, please re-enter.");
@@ -58,13 +63,14 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     HttpContext.Session.SetString("Role", checkUser.Role.ToString());
                     HttpContext.Session.SetString("Name", checkUser.Name.ToString());
                     HttpContext.Session.SetString("Email", checkUser.Email.ToString());
+                    HttpContext.Session.SetString("Id", checkUser.Id.ToString());
                     return RedirectToAction("Index", "Admin");
                 }
             }
             return View();
         }
 
-        [Authentication]
+        [Authorization]
         [Route("Logout")]
         [HttpGet]
         public IActionResult Logout()
@@ -74,7 +80,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View();
         }
 
-        [Authentication]
+        [Authorization]
         [Route("")]
         public IActionResult Index(int page = 1)
         {
@@ -87,7 +93,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View(pagedList);
         }
 
-        [Authentication]
+        [Authorization]
         [Route("Edit/{id}")]
         public IActionResult Edit(int? id)
         {
@@ -103,7 +109,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View(user);
         }
 
-        [Authentication]
+        [Authorization]
         [Route("Edit/{id}")]
         [HttpPost]
         public IActionResult Edit(User user, int id)
@@ -172,7 +178,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             return View(user);
         }
 
-        [Authentication]
+        [Authorization]
         [Route("Delete")]
         [HttpPost]
         public IActionResult Delete(int id)
@@ -205,7 +211,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             ));
         }
 
-        [Authentication]
+        [Authorization]
         [Route("Logout")]
         [HttpPost]
         public IActionResult Logout(User user)

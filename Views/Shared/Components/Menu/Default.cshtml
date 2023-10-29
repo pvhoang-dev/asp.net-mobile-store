@@ -12,9 +12,24 @@
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        My Account
-                    </a>
+                    @if (@Context.Session.GetString("Id") == null)
+                    {
+                        <a href="/login" class="flex-c-m trans-04 p-lr-25">
+                            Login
+                        </a>
+                        <a href="/register" class="flex-c-m trans-04 p-lr-25">
+                            Sign up
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="#" class="flex-c-m trans-04 p-lr-25">
+                            @Context.Session.GetString("Name")
+                        </a>
+                        <a id="logoutLink" href="" class="flex-c-m trans-04 p-lr-25">
+                            Logout
+                        </a>
+                    }
 
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
                         EN
@@ -32,7 +47,7 @@
 
                 <!-- Logo desktop -->
                 <a asp-controller="Home" asp-action="Index" class="logo">
-                    <img src="~/admin/assets/images/logo-admin-dark.png" alt="IMG-LOGO">
+                    <img src="~/admin/assets/images/logo-admin-dark.png" alt="IMG-LOGO" height="33">
                 </a>
                 <!-- Menu desktop -->
                 <div class="menu-desktop">
@@ -58,15 +73,15 @@
                         </li>
 
                         <li>
-                            <a href="/">Blog</a>
+                            <a href="#">Blog</a>
                         </li>
 
                         <li>
-                            <a href="/">About</a>
+                            <a href="#">About</a>
                         </li>
 
                         <li>
-                            <a href="/">Contact</a>
+                            <a href="#">Contact</a>
                         </li>
                     </ul>
                 </div>
@@ -203,7 +218,7 @@
             <style>
                 .result_product {
                     visibility: hidden;
-                    background:white;
+                    background: white;
                     max-height: 400px;
                     overflow-y: scroll;
                     max-width: 960px;
@@ -238,7 +253,7 @@
 
                     <li class="header-cart-item flex-w flex-t m-b-12">
                         <div class="header-cart-item-img">
-                            <img src="~/web/assets/images/item-cart-01.jpg" alt="IMG">
+                            <img src="/@item.Attributes.Image" alt="IMG">
                         </div>
 
                         <div class="header-cart-item-txt p-t-8">
@@ -251,7 +266,7 @@
                                 qty += item.Quantity;
                             }
                             <span class="header-cart-item-info">
-                                @item.Quantity x @item.Price đ
+                                @item.Quantity x $ @item.Price
                             </span>
                         </div>
                     </li>
@@ -260,16 +275,12 @@
 
             <div class="w-full">
                 <div class="header-cart-total w-full p-tb-40">
-                    Total: @Total đ
+                    Total: $ @Total
                 </div>
 
-                <div class="header-cart-buttons flex-w w-full">
+                <div class="header-cart-buttons flex-w w-full justify-content-center">
                     <a asp-controller="Cart" asp-action="Index" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
                         View Cart
-                    </a>
-
-                    <a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
-                        Check Out
                     </a>
                 </div>
             </div>
@@ -285,7 +296,7 @@
 
     function getCartItemCount() {
         return @qty
-                        }
+                            }
     updateCartItemCount();
 </script>
 
@@ -293,7 +304,7 @@
 
     $(document).ready(function () {
         $("#search").click(function () {
-           $(".result_product").attr('style', 'visibility:visible');
+            $(".result_product").attr('style', 'visibility:visible');
             let input = $('.input_search').val();
             searchAjax(input);
         });
@@ -324,27 +335,27 @@
                         var productDetail = `/home/products/detail/${value.id}`;
 
                         html += `<div class="result_product_item m-b-10 m-t-10 p-l-30">
-                                        <table>
-                                            <tbody>
-                                                <tr>
-                                                    <td style="vertical-align:top">
-                                                          <a href="${productDetail}">
-                                                                 <img src="${value.imageDefault}" width="50" style="margin-right:50px;">
-                                                           </a>
-                                                        </td>
-                                                        <td>
-                                                                    <a class="suggest_link text-dark" href="${productDetail}">
-                                                                ${value.name}
-                                                            </a>
-
-                                                                         <p class="m-t-10 .text-muted">
-                                                                 $${price}
-                                                             </p>
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="vertical-align:top">
+                                                              <a href="${productDetail}">
+                                                                     <img src="${value.imageDefault}" width="50" style="margin-right:50px;">
+                                                               </a>
                                                             </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>`
+                                                            <td>
+                                                                        <a class="suggest_link text-dark" href="${productDetail}">
+                                                                    ${value.name}
+                                                                </a>
+
+                                                                             <p class="m-t-10 .text-muted">
+                                                                     $${price}
+                                                                 </p>
+                                                                </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>`
                     });
                     $(".result_product").append(html);
                 } else {
@@ -356,4 +367,21 @@
             }
         });
     }
+</script>
+<script>
+    $(document).ready(function () {
+        $("#logoutLink").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/Logout", 
+                success: function (data) {
+                    window.location.href = "/"; 
+                },
+                error: function (error) {
+                    console.error("Logout failed", error);
+                }
+            });
+        });
+    });
 </script>

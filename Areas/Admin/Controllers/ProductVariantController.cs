@@ -9,7 +9,7 @@ using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
-    [Authentication]
+    [Authorization]
     [Area("Admin")]
     [Route("Admin/Product-Variants")]
     public class ProductVariantController : Controller
@@ -50,17 +50,41 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [Route("Create/{id}")]
         public IActionResult Create(int? id)
         {
-            List<AttributeWithValueViewModel> attributeWithValueViewModel =
-                            (from attr in db.Attrs
-                             join attrValue in db.AttributeValues
-                             on attr.Id equals attrValue.AttributeId
-                             select new AttributeWithValueViewModel
-                             {
-                                 AttributeName = attr.Name,
-                                 AttributeNameId = attr.Id,
-                                 AttributeValue = attrValue.Name,
-                                 AttributeValueId = attrValue.Id
-                             }).ToList();
+            List<ProductAttributeValue> pAVs = db.ProductAttributeValues.Where(p => p.ProductId == id).Take(2).ToList();
+            List<AttributeWithValueViewModel> attributeWithValueViewModel = new List<AttributeWithValueViewModel>();
+            if (pAVs.Count != 0)
+            {
+                int attrVal1 = (int)pAVs[0].AttributeValueId;
+                int attrVal2 = (int)pAVs[1].AttributeValueId;
+
+                var av1 = db.AttributeValues.Find(attrVal1);
+                var av2 = db.AttributeValues.Find(attrVal2);
+
+                attributeWithValueViewModel = (from attr in db.Attrs
+                                               join attrValue in db.AttributeValues
+                                               on attr.Id equals attrValue.AttributeId
+                                               where attr.Id == av1.AttributeId || attr.Id == av2.AttributeId
+                                               select new AttributeWithValueViewModel
+                                               {
+                                                   AttributeName = attr.Name,
+                                                   AttributeNameId = attr.Id,
+                                                   AttributeValue = attrValue.Name,
+                                                   AttributeValueId = attrValue.Id
+                                               }).ToList();
+            }
+            else
+            {
+                attributeWithValueViewModel = (from attr in db.Attrs
+                                               join attrValue in db.AttributeValues
+                                               on attr.Id equals attrValue.AttributeId
+                                               select new AttributeWithValueViewModel
+                                               {
+                                                   AttributeName = attr.Name,
+                                                   AttributeNameId = attr.Id,
+                                                   AttributeValue = attrValue.Name,
+                                                   AttributeValueId = attrValue.Id
+                                               }).ToList();
+            }
 
             Dictionary<string, Dictionary<string, int>> resultDictionary = new Dictionary<string, Dictionary<string, int>>();
 
@@ -127,7 +151,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
                     ViewBag.Greeting = "Warning";
                     ViewBag.Message = "Product variant with these attributes existed";
-                    ViewBag.Text = "warning";
+                    ViewBag.Text = id;
 
                     List<AttributeWithValueViewModel> attributeWithValueViewModel =
                             (from attr in db.Attrs
@@ -190,8 +214,6 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 }
             }
 
-            ViewBag.Message = "Error";
-            ViewBag.Text = "warning";
             return View();
         }
 

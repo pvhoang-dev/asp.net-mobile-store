@@ -11,7 +11,7 @@ using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
-    [Authentication]
+    [Authorization]
     [Area("admin")]
     [Route("admin/attribute-values")]
     public class AttributeValueController : Controller

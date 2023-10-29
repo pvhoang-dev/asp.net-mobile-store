@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace BTL_QuanLyBanDienThoai.Models.Authentication
+namespace BTL_QuanLyBanDienThoai.Models.Authorization
 {
     public class Authorization: ActionFilterAttribute
     {
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if(context.HttpContext.Session.GetString("Role") != "1")
+            if(context.HttpContext.Session.GetString("Id") == null)
             {
                 context.Result = new RedirectToRouteResult(
                         new RouteValueDictionary
                         {
-                            {"Controller", "Home"},
-                            {"Action", "Index" }
+                            {"Controller", "Auth"},
+                            {"Action", "Login" }
                         }
                     );
             }

@@ -16,7 +16,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             db = _db;
         }
 
-        [Route("auth/login")]
+        [Route("login")]
         public IActionResult Login()
         {
             if (HttpContext.Session.GetString("Email") == null)
@@ -29,7 +29,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             }
 
         }
-        [Route("auth/login")]
+        [Route("login")]
         [HttpPost]
         public IActionResult Login(User user)
         {
@@ -58,13 +58,13 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             return View();
         }
 
-        [Route("auth/register")]
+        [Route("register")]
         public IActionResult Register()
         {
             return View();
         }
 
-        [Route("auth/register")]
+        [Route("register")]
         [HttpPost]
         public IActionResult Register(UserViewModel userViewModel)
         {
@@ -98,7 +98,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             return View(userViewModel);
         }
 
-        [Route("auth/logout")]
+        [Route("logout")]
         [HttpPost]
         public IActionResult Logout(User user)
         {

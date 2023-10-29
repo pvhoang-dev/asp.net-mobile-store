@@ -8,6 +8,7 @@ using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using static BTL_QuanLyBanDienThoai.Models.Order;
 using Microsoft.CodeAnalysis;
+using BTL_QuanLyBanDienThoai.Models.Authorization;
 
 namespace BTL_QuanLyBanDienThoai.Controllers
 {
@@ -47,16 +48,23 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                 CartList = cartList,
                 Addresses = addressList
             };
+
+            if (HttpContext.Session.GetString("Id") == null)
+            {
+                ViewBag.Text = "You need to log in before checking out";
+            }
+
             return View(cartViewModel);
         }
 
+        [Authorization]
         [Route("checkout/create")]
         [HttpPost]
         public IActionResult Create(OrderViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var userId = 12;
+                var userId = HttpContext.Session.GetString("Id");
                 var productIds = Request.Form["product_id[]"];
                 var productVariantIds = Request.Form["product_variant_id[]"];
                 var quantities = Request.Form["quantity[]"];
@@ -64,7 +72,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                 
                 var order = new Order
                 {
-                    UserId = userId,
+                    UserId = int.Parse(userId),
                     City = Request.Form["city_id"],
                     District = Request.Form["district_id"],
                     Ward = Request.Form["ward_id"],
@@ -107,8 +115,21 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                             Price = parsedPrice
                         };
 
-                        
+                        var product = db.Products.Find(parsedProductId);
+
+                        var productVariant = db.ProductVariants.Find(parsedProductVariantId);
+
+                        productVariant.Quantity = (productVariant.Quantity - parsedQuantity) >= 0 ? (productVariant.Quantity - parsedQuantity) : 0;
+
+                        product.Quantity = (product.Quantity - parsedQuantity) >= 0 ? (product.Quantity - parsedQuantity) : 0;
+
+                        db.Products.Update(product);
+
+                        db.ProductVariants.Update(productVariant);
+
                         db.OrderItems.Add(orderItem);
+
+                        db.SaveChanges();
                     }
                 }
                 

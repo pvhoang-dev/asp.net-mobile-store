@@ -10,7 +10,7 @@ using X.PagedList;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
-    [Authentication]
+    [Authorization]
     [Area("Admin")]
     [Route("Admin/Banners")]
     public class BannerController : Controller

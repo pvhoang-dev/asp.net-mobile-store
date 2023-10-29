@@ -75,7 +75,7 @@
                             <input type="text" class="size-107 bor8 m-b-22 stext-116 cl8 plh3 w-100 p-3"
                                    id="billing_last_name" name="user_last_name" placeholder="Last name" />
                         </div>
-                        
+
                         <div class="col-12 form-group">
                             <textarea placeholder="Notes about your order, e.g. special notes for delivery."
                                       name="note" id="billing_note" class="size-107 bor8 stext-116 cl8 plh3 p-3 form-control h-100"
@@ -113,11 +113,10 @@
                     {
                         @foreach (var item in Model.CartList)
                         {
-                            @item.ProductId
                             <div class="flex-w flex-t bor12 p-t-10 p-b-13">
                                 <div class="size-208">
                                     <span class="stext-111 cl6">
-                                        @item.Name  <strong class="">&nbsp;&nbsp;&nbsp;x @item.Quantity</strong>
+                                        @item.Name <strong class="">&nbsp;&nbsp;&nbsp;x @item.Quantity</strong>
                                     </span>
                                 </div>
                                 @{
@@ -126,7 +125,7 @@
                                 }
                                 <div class="size-209">
                                     <span class="stext-110 cl2 float-right">
-                                        @totalPrice đ
+                                        $ @totalPrice
                                     </span>
                                 </div>
                             </div>
@@ -140,18 +139,7 @@
                                    value="@item.Price">
                         }
                     }
-                    <div class="flex-w flex-t p-t-15 p-b-10">
-                        <div class="size-208 w-full-ssm">
-                            <span class="stext-110 cl2">
-                                Shipping:
-                            </span>
-                        </div>
 
-                        <div class="size-209 p-r-0-sm w-full-ssm">
-                            <span class="stext-110 cl2 float-right">...</span>
-                        </div>
-                    </div>
-                    <hr>
                     <div class="flex-w flex-t p-t-10 p-b-33">
                         <div class="size-208">
                             <span class="mtext-101 cl2">
@@ -160,7 +148,7 @@
                         </div>
                         <div class="size-209 p-t-1">
                             <span class="mtext-110 cl2 float-right">
-                                @Total đ
+                                $ @Total
                             </span>
                         </div>
                     </div>
@@ -178,8 +166,25 @@
     </div>
 </form>
 
+@if (ViewBag.Text != null)
+{
+    <script>
+        $(document).ready(function () {
+            Swal.fire({
+                title: 'Warning',
+                icon: 'warning',
+                html: '@ViewBag.Text',
+                focusConfirm: true,
+                confirmButtonText:
+                    '<a class="text-white" href="/login">Login</a>',
+                confirmButtonAriaLabel: 'Thumbs up, great!',
+            })
+        });
+    </script>
+}
 <script>
     $(document).ready(function () {
+
         $(document).on('click', '#order', function () {
             // Confirm the deletion using SweetAlert2
             Swal.fire({
@@ -208,6 +213,23 @@
                         });
                         return;
                     }
+                    // var role = @Context.Session.GetString("Role");
+                    // console.log(role);
+                    // return;
+
+                    // if (@Context.Session.GetString("Role") == null) {
+                    //     Swal.fire({
+                    //         title: 'Warning',
+                    //         icon: 'warning',
+                    //         html: 'You need to log in before checking out',
+                    //         focusConfirm: true,
+                    //         confirmButtonText:
+                    //             '<a class="text-white" href="/login">Login</a>',
+                    //         confirmButtonAriaLabel: 'Thumbs up, great!',
+                    //     })
+
+                    //     return;
+                    // }
 
                     Swal.fire(
                         'Success!',

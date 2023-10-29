@@ -21,7 +21,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
 
         [Route("home/products/detail/{id}")]
 
-        public IActionResult Index(int ? id)
+        public IActionResult Index(int? id)
         {
             if (id == null || id == 0)
             {
@@ -34,7 +34,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
 
             if (product == null)
             {
-                return NotFound(); // Handle the case where the product is not found
+                return NotFound();
             }
 
             var productAttributeValues = _context.ProductAttributeValues
@@ -51,6 +51,8 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                     AttributeValue = joined.joined.av.Name
                 })
                 .ToList();
+
+            var distinctAttributeIds = productAttributeValues.Select(pa => pa.AttributeId).Distinct().ToList();
 
             var productVariants = new Dictionary<int, Dictionary<int, Dictionary<string, string>>>();
 
@@ -78,7 +80,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
 
             var attrNames = productAttributeValues
                 .Select(pa => pa.AttributeName)
-                .ToArray(); 
+                .ToArray();
 
             var productImages = _context.ProductImages.Where(i => i.ProductId == id).ToList();
 
@@ -88,7 +90,9 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                 ProductVariants = productVariants,
                 CategoryProducts = categoryProducts,
                 AttrNames = attrNames,
-                productImages = productImages
+                productImages = productImages,
+                attr1 = distinctAttributeIds[0],
+                attr2 = distinctAttributeIds[1],
             });
         }
     }

@@ -5,6 +5,8 @@
     internal class ProductDetailViewModel
     {
         public Product Product { get; set; }
+        public int? attr1 { get; set; }
+        public int? attr2 { get; set; }
         public Attribute? Attribute { get; set; }
         public AttributeValue AttributeValue { get; set; }
         public List<ProductImage>? productImages { get; set; }

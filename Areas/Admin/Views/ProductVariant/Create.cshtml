@@ -141,14 +141,18 @@
             });
         });
     </script>
-    @if (ViewBag.Message != null)
+    @if (ViewBag.Greeting != null)
     {
         <script>
             Swal.fire(
                 "@ViewBag.Greeting",
                 "@ViewBag.Message",
-                "@ViewBag.Text"
+                "warning"
             )
+            setTimeout(
+                function () {
+                    window.location.href = '/Admin/Product-Variants/Create/' + "@ViewBag.Text" 
+                }, 1000);
         </script>
     }
 }
