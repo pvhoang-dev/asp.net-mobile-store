@@ -29,11 +29,14 @@ namespace BTL_QuanLyBanDienThoai.Controllers
 
 			if (!string.IsNullOrEmpty(searchProduct))
 			{
-				allProducts = products.Where(p => p.Name.Contains(searchProduct)).ToList();
+				allProducts = products
+					.Where(p=> p.Status == 1)
+					.Where(p => p.Name.Contains(searchProduct))
+					.ToList();
 			}
 			else
 			{
-				allProducts = products.ToList(); 
+				allProducts = products.Where(p=>p.Status==1).ToList(); 
 			}
 
 			var viewModel = new ShopViewModel
@@ -56,6 +59,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
 					try
 					{
 						var data = _context.Products
+						.Where(p=>p.Status == 1)
 						.Where(p => p.Price >= priceMin && p.Price <= priceMax)
 						.Select(p => new
 						{

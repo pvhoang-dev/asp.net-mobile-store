@@ -26,7 +26,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
         public IActionResult Index()
         {
             var categories = db.Categories.Take(3).ToList();
-            var products = db.Products.ToList();
+            var products = db.Products.Where(p=>p.Status==1).ToList();
             var banners = db.Banners.ToList();
 
             var HomeViewModel = new HomeViewModel
@@ -72,7 +72,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             {
                 try
                 {
-                    var data = db.Products
+                    var data = db.Products.Where(p => p.Status == 1)
                     .Where(p => p.Name.Contains(searchValue) || p.Description.Contains(searchValue))
                     .Select(p => new
                     {
