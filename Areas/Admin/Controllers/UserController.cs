@@ -7,6 +7,7 @@ using BTL_QuanLyBanDienThoai.Models.Authentication;
 using BTL_QuanLyBanDienThoai.Models.ViewModel;
 using BTL_QuanLyBanDienThoai.Utils;
 using X.PagedList;
+using Microsoft.EntityFrameworkCore;
 
 namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 {
@@ -202,7 +203,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
                     foreach (var order in ordersToBeUpdated)
                     {
-                        order.UserId = null;
+                        order.UserId = null; 
                     }
                     db.SaveChanges();
 
