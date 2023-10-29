@@ -115,7 +115,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(User user, int id)
         {
-
+            ModelState.Remove("Password");
             if (ModelState.IsValid)
             {
                 var existUser = db.Users.Find(id);
@@ -130,11 +130,19 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     ModelState.AddModelError("Email", "Email has already exist.");
                     return View();
                 }
+                if(existUser.Password != user.Password)
+                {
 
-                existUser.Password = password.HashPassword(user.Password);
+                }
+
+                if (user.Password != null)
+                {
+                    existUser.Password = password.HashPassword(user.Password);
+                }
+
                 db.Users.Update(existUser);
                 db.SaveChanges();
-               
+
                 return RedirectToAction("Index", "User");
             }
             return View();
