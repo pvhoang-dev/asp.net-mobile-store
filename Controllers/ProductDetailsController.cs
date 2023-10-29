@@ -29,6 +29,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             }
 
             var product = _context.Products
+                .Where(p => p.Status == 1)
                 .Include(p => p.Category)
                 .FirstOrDefault(p => p.Id == id);
 
