@@ -7,7 +7,7 @@
 }
 
 @section Title {
-        Create Attribute Value
+            Create Attribute Value
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Attribute-Values">
@@ -24,7 +24,7 @@
                 <div class="form-group col-sm-6">
                     <label asp-for="attrId" for="attribute_id" class="required-input">Attribute</label>
                     <select asp-for="attrId" id="attribute_id" name="attribute_id" class="form-control" data-toggle="" onchange="clearError('attribute-error')">
-                        <option>Selected attribute</option>
+                        <option value="0">Selected attribute</option>
                         @foreach (var attr in Model.attrs)
                         {
                             if (Model.attrId != null && Model.attrId == @attr.Id)
@@ -60,20 +60,33 @@
             document.getElementById('Id').value = selectedValue;
         });
 
-        // $(document).ready(function () {
-        //     $('#create').on('click', function () {
-        //         var input = $("#value").val().trim();
-        //         if ($("#attribute_id option:selected").val() != 0 && input != "") {
-        //             $("#form").submit();
-        //         } else {
-        //             Swal.fire(
-        //                 'Warning',
-        //                 "Please enter all fields",
-        //                 'warning'
-        //             )
-        //         }
-        //     });
-        // });
+        $(document).ready(function () {
+            $('#create').on('click', function (event) {
+                var input = $("#value").val().trim();
+                if ($("#attribute_id option:selected").val() != 0 && input != "") {
+                    Swal.fire({
+                        title: 'Adding...',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                    })
+                    $("#form").submit();
+                } else {
+                    swal.fire(
+                        'warning',
+                        "Please enter all fields",
+                        'warning'
+                    )
+                    event.preventDefault();
+                }
+            });
+        });
 
     </script>
     @if (ViewBag.Message != null)

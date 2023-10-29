@@ -394,8 +394,9 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         public IActionResult UpdateStatus(int object_id, int status)
         {
             var product = db.Products.Find(object_id);
+            var existingVariant = db.ProductVariants.FirstOrDefault(a => a.ProductId == object_id);
 
-            if (product != null)
+            if (product != null && (existingVariant != null || status == 1))
             {
                 if (status == 1)
                     status = 0;
@@ -408,7 +409,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 return Json(new { status = status });
             }
 
-            return Json(new { message = "Error" });
+            return Json(new { status = 3 });
         }
 
         [HttpPost]

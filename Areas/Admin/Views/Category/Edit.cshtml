@@ -110,20 +110,22 @@
 
             $('input[name="Image"]').val(fileName);
         }
-        // $(document).ready(function () {
-        //     $('#create').on('click', function () {
-        //         var name = $("#Name").val().trim();
-        //         if (name != "") {
-        //             $("#form").submit();
-        //         } else {
-        //             Swal.fire(
-        //                 'Warning',
-        //                 "Please enter all fields",
-        //                 'warning'
-        //             )
-        //         }
-        //     });
-        // });
+        $(document).ready(function () {
+            $('#create').on('click', function () {
+                Swal.fire({
+                    title: 'Updating...',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                            b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                    },
+                })
+            });
+        });
     </script>
 
     @if (ViewBag.Message != null)

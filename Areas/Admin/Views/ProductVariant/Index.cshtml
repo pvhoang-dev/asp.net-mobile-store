@@ -10,10 +10,46 @@
             Product Variants
 }
 
+@section Css {
+    <style>
+        .suggestion-box {
+            position: absolute;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+            min-width: 226px;
+            left: 23px;
+        }
+
+        .suggestion-item {
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+}
+
 @model X.PagedList.PagedList<ProductVariantViewModel>
 
 <div class="card">
     <div class="card-body p-0">
+        <div class="app-search dropdown d-lg-block bg-white p-2 pt-3">
+            <div class="input-group row pl-4">
+                <div class="">
+                    <input type="text" class="form-control" placeholder="Search..." id="searchInput">
+                    <span class="mdi mdi-magnify search-icon pl-4"></span>
+                    @* <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                    </div> *@
+                </div>
+            </div>
+
+            <div class="form-group position-relative pl-4">
+                <div class="suggestion-box bg-white" id="searchResults">
+                </div>
+            </div>
+        </div>
         <div class="table-responsive users-table">
             <table class="table table-centered mb-0 " id="product-variants-table">
                 <thead>
@@ -64,10 +100,20 @@
                     }
                     @for (var i = 1; i <= Model.PageCount; i++)
                     {
-                        <li class="page-item">
 
-                            <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@i)">@i</a>
-                        </li>
+                        @if (i == @Model.PageNumber)
+                        {
+                            <li class="page-item active">
+                                <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@i)">@i</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@i)">@i</a>
+                            </li>
+                        }
+
                     }
                     @if (Model.HasNextPage)
                     {
@@ -95,5 +141,53 @@
                 }
             });
         }
+        $(document).ready(function () {
+            $('#searchInput').on('input', function () {
+                var inputValue = $(this).val();
+                if (inputValue === '') {
+                    $('#searchResults').hide();
+                } else {
+                    $('#searchResults').show();
+                }
+            });
+
+            $('.suggestion-item').on('click', function () {
+                var selectedValue = $(this).text();
+                $('#searchInput').val(selectedValue);
+                $('#searchResults').hide();
+            });
+            // Search
+            $("#searchInput").on("input", function () {
+                var query = $(this).val();
+                let html = "";
+                if (query.length >= 1) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/Product-Variants/Search",
+                        data: { query: query },
+                        success: function (data) {
+                            $("#searchResults").empty();
+                            if (data.length > 0) {
+                                data.forEach(function (product) {
+                                    var productEdit = `/admin/product-variants/edit/${product.id}`;
+
+                                    html = `<a target="_blank" class="dropdown-item" href="${productEdit}">${product.name}</a>`
+
+                                    $("#searchResults").append(html);
+                                });
+                            } else {
+                                $("#searchResults").html('<a class="dropdown-item" href="javascripts:void(0)">No results found</a>');
+                            }
+                        },
+                        error: function () {
+                            // Handle any errors
+                        }
+                    });
+                } else {
+                    $("#searchResults").empty();
+                }
+            });
+        });
     </script>
+
 }

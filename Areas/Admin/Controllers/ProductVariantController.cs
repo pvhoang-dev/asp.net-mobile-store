@@ -132,26 +132,24 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                 int attrVal_1 = int.Parse(Request.Form["attribute_1_value"]);
                 int attrVal_2 = int.Parse(Request.Form["attribute_2_value"]);
 
-                var existingVartiant1 = db.ProductAttributeValues.FirstOrDefault(
+                var existingVartiant1 = db.ProductAttributeValues.Where(
                         a => a.ProductId == id &&
                         a.AttributeValueId == attrVal_1
-                    );
+                    ).ToList();
 
-                var existingVartiant2 = db.ProductAttributeValues.FirstOrDefault(
+                var existingVartiant2 = db.ProductAttributeValues.Where(
                         a => a.ProductId == id &&
                         a.AttributeValueId == attrVal_2
-                    );
+                    ).ToList();
 
-                if (existingVartiant1 != null && existingVartiant2 != null)
+                bool checkExist = existingVartiant1.Any(ev1 => existingVartiant2.Any(ev2 => ev1.ProductVariantId == ev2.ProductVariantId));
+
+                if (checkExist)
                 {
                     db.ProductVariants.Remove(pV);
                     db.SaveChanges();
 
-                    // var pVariant = db.ProductVariants.Where(pav => pav.Name == productVariantViewModel.Name).ToList();
-
-                    ViewBag.Greeting = "Warning";
-                    ViewBag.Message = "Product variant with these attributes existed";
-                    ViewBag.Text = id;
+                    productVariantViewModel.exist = id;
 
                     List<AttributeWithValueViewModel> attributeWithValueViewModel =
                             (from attr in db.Attrs
@@ -191,6 +189,8 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     Product product = db.Products.Find(id);
 
                     product.Quantity = product.Quantity + pV.Quantity;
+
+                    product.Status = 1;
 
                     db.Update(product);
 
@@ -271,6 +271,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             proVariant.Name = productVariantViewModel.Name;
             proVariant.Price = productVariantViewModel.Price;
             proVariant.Quantity = productVariantViewModel.Quantity;
+            proVariant.Slug = slug.Create(productVariantViewModel.Name);
 
             db.Update(product);
 
@@ -289,19 +290,17 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             {
                 try
                 {
-                    //List<ProductAttributeValue> productAttributeValues =
-                    //        (from pav in db.ProductAttributeValues
-                    //         where pav.ProductVariantId == id
-                    //         select new ProductAttributeValue
-                    //         {
-                    //             AttributeValueId = pav.AttributeValueId,
-                    //         }).ToList();
 
                     var itemsToRemove = db.ProductAttributeValues.Where(pav => pav.ProductVariantId == id).ToList();
 
                     Product product = db.Products.Find(productVariant.ProductId);
 
                     product.Quantity = (product.Quantity - productVariant.Quantity) >= 0 ? (product.Quantity - productVariant.Quantity) : 0;
+
+                    if(product.Quantity == 0)
+                    {
+                        product.Status = 0;
+                    }
 
                     db.Update(product);
 
@@ -330,6 +329,22 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     error = "Can not delete this product variant"
                 }
             ));
+        }
+
+        [HttpPost]
+        [Route("Search")]
+        public IActionResult Search(string query)
+        {
+            var searchResults = db.ProductVariants
+                .Where(product => product.Name.Contains(query))
+                .Select(product => new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                })
+                .ToList();
+
+            return Json(searchResults);
         }
     }
 }

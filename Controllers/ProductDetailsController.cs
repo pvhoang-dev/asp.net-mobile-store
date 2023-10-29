@@ -73,6 +73,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
             }
 
             var categoryProducts = _context.Products
+                .Where(p => p.Status == 1)
                 .Where(p => p.CategoryId == product.CategoryId)
                 .OrderBy(x => Guid.NewGuid())
                 .Take(5)

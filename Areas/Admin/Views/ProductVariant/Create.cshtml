@@ -8,7 +8,7 @@
 @model ProductVariantViewModel
 
 @section Title {
-        Create Product Variant
+            Create Product Variant
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products/Edit/@Model.Product.Id">
@@ -125,34 +125,36 @@
                 $('#create').attr("value", 1);
             });
 
-            $('#create').on('click', function (event) {
-                Swal.fire({
-                    title: 'Adding...',
-                    timer: 1000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading()
-                        const b = Swal.getHtmlContainer().querySelector('b')
-                        timerInterval = setInterval(() => {
-                            b.textContent = Swal.getTimerLeft()
-                        }, 100)
-                    },
-                })
+            $('#create').on('click', function () {
+                // Swal.fire({
+                //     title: 'Adding...',
+                //     timer: 1000,
+                //     timerProgressBar: true,
+                //     didOpen: () => {
+                //         Swal.showLoading()
+                //         const b = Swal.getHtmlContainer().querySelector('b')
+                //         timerInterval = setInterval(() => {
+                //             b.textContent = Swal.getTimerLeft()
+                //         }, 100)
+                //     },
+                // })
             });
         });
     </script>
-    @if (ViewBag.Greeting != null)
-    {
-        <script>
+
+    <script>
+        var exist = @Model.exist;
+        if (exist != null) {
             Swal.fire(
-                "@ViewBag.Greeting",
-                "@ViewBag.Message",
+                "Warning",
+                "Products with those 2 attribute values already exist",
                 "warning"
             )
             setTimeout(
                 function () {
-                    window.location.href = '/Admin/Product-Variants/Create/' + "@ViewBag.Text" 
+                    window.location.href = '/Admin/Product-Variants/Create/' + exist;
                 }, 1000);
-        </script>
-    }
+        } 
+    </script>
+
 }

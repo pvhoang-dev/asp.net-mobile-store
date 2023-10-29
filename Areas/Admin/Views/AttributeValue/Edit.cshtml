@@ -61,26 +61,40 @@
             document.getElementById('Id').value = selectedValue;
         });
 
-        // $(document).ready(function () {
-        //     $('#create').on('click', function () {
-        //         var input = $("#value").val().trim();
-        //         if ($("#attribute_id option:selected").val() != 0 && input != "") {
-        //             $("#form").submit();
-        //         } else {
-        //             Swal.fire(
-        //                 'Warning',
-        //                 "Please enter all fields",
-        //                 'warning'
-        //             )
-        //         }
-        //     });
-        // });
+        $(document).ready(function () {
+            $('#create').on('click', function (e) {
+                var input = $("#value").val().trim();
+                if ($("#attribute_id option:selected").val() != 0 && input != "") {
+                    Swal.fire({
+                        title: 'Updating...',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                    })
+                    $("#form").submit();
+                } else {
+                    Swal.fire(
+                        'Warning',
+                        "Please enter all fields",
+                        'warning'
+                    )
+                    e.preventDefault();
+                }
+            });
+        });
+
     </script>
     @if (ViewBag.Message != null)
     {
         <script>
             Swal.fire(
-                'Warning',
+                'Notification',
                 "@ViewBag.Message",
                 "@ViewBag.Text",
                 1000

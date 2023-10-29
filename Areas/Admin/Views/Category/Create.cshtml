@@ -6,7 +6,7 @@
 }
 
 @section Title {
-                    Create Category
+                        Create Category
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/Admin/Categories">
@@ -29,7 +29,7 @@
                 <!-- File Upload -->
                 <div class="form-group col-12 tab-content">
                     <label asp-for="Image" class="required-input">Images</label>
-                    
+
                     <div class="tab-pane show active" id="file-upload-preview">
                         <div onclick="chooseFile()" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
                              data-upload-preview-template="#uploadPreviewTemplate">
@@ -106,20 +106,22 @@
             $('input[name="Image"]').val(fileName);
         }
 
-        // $(document).ready(function () {
-        //     $('#create').on('click', function () {
-        //         var name = $("#Name").val().trim();
-        //         if (checkAllFields != false && name != "") {
-        //             $("#form").submit();
-        //         } else {
-        //             Swal.fire(
-        //                 'Warning',
-        //                 "Please enter all fields",
-        //                 'warning'
-        //             )
-        //         }
-        //     });
-        // });
+        $(document).ready(function () {
+            $('#create').on('click', function () {
+                Swal.fire({
+                    title: 'Adding...',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                            b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                    },
+                })
+            });
+        });
     </script>
 
     <script>

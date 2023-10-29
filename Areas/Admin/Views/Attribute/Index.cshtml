@@ -63,10 +63,20 @@
                     }
                     @for (var i = 1; i <= Model.PageCount; i++)
                     {
-                        <li class="page-item">
 
-                            <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@i)">@i</a>
-                        </li>
+                        @if (i == @Model.PageNumber)
+                        {
+                            <li class="page-item active">
+                                <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@i)">@i</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a href="javascript:void(0);" class="page-link" onclick="LoadPage(@i)">@i</a>
+                            </li>
+                        }
+
                     }
                     @if (Model.HasNextPage)
                     {
