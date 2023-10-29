@@ -30,7 +30,6 @@ namespace BTL_QuanLyBanDienThoai.ViewComponents
 
             var menuViewModel = new BTL_QuanLyBanDienThoai.Models.ViewModel.MenuViewModel
             {
-                // Sử dụng cartList hoặc tạo danh sách mới nếu cartList là null
                 Cart = cartList ?? new List<CartItemViewModel>(), 
                 Categories = categories
             };
