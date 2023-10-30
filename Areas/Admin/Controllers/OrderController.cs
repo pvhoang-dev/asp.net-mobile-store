@@ -39,6 +39,10 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             {
                 UserId = order.Id,
 
+                FirstName = order.FirstName,
+
+                LastName = order.LastName,
+
                 Phone = order.Phone,
 
                 City = order.City,

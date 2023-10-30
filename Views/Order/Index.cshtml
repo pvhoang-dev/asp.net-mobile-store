@@ -168,24 +168,7 @@
 
 
 <script>
-    if (@ViewBag.Text != null) {
-        $(document).ready(function () {
-            Swal.fire({
-                title: 'Warning',
-                icon: 'warning',
-                html: '@ViewBag.Text',
-                focusConfirm: true,
-                confirmButtonText:
-                    '<a class="text-white" href="/login">Login</a>',
-                confirmButtonAriaLabel: 'Thumbs up, great!',
-            })
-        });
-    }
-</script>
-
-<script>
     $(document).ready(function () {
-
         $(document).on('click', '#order', function () {
             // Confirm the deletion using SweetAlert2
             Swal.fire({
@@ -244,5 +227,24 @@
                 }
             })
         });
+
+        var exist = @Model.checkLogin;
+        console.log(exist);
+        if (exist == 0) {
+            Swal.fire({
+                title: 'Warning',
+                icon: 'warning',
+                html: 'You need to login before checking out',
+                focusConfirm: true,
+                confirmButtonText:
+                    '<a class="text-white" href="/login">Login</a>',
+                confirmButtonAriaLabel: 'Thumbs up, great!',
+            })
+
+            setTimeout(
+                function () {
+                    window.location.href = '/login';
+                }, 1500);
+        }
     });
 </script>

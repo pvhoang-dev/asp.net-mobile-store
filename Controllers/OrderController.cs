@@ -49,9 +49,15 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                 Addresses = addressList
             };
 
-            if (HttpContext.Session.GetString("Id") == null)
+            bool checkId = HttpContext.Session.GetString("Id") == null;
+
+            if (checkId == true)
             {
-                ViewBag.Text = "You need to log in before checking out";
+                cartViewModel.checkLogin = 0;
+            }
+            else
+            {
+                cartViewModel.checkLogin = 1;
             }
 
             return View(cartViewModel);
@@ -69,10 +75,12 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                 var productVariantIds = Request.Form["product_variant_id[]"];
                 var quantities = Request.Form["quantity[]"];
                 var prices = Request.Form["price[]"];
-                
+
                 var order = new Order
                 {
                     UserId = int.Parse(userId),
+                    FirstName = Request.Form["user_first_name"],
+                    LastName = Request.Form["user_last_name"],
                     City = Request.Form["city_id"],
                     District = Request.Form["district_id"],
                     Ward = Request.Form["ward_id"],
@@ -132,7 +140,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                         db.SaveChanges();
                     }
                 }
-                
+
                 order.Amount = total;
                 db.Orders.Update(order);
                 db.SaveChanges();
@@ -141,7 +149,7 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                 return RedirectToAction("Index", "Cart");
             }
             return View();
-          
+
         }
 
         private void CreateOrderItem(int id, List<OrderItem> orderItems)

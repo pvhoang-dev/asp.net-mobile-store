@@ -36,5 +36,7 @@ namespace BTL_QuanLyBanDienThoai.Models.ViewModel
 	{
 		public List<CartItemViewModel> CartList { get; set; }
 		public List<AddressViewModel> Addresses { get; set; }
+
+        public int? checkLogin { get; set; }
     }
 }
