@@ -236,7 +236,7 @@
                                 data.forEach(function (product) {
                                     var productEdit = `/admin/products/edit/${product.id}`;
 
-                                    html = `<a target="_blank" class="dropdown-item" href="${productEdit}">${product.name}</a>`
+                                    html = `<a class="dropdown-item" href="${productEdit}">${product.name}</a>`
 
                                     $("#searchResults").append(html);
                                 });
@@ -277,10 +277,12 @@
                                 'This product variant is null',
                                 'warning'
                             )
-                            setTimeout(
-                                function () {
-                                    location.reload();
-                                }, 700);
+                            $("#" + id).prop("checked", false);
+                            $("#" + id).attr("status", 0);
+                            // setTimeout(
+                            //     function () {
+                            //         location.reload();
+                            //     }, 700);
                         }
                     },
                     error: function () {
