@@ -9,7 +9,7 @@
 
 @section Title {
      Banner
-
+    @*Create Button*@
     <a class="btn btn-primary float-right align-items-center"
        href="/Admin/Banners/Create">
         Add New
@@ -31,6 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @*Fill Data*@
                     @foreach(var banner in Model)
                     {
                         <tr>
@@ -44,9 +45,11 @@
                             </td>
                             <td>
                                 <div class='btn-group'>
+                                    @*Edit Button*@
                                     <a asp-area="Admin" asp-controller="Banner" asp-action="Edit" asp-route-id="@banner.Id" class="action-icon">
                                         <i class="mdi mdi-pencil"></i>
                                     </a>
+                                    @*Delete Button*@
                                     <a onclick="HandleDelete(@banner.Id)" href="javascript:void(0)" class="action-icon">
                                         <i class="mdi mdi-delete"></i>
                                     </a>
@@ -54,8 +57,6 @@
                             </td>
                         </tr>
                     }
-
-                    
                 </tbody>
             </table>
         </div>

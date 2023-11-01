@@ -68,7 +68,7 @@
 
 <div class="row mt-3">
     <div class="col-12 text-center">
-        <p class="text-muted">Don't have an account? <a href="/auth/login" class="text-muted ml-1"><b>Sign In</b></a></p>
+        <p class="text-muted">Don't have an account? <a href="/login" class="text-muted ml-1"><b>Sign In</b></a></p>
     </div> <!-- end col -->
 </div>
 <!-- end row -->
@@ -80,6 +80,10 @@
             "@ViewBag.Message",
             "@ViewBag.Text"
         )
+        setTimeout(
+            function () {
+                window.location.href = "/login"
+            }, 700);
     </script>
 }
 <script>

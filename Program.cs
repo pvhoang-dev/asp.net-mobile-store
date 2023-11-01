@@ -12,14 +12,10 @@ builder.Services.AddDbContext<QLBanDienThoaiContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IBufferedFileUploadService, BufferedFileUploadLocalService>();
-
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
 builder.Services.AddDistributedMemoryCache();
-
 builder.Services.AddSession();
 builder.Services.AddControllers();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,9 +28,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 app.UseSession();
 
