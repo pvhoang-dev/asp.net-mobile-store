@@ -22,6 +22,6 @@
 
         public string? Note { get; set; }
 
-        public List<OrderItem>? orderItemList { get; set; }
+        public List<OrderItemViewModel>? orderItemList { get; set; }
     }
 }

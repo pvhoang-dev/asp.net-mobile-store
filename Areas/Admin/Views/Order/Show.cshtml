@@ -80,10 +80,10 @@
                             @foreach (var item in Model.orderItemList)
                             {
                                 <tr>
-                                    <td>@item.ProductVariantId</td>
-                                    <td>@item.Price</td>
-                                    <td><span class="badge badge-primary">@item.Quantity</span></td>
-                                    <td>@(item.Price * item.Quantity)</td>
+                                    <td>@item.productVariant.Name</td>
+                                    <td>@item.orderItem.Price</td>
+                                    <td><span class="badge badge-primary">@item.orderItem.Quantity</span></td>
+                                    <td>@(item.orderItem.Price * item.orderItem.Quantity)</td>
                                 </tr>
                             }
                         </tbody>

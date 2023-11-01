@@ -1,7 +1,7 @@
 ﻿@model BTL_QuanLyBanDienThoai.Models.ViewModel.ProductDetailViewModel
 
 @{
-    ViewData["Title"] = "Product detail";   
+    ViewData["Title"] = "Product detail";
 }
 
 <!-- breadcrumb -->
@@ -108,7 +108,7 @@
                                     }
                                 }
                             </select>
-                       </div>
+                        </div>
 
                         <div class="d-flex align-items-center m-b-20">
                             <div class="size-203 respon6">
@@ -128,15 +128,15 @@
 
                                 }
                             </select>
-                      </div>
+                        </div>
                         <div class="flex-w justify-content-center">
-                            <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center" id="qty-pro">
                                 <div class="wrap-num-product flex-w m-r-20 m-tb-10">
-                                    <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                    <div class="btn-num-down cl8 hov-btn3 trans-04 flex-c-m">
                                         <i class="fs-16 zmdi zmdi-minus"></i>
                                     </div>
                                     <input id="quantity-item" class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
-                                    <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                    <div class="btn-num-up cl8 hov-btn3 trans-04 flex-c-m">
                                         <i class="fs-16 zmdi zmdi-plus"></i>
                                     </div>
                                 </div>
@@ -227,6 +227,15 @@
 </section>
 
 <script>
+    $('.btn-num-down').on('click', function () {
+        var numProduct = $("#quantity-item").val();
+        if (numProduct > 1) $("#quantity-item").val(numProduct - 1);
+    });
+
+    $('.btn-num-up').on('click', function () {
+        var numProduct = parseInt($("#quantity-item").val(), 10);
+        $("#quantity-item").val(numProduct + 1);
+    });
     $(document).ready(function () {
         // Add to Cart
         $(document).on('click', '#btn-add-to-card', function () {
@@ -238,20 +247,38 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                type: 'post',
+                type: 'get',
                 url: '/cart/add',
                 data: {
                     id: product_variant_id,
-                    qty: qty
-                },
+                    qty: qty,
+                    product_id: @Model.Product.Id
+                        },
                 success: function (resp) {
                     $.toast({
                         heading: 'Success',
-                        text: resp['message'],
+                        text: 'Added product successfully!',
                         showHideTransition: 'slide',
                         position: 'bottom-right',
                         icon: 'success'
                     })
+
+                    var pageHeaderContent = $(resp).filter("#header-page");
+                    if (pageHeaderContent.length > 0) {
+                        var pageHeaderHTML = pageHeaderContent.html();
+                        $("#header-page").html(pageHeaderHTML);
+                    }
+
+                    var js = $(resp).filter("#scripts");
+                    if (js.length > 0) {
+                        var pageHeaderHTML = js.html();
+                        $("#scripts").html(pageHeaderHTML);
+                    }
+
+                    $("#quantity-item").val(1);
+
+                    return;
+
                     setTimeout(
                         function () {
                             location.reload();
