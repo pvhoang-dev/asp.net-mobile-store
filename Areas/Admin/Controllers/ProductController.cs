@@ -37,7 +37,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             List<ProductViewModel> productViewModel = (from product in db.Products
                                                        join category in db.Categories
                                                        on product.CategoryId equals category.Id
-                                                       orderby category.Id
+                                                       orderby product.Status descending, category.Id
                                                        select new ProductViewModel
                                                        {
                                                            Id = product.Id,

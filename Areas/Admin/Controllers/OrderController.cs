@@ -37,7 +37,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
             OrderShowViewModel orderShowViewModel = new OrderShowViewModel
             {
-                UserId = order.Id,
+                UserId = order.UserId,
 
                 FirstName = order.FirstName,
 
@@ -59,8 +59,15 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
                 Note = order.Note,
 
-                orderItemList = db.OrderItems.Where(oi => oi.OrderId == id).ToList(),
-            };
+                orderItemList = (from oi in db.OrderItems
+                                 join p in db.ProductVariants on oi.ProductVariantId equals p.Id
+                                 where oi.OrderId == id
+                                 select new OrderItemViewModel
+                                 {
+                                     orderItem = oi,
+                                     productVariant = p
+                                 }).ToList()
+        };
 
             return View(orderShowViewModel);
         }
