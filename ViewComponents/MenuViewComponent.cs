@@ -21,7 +21,7 @@ namespace BTL_QuanLyBanDienThoai.ViewComponents
             var categories = _db.Categories.ToList();
             string cartString = HttpContext.Session.GetString("cart");
 
-            List <CartItemViewModel> cartList = null;
+            List<CartItemViewModel> cartList = null;
 
             if (cartString != null)
             {
@@ -30,7 +30,7 @@ namespace BTL_QuanLyBanDienThoai.ViewComponents
 
             var menuViewModel = new BTL_QuanLyBanDienThoai.Models.ViewModel.MenuViewModel
             {
-                Cart = cartList ?? new List<CartItemViewModel>(), 
+                Cart = cartList ?? new List<CartItemViewModel>(),
                 Categories = categories
             };
 

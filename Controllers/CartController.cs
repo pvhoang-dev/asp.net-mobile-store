@@ -52,8 +52,8 @@ namespace BTL_QuanLyBanDienThoai.Controllers
         }
 
         [Route("/cart/add")]
-        [HttpPost]
-        public ActionResult AddToCart(int id, int qty)
+        [HttpGet]
+        public ActionResult AddToCart(int id, int qty, int product_id)
         {
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -103,14 +103,16 @@ namespace BTL_QuanLyBanDienThoai.Controllers
                             }
                         };
 
-                            cartList.Add(cartItem);
+                        cartList.Add(cartItem);
                     }
 
                     // Lưu trạng thái giỏ hàng vào phiên
                     string cartString = JsonConvert.SerializeObject(cartList);
                     HttpContext.Session.SetString("cart", cartString);
 
-                    return Json(new { message = "Item added successfully" });
+                    return RedirectToAction("Index", "ProductDetails", new { id = product_id });
+
+                    //return Json(new { message = "Item added successfully" });
 
                 }
 
