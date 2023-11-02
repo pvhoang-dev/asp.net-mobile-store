@@ -119,26 +119,26 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var existUser = db.Users.Find(id);
-                if (existUser == null)
+                var checkUser = db.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
+                if (checkUser != null)
                 {
                     ModelState.AddModelError("Email", "Email has already exist.");
-                    return View();
-                }
-                var checkDuplicateEmail = db.Users.Where(x => x.Email.Equals(existUser.Email)).FirstOrDefault();
-                if (checkDuplicateEmail == null)
-                {
-                    ModelState.AddModelError("Email", "Email has already exist.");
-                    return View();
-                }
-                if(existUser.Password != user.Password)
-                {
-
+                    return View(existUser);
                 }
 
                 if (user.Password != null)
                 {
+                    if (existUser.Password != user.Password)
+                    {
+                        ModelState.AddModelError("Password", "Password not equal confirm password");
+                        return View(existUser);
+                    }
                     existUser.Password = password.HashPassword(user.Password);
                 }
+
+                existUser.Email = user.Email;
+                existUser.Name = user.Name;    
+                existUser.Role = user.Role;
 
                 db.Users.Update(existUser);
                 db.SaveChanges();
