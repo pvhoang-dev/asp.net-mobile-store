@@ -120,7 +120,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             {
                 var existUser = db.Users.Find(id);
                 var checkUser = db.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
-                if (checkUser != null)
+                if (checkUser != null && existUser.Email != user.Email)
                 {
                     ModelState.AddModelError("Email", "Email has already exist.");
                     return View(existUser);

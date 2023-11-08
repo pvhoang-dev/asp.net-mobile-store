@@ -30,13 +30,14 @@
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary" id="create">Save</button>
         </div>
     </form>
 </div>
 
 
 @section Scripts{
+
     @if (ViewBag.Message != null)
     {
         <script>
@@ -49,6 +50,7 @@
     }
 
     <script>
+
         function clearError(errorSpanId) {
             $("#" + errorSpanId).html("");
         }

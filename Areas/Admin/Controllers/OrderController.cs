@@ -21,7 +21,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
         public IActionResult Index(int page = 1)
         {
-            List<Order> orders = db.Orders.ToList();
+            var orders = db.Orders.OrderByDescending(o => o.CreateAt);
 
             int pageSize = 8;
 

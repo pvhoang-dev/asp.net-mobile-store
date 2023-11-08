@@ -36,34 +36,12 @@
 
 @section Scripts {
     <script>
-        // $('#create').on('click', function () {
-        //         $("#form").submit();
-        //     });
-        // $(document).on('ready', () => {
-            
-        // });
-    </script>
-    @if (ViewBag.Message != null)
-    {
-        <script>
-            Swal.fire(
-                'Warning',
-                "@ViewBag.Message",
-                'warning'
-            )
-        </script>
-    }
-
-
-    <script>
         function clearError(errorSpanId) {
             $("#" + errorSpanId).html("");
         }
         $(document).on("ready", function () {
             $("#form").submit(function (event) {
                 event.preventDefault();
-                
-
                 $.ajax({
                     url: "/Admin/Attributes/Create",
                     type: "POST",
@@ -94,8 +72,6 @@
                                 $("#name-error").html(error);
                                 break;
                         }
-
-
                     }
                 })
             })

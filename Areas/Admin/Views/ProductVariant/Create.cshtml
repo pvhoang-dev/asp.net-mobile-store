@@ -21,63 +21,43 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label asp-for="Product.Name" class="required-input">Product Parent</label>
+                    <label asp-for="Product.Name">Product Parent</label>
                     <input type="text" asp-for="Product.Name" class="form-control" disabled>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input type="text" asp-for="Name" class="form-control" required>
+                    <input type="text" asp-for="Name" id="name" class="form-control" oninput="clearError('name-error')">
+                    <span id="name-error" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Price" class="required-input">Price</label>
-                    <input type="number" asp-for="Price" class="form-control" required>
+                    <input type="number" asp-for="Price" id="price" class="form-control" oninput="clearError('price-error')">
+                    <span id="price-error" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Quantity" class="required-input">Quantity</label>
-                    <input type="number" asp-for="Quantity" class="form-control" required>
+                    <input type="number" asp-for="Quantity" id="quantity" class="form-control" oninput="clearError('quantity-error')">
+                    <span id="quantity-error" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6" id="option-1">
                     <label class="required-input">Attribute 1<span class="index-1"></span></label>
-                    <select class="form-control" data-toggle="" id="attribute_1" name="attribute_1">
-                        <option>Select a attribute</option>
-                        @foreach (var attr in Model.resultDict)
-                        {
-                            <option value="@attr.Key"> @attr.Key </option>
-                        }
-                    </select>
-                </div>
-                <div class="col-sm-6" id="option-2">
-                    <label class="required-input">Attribute 1 Value<span class="index-1"></span></label>
-                    <select class="form-control" data-toggle="" id="attribute_1_value" name="attribute_1_value" disabled>
-                        <option>Select a attribute value</option>
-                        @foreach (var attr in Model.resultDict)
-                        {
-                            @foreach (var val in @attr.Value)
-                            {
-                                <option class="d-none @attr.Key" value="@val.Value"> @val.Key </option>
-                            }
-                        }
-                    </select>
-                </div>
-
-                <div class="form-group col-sm-6">
-                    <label class="required-input">Attribute 2<span class="index-2"></span></label>
-                    <select class="form-control" data-toggle="" id="attribute_2" name="attribute_2" disabled>
+                    <select class="form-control" data-toggle="" id="attribute_1" name="attribute_1" onchange="clearError('attr1-error')">
                         <option value="">Select a attribute</option>
                         @foreach (var attr in Model.resultDict)
                         {
                             <option value="@attr.Key"> @attr.Key </option>
                         }
                     </select>
+                    <span id="attr1-error" class="text-danger"></span>
                 </div>
-                <div class="col-sm-6">
-                    <label class="required-input">Attribute 2 Value<span class="index-2"></span></label>
-                    <select class="form-control" data-toggle="" id="attribute_2_value" name="attribute_2_value" disabled>
-                        <option>Select a attribute value</option>
+                <div class="col-sm-6" id="option-2">
+                    <label class="required-input">Attribute 1 Value<span class="index-1"></span></label>
+                    <select class="form-control" data-toggle="" id="attribute_1_value" name="attribute_1_value" disabled onchange="clearError('attrVal1-error')">
+                        <option value="">Select a attribute value</option>
                         @foreach (var attr in Model.resultDict)
                         {
                             @foreach (var val in @attr.Value)
@@ -86,17 +66,47 @@
                             }
                         }
                     </select>
+                    <span id="attrVal1-error" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label class="required-input">Attribute 2<span class="index-2"></span></label>
+                    <select class="form-control" data-toggle="" id="attribute_2" name="attribute_2" disabled onchange="clearError('attr2-error')">
+                        <option value="">Select a attribute</option>
+                        @foreach (var attr in Model.resultDict)
+                        {
+                            <option value="@attr.Key"> @attr.Key </option>
+                        }
+                    </select>
+                    <span id="attr2-error" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label class="required-input">Attribute 2 Value<span class="index-2"></span></label>
+                    <select class="form-control" data-toggle="" id="attribute_2_value" name="attribute_2_value" disabled onchange="clearError('attrVal2-error')">
+                        <option value="">Select a attribute value</option>
+                        @foreach (var attr in Model.resultDict)
+                        {
+                            @foreach (var val in @attr.Value)
+                            {
+                                <option class="d-none @attr.Key" value="@val.Value"> @val.Key </option>
+                            }
+                        }
+                    </select>
+                    <span id="attrVal2-error" class="text-danger"></span>
                 </div>
             </div>
         </div>
         <div class="card-footer float-right border-0 bg-transparent">
-            <button type="submit" class="btn btn-primary" id="create" value="0">Create</button>
+            <button type="button" class="btn btn-primary" id="create">Create</button>
         </div>
     </form>
 </div>
 
 @section Scripts {
     <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
         var checkAllFields = false;
         $(document).ready(function () {
             $('#attribute_1').on('change', function () {
@@ -122,38 +132,89 @@
             });
 
             $('#attribute_2_value').on('change', function () {
-                $('#create').attr("value", 1);
+
             });
 
             $('#create').on('click', function () {
-                // Swal.fire({
-                //     title: 'Adding...',
-                //     timer: 1000,
-                //     timerProgressBar: true,
-                //     didOpen: () => {
-                //         Swal.showLoading()
-                //         const b = Swal.getHtmlContainer().querySelector('b')
-                //         timerInterval = setInterval(() => {
-                //             b.textContent = Swal.getTimerLeft()
-                //         }, 100)
-                //     },
-                // })
+                var name = $('#name').val().trim();
+                var price = $('#price').val().trim();
+                var quantity = $('#quantity').val().trim();
+                var attr1 = $('#attribute_1').val();
+                var attr2 = $('#attribute_2').val();
+                var attrVal1 = $('#attribute_1_value').val();
+                var attrVal2 = $('#attribute_2_value').val();
+
+                var check = true;
+
+                if (name == "") {
+                    $('span#name-error').html("Please enter name!");
+                    check = false;
+                }
+
+                if (price == "" || price == "0" || parseFloat(price) <= 0) {
+                    $('span#price-error').html("Please enter valid price!");
+                    check = false;
+                }
+
+                if (quantity == "" || parseFloat(quantity) < 0) {
+                    $('span#quantity-error').html("Please enter valid quantity!");
+                    check = false;
+                }
+
+                if (attr1 == "") {
+                    $('span#attr1-error').html("Please enter attribute 1!");
+                    check = false;
+                }
+
+                if (attr2 == "") {
+                    $('span#attr2-error').html("Please enter attribute 2!");
+                    check = false;
+                }
+
+                if (attrVal1 == "") {
+                    $('span#attrVal1-error').html("Please enter attribute value 1!");
+                    check = false;
+                }
+
+                if (attrVal2 == "") {
+                    $('span#attrVal2-error').html("Please enter attribute value 2!");
+                    check = false;
+                }
+
+                if (!check) {
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Adding...',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                            b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                    },
+                }).then((result) => {
+                    $("#form").submit();
+                })
             });
         });
     </script>
 
     <script>
         var exist = @Model.exist;
-        if (exist != null) {
+        if (exist != 0) {
             Swal.fire(
                 "Warning",
                 "Products with those 2 attribute values already exist",
                 "warning"
             )
-            setTimeout(
-                function () {
-                    window.location.href = '/Admin/Product-Variants/Create/' + exist;
-                }, 1000);
+            // setTimeout(
+            //     function () {
+            //         window.location.href = '/Admin/Product-Variants/Create/' + exist;
+            //     }, 1000);
         } 
     </script>
 

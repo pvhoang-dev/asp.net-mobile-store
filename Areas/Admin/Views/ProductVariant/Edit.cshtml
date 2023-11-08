@@ -6,7 +6,7 @@
 }
 
 @section Title {
-            Edit Product Variant
+                Edit Product Variant
 
     <a class="btn btn-outline-primary float-right align-items-center"
        href="/admin/Products/Edit/@Model.Product.Id">
@@ -18,7 +18,7 @@
 
 <div class="card">
     <form method="post" id="form">
-        <div class="card-body">
+        <div class="card-body edit">
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label>Product Parent</label>
@@ -28,17 +28,20 @@
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Name" class="required-input">Name</label>
-                    <input type="text" asp-for="Name" class="form-control" required>
+                    <input type="text" asp-for="Name" id="name" class="form-control" oninput="clearError('name-error')">
+                    <span id="name-error" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Price" class="required-input">Price</label>
-                    <input type="number" asp-for="Price" class="form-control" required>
+                    <input type="number" asp-for="Price" id="price" class="form-control" oninput="clearError('price-error')">
+                    <span id="price-error" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
                     <label asp-for="Quantity" class="required-input">Quantity</label>
-                    <input type="number" asp-for="Quantity" class="form-control" required>
+                    <input type="number" asp-for="Quantity" id="quantity" class="form-control" oninput="clearError('quantity-error')">
+                    <span id="quantity-error" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-sm-6">
@@ -70,8 +73,35 @@
 
 @section Scripts {
     <script>
+        function clearError(errorSpanId) {
+            $("#" + errorSpanId).html("");
+        }
         $(document).ready(function () {
             $('#create').on('click', function () {
+                var name = $('#name').val().trim();
+                var price = $('#price').val().trim();
+                var quantity = $('#quantity').val().trim();
+
+                var check = true;
+
+                if (name == "") {
+                    $('span#name-error').html("Please enter name!");
+                    check = false;
+                }
+
+                if (price == "" || price == "0" || parseFloat(price) < 0) {
+                    $('span#price-error').html("Please enter valid price!");
+                    check = false;
+                }
+
+                if (quantity == "" || parseFloat(quantity) < 0) {
+                    $('span#quantity-error').html("Please enter valid quantity!");
+                    check = false;
+                }
+
+                if (!check) {
+                    return;
+                }
 
                 Swal.fire({
                     title: 'Are you sure?',
@@ -96,14 +126,4 @@
             });
         });
     </script>
-    @if (ViewBag.Message != null)
-    {
-        <script>
-            Swal.fire(
-                'Warning',
-                "@ViewBag.Message",
-                "@ViewBag.Text"
-            )
-        </script>
-    }
 }

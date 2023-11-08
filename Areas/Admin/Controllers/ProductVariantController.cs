@@ -25,21 +25,59 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             db = _db;
             _webHostEnvironment = webHostEnvironment;
         }
-        public IActionResult Index(int page = 1)
+        public IActionResult Index(int page = 1, string search = null, string sortBy = null)
         {
-            List<ProductVariantViewModel> productVariants = (from productVariant in db.ProductVariants
-                                                             join product in db.Products
-                                                             on productVariant.ProductId equals product.Id
-                                                             orderby product.Id
-                                                             select new ProductVariantViewModel
-                                                             {
-                                                                 Id = productVariant.Id,
-                                                                 Name = productVariant.Name,
-                                                                 Price = productVariant.Price,
-                                                                 Quantity = productVariant.Quantity,
-                                                                 Slug = productVariant.Slug,
-                                                                 Product = product
-                                                             }).ToList();
+            // List<ProductVariantViewModel> productVariants = new List<ProductVariantViewModel>();
+
+            if (search == null)
+            {
+                search = "";
+            }
+
+            if (sortBy == null)
+            {
+                sortBy = "";
+            }
+
+            var productVariants = (from productVariant in db.ProductVariants
+                                   join product in db.Products
+                                   on productVariant.ProductId equals product.Id
+                                   where productVariant.Name.Contains(search)
+                                   select new ProductVariantViewModel
+                                   {
+                                       Id = productVariant.Id,
+                                       Name = productVariant.Name,
+                                       Price = productVariant.Price,
+                                       Quantity = productVariant.Quantity,
+                                       Slug = productVariant.Slug,
+                                       Product = product
+                                   });
+
+            switch (sortBy)
+            {
+                case "price-increase":
+                    productVariants = productVariants.OrderBy(p => p.Price);
+                    break;
+
+                case "price-decrease":
+                    productVariants = productVariants.OrderByDescending(p => p.Price);
+                    break;
+                case "quantity-increase":
+                    productVariants = productVariants.OrderBy(p => p.Quantity);
+                    break;
+
+                case "quantity-decrease":
+                    productVariants = productVariants.OrderByDescending(p => p.Quantity);
+                    break;
+
+                default:
+                    productVariants = productVariants.OrderBy(p => p.Product.Id);
+                    break;
+            }
+
+            ViewBag.Text = search;
+            ViewBag.sortBy = sortBy;
+
             int pageSize = 8;
 
             IPagedList<ProductVariantViewModel> pagedList = productVariants.ToPagedList(page, pageSize);
@@ -104,6 +142,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
             ProductVariantViewModel productVariantViewModel = new ProductVariantViewModel
             {
+                exist = 0,
                 Product = db.Products.Find(id),
                 resultDict = resultDictionary
             };
@@ -117,6 +156,8 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                productVariantViewModel.exist = 0;
+
                 ProductVariant pV = new ProductVariant
                 {
                     Name = productVariantViewModel.Name,
@@ -125,6 +166,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
                     Price = productVariantViewModel.Price,
                     Slug = slug.Create(productVariantViewModel.Name),
                 };
+
                 db.ProductVariants.Add(pV);
 
                 db.SaveChanges();
@@ -224,6 +266,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
             ProductVariantViewModel productVariantViewModel = new ProductVariantViewModel
             {
+                Id = id,
                 Product = db.Products.Find(proVariant.ProductId),
                 Name = proVariant.Name,
                 Price = proVariant.Price,
@@ -297,7 +340,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
                     product.Quantity = (product.Quantity - productVariant.Quantity) >= 0 ? (product.Quantity - productVariant.Quantity) : 0;
 
-                    if(product.Quantity == 0)
+                    if (product.Quantity == 0)
                     {
                         product.Status = 0;
                     }

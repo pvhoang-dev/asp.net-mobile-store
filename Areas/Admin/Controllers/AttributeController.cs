@@ -25,7 +25,7 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
         public IActionResult Index(int page = 1)
         {
             List<Attr> attrs = db.Attrs.ToList();
-            
+
             int pageSize = 5;
 
             IPagedList<Attr> pagedList = attrs.ToPagedList(page, pageSize);
@@ -102,15 +102,28 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
 
         [Route("Edit/{id}")]
         [HttpPost]
-        public IActionResult Edit(Attr attr)
+        public IActionResult Edit(int? id, Attr attr)
         {
             if (ModelState.IsValid)
             {
                 attr.Code = slug.Create(attr.Name);
-                db.Attrs.Update(attr);
-                db.SaveChanges();
-                ViewBag.Message = "Edit Attribute Successful";
-                ViewBag.Text = "success";
+                var checkAttr = db.Attrs.Where(x => x.Code.Equals(attr.Code)).FirstOrDefault();
+
+                if (checkAttr != null && checkAttr.Id != id)
+                {
+                    ViewBag.Message = "Attribute has already exist!";
+                    ViewBag.Text = "warning";
+                }
+                else
+                {
+                    ViewBag.Message = "Attribute updated successfully!";
+                    ViewBag.Text = "success";
+                    checkAttr = db.Attrs.Find(id);
+                    checkAttr.Name = attr.Name;
+                    checkAttr.Code = attr.Code;
+                    db.Update(checkAttr);
+                    db.SaveChanges();
+                }
             }
             return View(attr);
         }
@@ -122,12 +135,12 @@ namespace BTL_QuanLyBanDienThoai.Areas.Admin.Controllers
             var dbAttr = db.Attrs.FirstOrDefault(x => x.Id == id);
 
             if (dbAttr != null)
-            {                
+            {
                 try
                 {
                     var existingChildAttrValue = db.AttributeValues.FirstOrDefault(a => a.AttributeId == id);
 
-                    if(existingChildAttrValue != null)
+                    if (existingChildAttrValue != null)
                     {
                         return Json(new { success = false, message = "You need to delete attribute values in this attribute first !!!" });
                     }

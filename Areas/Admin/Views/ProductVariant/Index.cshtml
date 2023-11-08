@@ -22,9 +22,14 @@
             left: 23px;
         }
 
-        .suggestion-item {
-            padding: 5px;
-            cursor: pointer;
+        .sort-field{
+            position: relative;
+        }
+
+        .sort-label{
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
     </style>
 
@@ -35,13 +40,55 @@
 <div class="card">
     <div class="card-body p-0">
         <div class="app-search dropdown d-lg-block bg-white p-2 pt-3">
-            <div class="input-group row pl-4">
-                <div class="">
-                    <input type="text" class="form-control" placeholder="Search..." id="searchInput">
+            <div class="input-group row-lg pl-4 justify-content-between">
+                <div class="d-flex">
+                    <input type="text" class="form-control" placeholder="Search..." id="searchInput" value="@ViewBag.Text" autocomplete="off">
                     <span class="mdi mdi-magnify search-icon pl-4"></span>
-                    @* <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Search</button>
-                    </div> *@
+                    <button class="btn btn-info" type="button" onclick="LoadPage(1)">Search</button>
+                </div>
+
+                <div class="d-flex">
+                    <div class="d-block sort-field">
+                        <span class="sort-label">Sort:&nbsp&nbsp</span>
+                    </div>
+                    <select class="form-control p-1" id="sortBy" onchange="LoadPage(1)">
+                        <option value="">None</option>
+                        @if (ViewBag.sortBy == "price-increase")
+                        {
+                            <option selected value="price-increase"> Price increase </option>
+                        }
+                        else
+                        {
+                            <option value="price-increase"> Price increase </option>
+                        }
+
+                        @if (ViewBag.sortBy == "price-decrease")
+                        {
+                            <option selected value="price-decrease"> Price decrease </option>
+                        }
+                        else
+                        {
+                            <option value="price-decrease"> Price decrease </option>
+                        }
+
+                        @if (ViewBag.sortBy == "quantity-increase")
+                        {
+                            <option selected value="quantity-increase"> Quantity increase </option>
+                        }
+                        else
+                        {
+                            <option value="quantity-increase"> Quantity increase </option>
+                        }
+
+                        @if (ViewBag.sortBy == "quantity-decrease")
+                        {
+                            <option selected value="quantity-decrease"> Quantity decrease </option>
+                        }
+                        else
+                        {
+                            <option value="quantity-decrease"> Quantity decrease </option>
+                        }
+                    </select>
                 </div>
             </div>
 
@@ -133,9 +180,11 @@
 @section Scripts{
     <script>
         function LoadPage(page) {
+            console.log("/Admin/Product-Variants?page=" + page + "&search=" + $('#searchInput').val().trim() + "&sortBy=" + $('#sortBy').val());
+
             $.ajax({
                 type: "GET",
-                url: "/Admin/Product-Variants?page=" + page,
+                url: "/Admin/Product-Variants?page=" + page + "&search=" + $('#searchInput').val().trim() + "&sortBy=" + $('#sortBy').val(),
                 success: function (data) {
                     $(".card-body").html($(data).find(".card-body").html());
                 }
@@ -144,21 +193,13 @@
         $(document).ready(function () {
             $('#searchInput').on('input', function () {
                 var inputValue = $(this).val();
-                if (inputValue === '') {
+                if (inputValue == '') {
                     $('#searchResults').hide();
                 } else {
                     $('#searchResults').show();
                 }
-            });
 
-            $('.suggestion-item').on('click', function () {
-                var selectedValue = $(this).text();
-                $('#searchInput').val(selectedValue);
-                $('#searchResults').hide();
-            });
-            // Search
-            $("#searchInput").on("input", function () {
-                var query = $(this).val();
+                var query = inputValue;
                 let html = "";
                 if (query.length >= 1) {
                     $.ajax({
@@ -189,5 +230,4 @@
             });
         });
     </script>
-
 }
